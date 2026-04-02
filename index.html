@@ -268,7 +268,7 @@ function cargarDatos(){
   cbCount++;
   var cbName = "cb"+cbCount;
   window[cbName] = function(data){
-    renderGrid(data);
+    renderGrid(data.salas || data);
     try {
       var el = document.getElementById("jsonp-script");
       if(el) el.parentNode.removeChild(el);
