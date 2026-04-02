@@ -3,207 +3,145 @@
 <head>
   <meta charset="UTF-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Salas de Reunion</title>
   <style>
-    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-    html, body {
-      width:100%; height:100%; overflow:hidden;
-      background:#020920; color:#fff;
-      font-family:'Segoe UI', Arial, Helvetica, sans-serif;
-    }
-    .app { display:flex; flex-direction:column; width:100vw; height:100vh; }
+    * { margin:0; padding:0; box-sizing:border-box; }
 
-    /* ══ HEADER ══ */
-    .header {
-      flex-shrink:0; height:72px;
-      background:linear-gradient(90deg,#020920 0%,#003399 60%,#020920 100%);
+    /* FIXED 1920x1080 CANVAS - compatible MagicInfo S3 */
+    html, body { width:1920px; height:1080px; overflow:hidden; background:#020B3A; color:#fff; font-family:Arial, Helvetica, sans-serif; }
+
+    /* HEADER */
+    #header {
+      position:absolute; left:0; top:0; width:1920px; height:70px;
+      background:#003399;
       border-bottom:4px solid #FF7D10;
-      display:flex; align-items:center; padding:0 28px; gap:24px;
     }
-    .h-logo { display:flex; align-items:center; gap:14px; flex-shrink:0; }
-    .h-logo img { height:44px; filter: drop-shadow(0 0 8px rgba(255,125,16,0.4)); }
-    .h-logo-sub { 
-      font-size:11px; letter-spacing:4px; text-transform:uppercase; 
+    #logo-img  { position:absolute; left:24px; top:13px; height:44px; }
+    #logo-sub  {
+      position:absolute; left:160px; top:26px;
+      font-size:11px; letter-spacing:4px; text-transform:uppercase;
       color:#AECDFF; font-weight:700;
-      border-left: 2px solid #FF7D10; padding-left: 14px;
+      border-left:2px solid #FF7D10; padding-left:14px;
     }
-    .h-legend { flex:1; display:flex; justify-content:center; gap:40px; }
-    .leg-item { 
-      display:flex; align-items:center; gap:10px; 
-      font-size:15px; letter-spacing:2px; text-transform:uppercase; 
-      color:#E2E2E2; font-weight:700; 
-    }
-    .leg-dot  { width:16px; height:16px; border-radius:50%; flex-shrink:0; box-shadow:0 0 8px currentColor; }
-    .h-clock  { flex-shrink:0; text-align:right; }
-    .clock-lbl  { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#AECDFF; display:block; }
-    .clock-time { font-size:52px; font-weight:800; letter-spacing:4px; color:#fff; line-height:1; display:block; }
-    .clock-date { font-size:13px; letter-spacing:2px; text-transform:uppercase; color:#AECDFF; margin-top:2px; display:block; }
+    #leg-dot-d { position:absolute; left:670px;  top:29px; width:16px; height:16px; border-radius:8px; background:#3ED68A; }
+    #leg-disp  { position:absolute; left:694px;  top:26px; font-size:15px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#E2E2E2; }
+    #leg-dot-p { position:absolute; left:910px;  top:29px; width:16px; height:16px; border-radius:8px; background:#5599FF; }
+    #leg-prox  { position:absolute; left:934px;  top:26px; font-size:15px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#E2E2E2; }
+    #leg-dot-o { position:absolute; left:1180px; top:29px; width:16px; height:16px; border-radius:8px; background:#FF7D10; }
+    #leg-ocup  { position:absolute; left:1204px; top:26px; font-size:15px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#E2E2E2; }
+    #act-txt   { position:absolute; right:24px;  top:6px;  font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#AECDFF; }
+    #clk-time  { position:absolute; right:24px;  top:16px; font-size:46px; font-weight:800; letter-spacing:4px; color:#fff; }
+    #clk-date  { position:absolute; right:24px;  top:63px; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#AECDFF; }
 
-    /* ══ MAIN ══ */
-    .main { flex:1; display:flex; overflow:hidden; min-height:0; padding:12px; gap:12px; }
-
-    /* ══ PLANO — más grande ══ */
-    .plano {
-      flex-shrink:0; width:280px;
-      background:linear-gradient(180deg, #002080 0%, #010D40 100%);
-      border:2px solid rgba(255,255,255,0.2);
-      border-radius:14px;
-      display:flex; flex-direction:column; overflow:hidden;
-      box-shadow: 0 0 30px rgba(0,50,200,0.4);
+    /* PLANO */
+    #plano {
+      position:absolute; left:10px; top:82px; width:290px; height:988px;
+      background:#002080;
+      border:2px solid rgba(200,200,255,0.3);
+      border-radius:12px; overflow:hidden;
     }
-    .plano-title {
-      font-size:12px; letter-spacing:5px; text-transform:uppercase;
-      color:#020920; text-align:center; padding:11px 4px;
-      border-bottom:2px solid rgba(255,255,255,0.3); flex-shrink:0; font-weight:900;
-      background:linear-gradient(90deg, #AECDFF, #fff, #AECDFF);
-    }
-    .plano-body {
-      flex:1; display:flex; flex-direction:column;
-      padding:14px; gap:10px; min-height:0;
+    #plano-title {
+      position:absolute; left:0; top:0; width:290px; height:34px;
+      background:#C8D8FF;
+      font-size:11px; letter-spacing:5px; text-transform:uppercase;
+      color:#020B3A; text-align:center; line-height:34px; font-weight:900;
     }
 
-    /* Villarica — más alto */
-    .plano-villarica {
-      flex-shrink:0; height:80px; border-radius:12px;
-      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
-      transition:background .4s, border-color .4s, box-shadow .4s;
-      border:2px solid rgba(255,255,255,0.4);
-    }
-    /* Grid 2x3 */
-    .plano-grid {
-      flex:1; display:grid;
-      grid-template-columns:1fr 1fr;
-      grid-template-rows:repeat(3,1fr);
-      gap:10px; min-height:0;
-    }
-    .plano-room {
+    /* Celda genérica */
+    .pr-room {
+      position:absolute;
       border-radius:12px; border:2px solid rgba(255,255,255,0.4);
-      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px;
-      transition:background .4s, border-color .4s, box-shadow .4s;
+      text-align:center; overflow:hidden;
     }
+    .pr-num { position:absolute; left:0; width:100%; font-size:26px; font-weight:900; color:#fff; text-align:center; }
+    .pr-est { position:absolute; left:0; width:100%; font-size:9px;  font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.92); text-align:center; }
+
+    /* Villarica */
+    #pr-villarica           { left:10px; top:44px; width:270px; height:88px; }
+    #pr-villarica .pr-num   { top:20px; }
+    #pr-villarica .pr-est   { top:56px; }
+
+    /* Col izquierda: S6, S4, S2 */
+    #pr-6 { left:10px;  top:143px; width:126px; height:138px; }
+    #pr-4 { left:10px;  top:291px; width:126px; height:138px; }
+    #pr-2 { left:10px;  top:439px; width:126px; height:138px; }
+    /* Col derecha:  S5, S3, S1 */
+    #pr-5 { left:154px; top:143px; width:126px; height:138px; }
+    #pr-3 { left:154px; top:291px; width:126px; height:138px; }
+    #pr-1 { left:154px; top:439px; width:126px; height:138px; }
+
+    #pr-6 .pr-num, #pr-5 .pr-num,
+    #pr-4 .pr-num, #pr-3 .pr-num,
+    #pr-2 .pr-num, #pr-1 .pr-num { top:36px; font-size:28px; }
+    #pr-6 .pr-est, #pr-5 .pr-est,
+    #pr-4 .pr-est, #pr-3 .pr-est,
+    #pr-2 .pr-est, #pr-1 .pr-est { top:78px; }
 
     /* Estados */
-    .libre   { 
-      background:linear-gradient(135deg,#3ED68A,#28A86E) !important; 
-      border-color:rgba(255,255,255,0.5) !important; 
-      box-shadow: 0 0 16px rgba(62,214,138,0.45) !important;
-    }
-    .ocupada { 
-      background:linear-gradient(135deg,#FF7D10,#D95E00) !important; 
-      border-color:rgba(255,255,255,0.5) !important; 
-      box-shadow: 0 0 16px rgba(255,125,16,0.45) !important;
-    }
-    .pronto  { 
-      background:linear-gradient(135deg,#5599FF,#2266DD) !important; 
-      border-color:rgba(255,255,255,0.5) !important; 
-      box-shadow: 0 0 16px rgba(85,153,255,0.45) !important;
-    }
+    .libre   { background:#28A86E !important; border-color:rgba(255,255,255,0.5) !important; }
+    .ocupada { background:#D95E00 !important; border-color:rgba(255,255,255,0.5) !important; }
+    .pronto  { background:#2266DD !important; border-color:rgba(255,255,255,0.5) !important; }
 
-    .pr-num {
-      font-size:clamp(22px,2.2vw,34px); font-weight:900; line-height:1;
-      color:#fff; text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    }
-    .pr-est {
-      font-size:clamp(8px,0.7vw,11px); font-weight:700; letter-spacing:1.5px;
-      text-transform:uppercase; color:rgba(255,255,255,0.9);
-    }
+    /* AREA CALENDARIO */
+    #cal-area { position:absolute; left:310px; top:82px; width:1600px; height:988px; }
 
-    /* ══ CALENDARIO ══ */
-    .cal { flex:1; display:flex; flex-direction:column; min-width:0; overflow:hidden; }
-
-    .cal-head {
-      flex-shrink:0; display:flex;
-      padding-left:58px; gap:5px; margin-bottom:5px;
-    }
+    /* Encabezados de columna */
     .col-head {
-      flex:1; min-width:0;
-      background:linear-gradient(180deg,#003399 0%,#001F70 100%); 
-      border:1px solid rgba(255,255,255,0.25); border-radius:12px 12px 0 0;
-      padding:10px 6px; text-align:center;
+      position:absolute; top:0; height:70px;
+      background:#003399;
+      border:1px solid rgba(255,255,255,0.25);
+      border-radius:10px 10px 0 0;
+      text-align:center; overflow:hidden;
     }
-    .col-head-short {
-      font-size:clamp(15px,1.5vw,24px); font-weight:900;
-      text-transform:uppercase; letter-spacing:3px; color:#fff; display:block;
-    }
-    .col-head-full {
-      font-size:clamp(9px,0.65vw,11px); color:#AECDFF;
-      text-transform:uppercase; letter-spacing:1px; display:block; margin-top:2px;
-    }
+    .col-head-short { display:block; margin-top:8px; font-size:22px; font-weight:900; text-transform:uppercase; letter-spacing:3px; color:#fff; }
+    .col-head-full  { display:block; font-size:10px; color:#AECDFF; text-transform:uppercase; letter-spacing:1px; margin-top:2px; }
     .col-badge {
-      display:inline-block; margin-top:6px;
-      padding:4px 12px; border-radius:20px;
-      font-size:clamp(9px,0.65vw,11px); font-weight:800; letter-spacing:1.5px; text-transform:uppercase;
+      display:inline-block; margin-top:4px;
+      padding:3px 12px; border-radius:20px;
+      font-size:10px; font-weight:800; letter-spacing:1px; text-transform:uppercase;
     }
     .b-libre   { background:#3ED68A; color:#012A1A; }
-    .b-ocupada { background:#FF7D10; color:#fff; border:2px solid rgba(255,255,255,0.4); }
+    .b-ocupada { background:#FF7D10; color:#fff; }
     .b-pronto  { background:#5599FF; color:#fff; }
-    .b-error   { background:#333;    color:#aaa; }
+    .b-error   { background:#444; color:#aaa; }
 
     /* Eje horas */
-    .cal-grid { flex:1; display:flex; min-height:0; overflow:hidden; }
-    .cal-axis { flex-shrink:0; width:58px; display:flex; flex-direction:column; }
-    .axis-slot { flex:1; display:flex; align-items:flex-start; justify-content:flex-end; padding-right:10px; }
-    .axis-slot span {
-      font-size:clamp(10px,0.8vw,13px); color:#7AA8FF;
-      font-weight:700; letter-spacing:1px;
-      transform:translateY(-50%); white-space:nowrap;
-    }
+    #cal-axis { position:absolute; left:0; top:70px; width:54px; height:918px; }
+    .axis-lbl { position:absolute; right:6px; font-size:11px; color:#7AA8FF; font-weight:700; white-space:nowrap; }
 
-    .cal-cols { flex:1; display:flex; gap:5px; min-width:0; }
-    .cal-col  {
-      flex:1; min-width:0; position:relative;
-      background:linear-gradient(180deg,#001F70 0%,#010D40 100%); 
-      border:1px solid rgba(255,255,255,0.15); border-radius:0 0 12px 12px;
-      overflow:hidden;
+    /* Columnas */
+    .cal-col {
+      position:absolute; top:70px; height:918px;
+      background:#001F70;
+      border:1px solid rgba(255,255,255,0.15);
+      border-radius:0 0 10px 10px; overflow:hidden;
     }
     .hour-line { position:absolute; left:0; right:0; height:1px; background:#fff; opacity:0.12; }
     .half-line { position:absolute; left:0; right:0; height:1px; background:#fff; opacity:0.05; }
 
     /* Eventos */
-    .cal-event {
-      position:absolute; left:4px; right:4px;
-      border-radius:8px; padding:5px 8px;
-      border-left:4px solid transparent; overflow:hidden;
-    }
-    .cal-event.ocupada { 
-      background:linear-gradient(135deg,rgba(255,125,16,0.9),rgba(200,80,0,0.9)); 
-      border-color:#fff; 
-    }
-    .cal-event.pronto  { 
-      background:linear-gradient(135deg,rgba(85,153,255,0.9),rgba(30,100,220,0.9)); 
-      border-color:#fff; 
-    }
-    .cal-event.proxima { 
-      background:rgba(255,255,255,0.08); 
-      border-color:rgba(255,255,255,0.3); 
-    }
+    .cal-event { position:absolute; left:4px; right:4px; border-radius:8px; padding:5px 8px; border-left:4px solid transparent; overflow:hidden; }
+    .ev-ocup   { background:#C85200; border-color:#fff; }
+    .ev-pronto { background:#1A55CC; border-color:#fff; }
+    .ev-proxima{ background:rgba(255,255,255,0.09); border-color:rgba(255,255,255,0.3); }
+    .ev-t { font-size:12px; font-weight:700; display:block; white-space:nowrap; color:#fff; }
+    .ev-q { font-size:12px; font-weight:600; display:block; white-space:nowrap; overflow:hidden; color:#fff; }
+    .ev-proxima .ev-t { color:#AECDFF; }
+    .ev-proxima .ev-q { color:#7AA8FF; }
 
-    .ev-t { font-size:clamp(10px,0.8vw,13px); font-weight:700; display:block; white-space:nowrap; color:#fff; }
-    .ev-q { font-size:clamp(11px,0.85vw,14px); font-weight:600; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:rgba(255,255,255,0.9); }
-    .cal-event.proxima .ev-t { color:#AECDFF; }
-    .cal-event.proxima .ev-q { color:#7AA8FF; }
+    /* Línea ahora */
+    .now-line { position:absolute; left:0; right:0; height:3px; background:#FF7D10; z-index:10; }
+    .now-dot  { position:absolute; left:-6px; top:-6px; width:14px; height:14px; border-radius:7px; background:#FF7D10; border:2px solid #fff; }
 
-    /* Línea de ahora */
-    .now-line {
-      position:absolute; left:0; right:0; height:3px;
-      background:#FF7D10; z-index:10; pointer-events:none;
-      box-shadow: 0 0 10px rgba(255,125,16,0.8);
+    /* OVERLAY */
+    #overlay { position:fixed; left:0; top:0; width:1920px; height:1080px; background:#020B3A; z-index:999; }
+    .spinner {
+      position:absolute; left:944px; top:490px; width:48px; height:48px;
+      border:5px solid #002080; border-top-color:#FF7D10; border-radius:24px;
+      -webkit-animation:spin .9s linear infinite; animation:spin .9s linear infinite;
     }
-    .now-dot {
-      position:absolute; left:-6px; top:-6px;
-      width:15px; height:15px; border-radius:50%;
-      background:#FF7D10; border:2px solid #fff;
-      box-shadow: 0 0 8px rgba(255,125,16,0.9);
-    }
-
-    /* ══ OVERLAY ══ */
-    #overlay {
-      position:fixed; inset:0; background:#020920; z-index:999;
-      display:flex; align-items:center; justify-content:center; flex-direction:column; gap:16px;
-    }
-    .spinner { width:48px; height:48px; border:4px solid #001F70; border-top-color:#FF7D10; border-radius:50%; animation:spin .9s linear infinite; }
-    .ov-txt { font-size:12px; color:#AECDFF; letter-spacing:4px; text-transform:uppercase; font-weight:700; }
+    .ov-txt { position:absolute; left:0; top:556px; width:1920px; font-size:12px; color:#AECDFF; letter-spacing:4px; text-transform:uppercase; font-weight:700; text-align:center; }
+    @-webkit-keyframes spin { to { -webkit-transform:rotate(360deg); } }
     @keyframes spin { to { transform:rotate(360deg); } }
   </style>
 </head>
@@ -214,147 +152,142 @@
   <span class="ov-txt">Cargando...</span>
 </div>
 
-<div class="app">
+<div id="header">
+  <img id="logo-img" src="https://i.imgur.com/fXLdGez.png" alt="Prodalam"/>
+  <span id="logo-sub">Estado en tiempo real</span>
+  <div id="leg-dot-d"></div><span id="leg-disp">Disponible</span>
+  <div id="leg-dot-p"></div><span id="leg-prox">Proxima (&lt;30 min)</span>
+  <div id="leg-dot-o"></div><span id="leg-ocup">Ocupada</span>
+  <span id="act-txt">Actualizando...</span>
+  <span id="clk-time">--:--</span>
+  <span id="clk-date">---</span>
+</div>
 
-  <!-- HEADER -->
-  <div class="header">
-    <div class="h-logo">
-      <img src="https://i.imgur.com/fXLdGez.png" alt="Prodalam"/>
-      <span class="h-logo-sub">Estado en tiempo real</span>
-    </div>
-    <div class="h-legend">
-      <div class="leg-item"><div class="leg-dot" style="background:#3ED68A"></div>Disponible</div>
-      <div class="leg-item"><div class="leg-dot" style="background:#5599FF"></div>Próxima (&lt;30 min)</div>
-      <div class="leg-item"><div class="leg-dot" style="background:#FF7D10"></div>Ocupada</div>
-    </div>
-    <div class="h-clock">
-      <span class="clock-lbl" id="actTxt">Actualizando...</span>
-      <span class="clock-time" id="clkTime">--:--</span>
-      <span class="clock-date" id="clkDate">---</span>
-    </div>
-  </div>
+<div id="plano">
+  <div id="plano-title">Plano de Salas</div>
+  <div class="pr-room libre" id="pr-villarica"><span class="pr-num">VLL</span><span class="pr-est">Disponible</span></div>
+  <div class="pr-room libre" id="pr-6"><span class="pr-num">S.6</span><span class="pr-est">Disponible</span></div>
+  <div class="pr-room libre" id="pr-5"><span class="pr-num">S.5</span><span class="pr-est">Disponible</span></div>
+  <div class="pr-room libre" id="pr-4"><span class="pr-num">S.4</span><span class="pr-est">Disponible</span></div>
+  <div class="pr-room libre" id="pr-3"><span class="pr-num">S.3</span><span class="pr-est">Disponible</span></div>
+  <div class="pr-room libre" id="pr-2"><span class="pr-num">S.2</span><span class="pr-est">Disponible</span></div>
+  <div class="pr-room libre" id="pr-1"><span class="pr-num">S.1</span><span class="pr-est">Disponible</span></div>
+</div>
 
-  <!-- MAIN -->
-  <div class="main">
-
-    <!-- PLANO -->
-    <div class="plano">
-      <div class="plano-title">Plano de Salas</div>
-      <div class="plano-body">
-        <div class="plano-villarica libre" id="pr-villarica">
-          <div class="pr-num">VLL</div>
-          <div class="pr-est">Disponible</div>
-        </div>
-        <div class="plano-grid">
-          <div class="plano-room libre" id="pr-6"><div class="pr-num">S.6</div><div class="pr-est">Disponible</div></div>
-          <div class="plano-room libre" id="pr-5"><div class="pr-num">S.5</div><div class="pr-est">Disponible</div></div>
-          <div class="plano-room libre" id="pr-4"><div class="pr-num">S.4</div><div class="pr-est">Disponible</div></div>
-          <div class="plano-room libre" id="pr-3"><div class="pr-num">S.3</div><div class="pr-est">Disponible</div></div>
-          <div class="plano-room libre" id="pr-2"><div class="pr-num">S.2</div><div class="pr-est">Disponible</div></div>
-          <div class="plano-room libre" id="pr-1"><div class="pr-num">S.1</div><div class="pr-est">Disponible</div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- CALENDARIO -->
-    <div class="cal">
-      <div class="cal-head" id="cal-head"></div>
-      <div class="cal-grid">
-        <div class="cal-axis" id="cal-axis"></div>
-        <div class="cal-cols" id="cal-cols"></div>
-      </div>
-    </div>
-
-  </div>
+<div id="cal-area">
+  <div id="cal-axis"></div>
 </div>
 
 <script>
-var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyn7VSKT-IFULCC2bPx2SlK2W2GlaXQNoKZ44WLQq5Ev94ESTC45vlJgcpmPgaN_IYQ/exec";
-
-var HORA_INI=7, HORA_FIN=21, TOTAL_H=HORA_FIN-HORA_INI;
-var DIAS=["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+var SCRIPT_URL="https://script.google.com/macros/s/AKfycbyn7VSKT-IFULCC2bPx2SlK2W2GlaXQNoKZ44WLQq5Ev94ESTC45vlJgcpmPgaN_IYQ/exec";
+var HORA_INI=7, HORA_FIN=21, TOTAL_H=14;
+var DIAS=["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"];
 var MESES=["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+var COL_HEIGHT=918;
 
 function pad(n){ return n<10?"0"+n:""+n; }
+function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function fmtH(iso){ if(!iso)return"--:--"; var d=new Date(iso); return pad(d.getHours())+":"+pad(d.getMinutes()); }
+function horaPx(iso){ var d=new Date(iso),m=(d.getHours()-HORA_INI)*60+d.getMinutes(); return Math.round(Math.max(0,Math.min(1,m/(TOTAL_H*60)))*COL_HEIGHT); }
+
 function tickClock(){
   var n=new Date();
-  document.getElementById("clkTime").textContent=pad(n.getHours())+":"+pad(n.getMinutes());
-  document.getElementById("clkDate").textContent=DIAS[n.getDay()]+" "+pad(n.getDate())+" "+MESES[n.getMonth()]+" "+n.getFullYear();
+  document.getElementById("clk-time").innerHTML=pad(n.getHours())+":"+pad(n.getMinutes());
+  document.getElementById("clk-date").innerHTML=DIAS[n.getDay()]+" "+pad(n.getDate())+" "+MESES[n.getMonth()]+" "+n.getFullYear();
 }
 setInterval(tickClock,1000); tickClock();
 
-function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
-function fmtH(iso){ if(!iso)return"--:--"; var d=new Date(iso); return pad(d.getHours())+":"+pad(d.getMinutes()); }
-function horaPct(iso){ var d=new Date(iso),m=(d.getHours()-HORA_INI)*60+d.getMinutes(); return Math.max(0,Math.min(100,m/(TOTAL_H*60)*100)); }
-
 function buildAxis(){
   var ax=document.getElementById("cal-axis"); ax.innerHTML="";
+  var rowH=COL_HEIGHT/TOTAL_H;
   for(var h=HORA_INI;h<=HORA_FIN;h++){
-    var sl=document.createElement("div"); sl.className="axis-slot";
-    sl.innerHTML="<span>"+(h<12?h+"AM":h===12?"12PM":(h-12)+"PM")+"</span>";
-    ax.appendChild(sl);
+    var lbl=document.createElement("span"); lbl.className="axis-lbl";
+    lbl.style.top=Math.round((h-HORA_INI)*rowH-7)+"px";
+    lbl.innerHTML=(h<12?h+"AM":(h===12?"12PM":(h-12)+"PM"));
+    ax.appendChild(lbl);
   }
 }
+
 function buildLines(col){
+  var rowH=COL_HEIGHT/TOTAL_H;
   for(var h=0;h<=TOTAL_H;h++){
-    var p=h/TOTAL_H*100;
-    var l=document.createElement("div"); l.className="hour-line"; l.style.top=p+"%"; col.appendChild(l);
-    if(h<TOTAL_H){ var lh=document.createElement("div"); lh.className="half-line"; lh.style.top=(p+50/TOTAL_H)+"%"; col.appendChild(lh); }
+    var top=Math.round(h*rowH);
+    var l=document.createElement("div"); l.className="hour-line"; l.style.top=top+"px"; col.appendChild(l);
+    if(h<TOTAL_H){
+      var lh=document.createElement("div"); lh.className="half-line"; lh.style.top=(top+Math.round(rowH/2))+"px"; col.appendChild(lh);
+    }
   }
 }
+
 function buildNow(col){
-  var now=new Date(), mins=(now.getHours()-HORA_INI)*60+now.getMinutes();
-  if(mins<0||mins>TOTAL_H*60) return;
-  var l=document.createElement("div"); l.className="now-line"; l.style.top=(mins/(TOTAL_H*60)*100)+"%";
+  var now=new Date(),mins=(now.getHours()-HORA_INI)*60+now.getMinutes();
+  if(mins<0||mins>TOTAL_H*60)return;
+  var top=Math.round(mins/(TOTAL_H*60)*COL_HEIGHT);
+  var l=document.createElement("div"); l.className="now-line"; l.style.top=top+"px";
   l.innerHTML='<div class="now-dot"></div>'; col.appendChild(l);
 }
+
 function buildEvent(col,ev,cls){
-  var top=horaPct(ev.inicio),bot=horaPct(ev.fin),h=Math.max(bot-top,1.8);
+  var top=horaPx(ev.inicio), bot=horaPx(ev.fin), h=Math.max(bot-top,18);
   var d=document.createElement("div"); d.className="cal-event "+cls;
-  d.style.top=top+"%"; d.style.height=h+"%";
-  d.innerHTML='<span class="ev-t">'+fmtH(ev.inicio)+" – "+fmtH(ev.fin)+'</span>'+(ev.creador?'<span class="ev-q">'+esc(ev.creador)+'</span>':"");
+  d.style.top=top+"px"; d.style.height=h+"px";
+  d.innerHTML='<span class="ev-t">'+fmtH(ev.inicio)+" - "+fmtH(ev.fin)+"</span>"+(ev.creador?'<span class="ev-q">'+esc(ev.creador)+"</span>":"");
   col.appendChild(d);
 }
 
 var PLANO_MAP={"Sala 1":"pr-1","Sala 2":"pr-2","Sala 3":"pr-3","Sala 4":"pr-4","Sala 5":"pr-5","Sala 6":"pr-6","Sala Villarica":"pr-villarica"};
-var EST_TXT={libre:"Disponible",ocupada:"Ocupada",pronto:"Próxima",error:"Error"};
+var EST_TXT={libre:"Disponible",ocupada:"Ocupada",pronto:"Proxima",error:"Error"};
 function updatePlano(salas){
   for(var i=0;i<salas.length;i++){
     var s=salas[i],id=PLANO_MAP[s.nombre]; if(!id)continue;
     var el=document.getElementById(id); if(!el)continue;
     el.className=el.className.replace(/\s*(libre|ocupada|pronto|error)/g,"")+" "+(s.estado||"error");
-    var est=el.querySelector(".pr-est"); if(est) est.textContent=EST_TXT[s.estado]||"";
+    var est=el.querySelector(".pr-est"); if(est)est.innerHTML=EST_TXT[s.estado]||"";
   }
 }
 
 var SHORT={"Sala 1":"S.1","Sala 2":"S.2","Sala 3":"S.3","Sala 4":"S.4","Sala 5":"S.5","Sala 6":"S.6","Sala Villarica":"VLL"};
+
 function renderGrid(salas){
-  if(!salas||!salas.length){ ocultarOverlay(); return; }
+  if(!salas||!salas.length){ocultarOverlay();return;}
   buildAxis(); updatePlano(salas);
-  var head=document.getElementById("cal-head"),cols=document.getElementById("cal-cols");
-  head.innerHTML=""; cols.innerHTML="";
-  for(var i=0;i<salas.length;i++){
+
+  var area=document.getElementById("cal-area");
+  var old=area.querySelectorAll(".cal-col,.col-head");
+  for(var i=0;i<old.length;i++) old[i].parentNode.removeChild(old[i]);
+
+  var n=salas.length, gap=4, axisW=54;
+  var totalW=1600-axisW;
+  var colW=Math.floor((totalW-gap*(n-1))/n);
+
+  for(var i=0;i<n;i++){
     var s=salas[i];
+    var lft=axisW+i*(colW+gap);
     var bc=s.estado==="libre"?"b-libre":s.estado==="ocupada"?"b-ocupada":s.estado==="pronto"?"b-pronto":"b-error";
-    var bt=s.estado==="libre"?"Disponible":s.estado==="ocupada"?"Ocupada":s.estado==="pronto"?"Próxima":"Error";
+    var bt=s.estado==="libre"?"Disponible":s.estado==="ocupada"?"Ocupada":s.estado==="pronto"?"Proxima":"Error";
     var sh=SHORT[s.nombre]||s.nombre;
+
     var ch=document.createElement("div"); ch.className="col-head";
-    ch.innerHTML='<span class="col-head-short">'+sh+'</span>'
-               +'<span class="col-head-full">'+esc(s.nombre)+'</span>'
-               +'<span class="col-badge '+bc+'">'+bt+'</span>';
-    head.appendChild(ch);
+    ch.style.left=lft+"px"; ch.style.width=colW+"px";
+    ch.innerHTML='<span class="col-head-short">'+sh+'</span><span class="col-head-full">'+esc(s.nombre)+'</span><span class="col-badge '+bc+'">'+bt+'</span>';
+    area.appendChild(ch);
+
     var col=document.createElement("div"); col.className="cal-col";
+    col.style.left=lft+"px"; col.style.width=colW+"px";
     buildLines(col);
-    if(s.actual) buildEvent(col,s.actual,"ocupada");
-    if(s.proximas) for(var j=0;j<s.proximas.length;j++){
-      var ev=s.proximas[j];
-      buildEvent(col,ev,(new Date(ev.inicio)-Date.now()<30*60*1000)?"pronto":"proxima");
+    if(s.actual) buildEvent(col,s.actual,"ev-ocup");
+    if(s.proximas){
+      for(var j=0;j<s.proximas.length;j++){
+        var ev=s.proximas[j];
+        buildEvent(col,ev,(new Date(ev.inicio)-Date.now()<30*60*1000)?"ev-pronto":"ev-proxima");
+      }
     }
     buildNow(col);
-    cols.appendChild(col);
+    area.appendChild(col);
   }
-  var n=new Date();
-  document.getElementById("actTxt").textContent="Act. "+pad(n.getHours())+":"+pad(n.getMinutes())+":"+pad(n.getSeconds());
+
+  var n2=new Date();
+  document.getElementById("act-txt").innerHTML="Act. "+pad(n2.getHours())+":"+pad(n2.getMinutes())+":"+pad(n2.getSeconds());
   ocultarOverlay();
 }
 
@@ -368,13 +301,18 @@ function cargarDatos(){
     try{ var el=document.getElementById("jsonp-script"); if(el)el.parentNode.removeChild(el); delete window[cn]; }catch(e){}
   };
   var sc=document.createElement("script"); sc.id="jsonp-script";
-  sc.src=SCRIPT_URL+"?callback="+cn+"&t="+Date.now(); document.head.appendChild(sc);
+  sc.src=SCRIPT_URL+"?callback="+cn+"&t="+Date.now();
+  document.getElementsByTagName("head")[0].appendChild(sc);
 }
 cargarDatos();
 setInterval(cargarDatos,60000);
 setInterval(function(){
-  var ls=document.querySelectorAll(".now-line"); for(var i=0;i<ls.length;i++)ls[i].parentNode.removeChild(ls[i]);
-  var cs=document.querySelectorAll(".cal-col"); for(var i=0;i<cs.length;i++)buildNow(cs[i]);
+  var cols=document.querySelectorAll(".cal-col");
+  for(var i=0;i<cols.length;i++){
+    var nls=cols[i].querySelectorAll(".now-line");
+    for(var j=0;j<nls.length;j++) nls[j].parentNode.removeChild(nls[j]);
+    buildNow(cols[i]);
+  }
 },60000);
 </script>
 </body>
