@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <meta http-equiv="refresh" content="300"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Salas de Reunion</title>
   <style>
@@ -31,8 +30,6 @@
     .gcell { display:table-cell; padding:14px 16px; vertical-align:top; }
     .grid { font-size:0; width:100%; }
     .card { display:inline-block; vertical-align:top; width:14.28%; padding:0 5px 10px 5px; font-size:13px; box-sizing:border-box; }
-
-    /* CARD */
     .card-inner { background:#101623; border:1px solid #1c2840; border-radius:12px; position:relative; overflow:hidden; }
     .strip { position:absolute; left:0; top:0; bottom:0; width:5px; background:#1c2840; }
     .libre .strip   { background:#00e5a0; }
@@ -43,7 +40,7 @@
     /* MODELO 3D SVG */
     .sala-3d { width:100%; height:110px; display:block; }
 
-    /* CONTENIDO */
+    /* CARD BODY */
     .card-body { padding:10px 12px 12px 16px; }
     .chead { border-bottom:1px solid #1c2840; padding-bottom:8px; margin-bottom:10px; }
     .sala-name { font-size:18px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#ffffff; display:block; margin-bottom:6px; }
@@ -83,16 +80,17 @@
 
     /* OVERLAY */
     #overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:#090d18; z-index:999; text-align:center; }
-    .ov-center { position:absolute; top:50%; left:50%; margin-top:-30px; margin-left:-70px; width:140px; text-align:center; }
+    .ov-center { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; }
     .ov-text { font-size:10px; color:#5a6a88; letter-spacing:3px; text-transform:uppercase; margin-top:12px; display:block; }
-    .spin-box { display:inline-block; width:32px; height:32px; border:3px solid #1c2840; border-top:3px solid #3b82f6; border-radius:50%; }
+    .spinner { width:36px; height:36px; border:3px solid #1c2840; border-top-color:#3b82f6; border-radius:50%; display:inline-block; animation:spin 0.9s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
   </style>
 </head>
 <body>
 
 <div id="overlay">
   <div class="ov-center">
-    <div class="spin-box" id="spinEl"></div>
+    <div class="spinner"></div>
     <span class="ov-text">Cargando...</span>
   </div>
 </div>
@@ -131,175 +129,127 @@ var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyz-i4RUop0HEoRwcfGQfm
 var DIAS  = ["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"];
 var MESES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 
-function pad(n) { return (n < 10 ? "0" : "") + n; }
+function pad(n){ return n < 10 ? "0"+n : ""+n; }
 
-function tickClock() {
-  var d = new Date();
-  document.getElementById("clkTime").innerHTML = pad(d.getHours()) + ":" + pad(d.getMinutes());
-  document.getElementById("clkDate").innerHTML = DIAS[d.getDay()] + " " + d.getDate() + " " + MESES[d.getMonth()] + " " + d.getFullYear();
+function tickClock(){
+  var n = new Date();
+  document.getElementById("clkTime").innerHTML = pad(n.getHours())+":"+pad(n.getMinutes());
+  document.getElementById("clkDate").innerHTML = DIAS[n.getDay()]+" "+pad(n.getDate())+" "+MESES[n.getMonth()]+" "+n.getFullYear();
 }
-
-var spinDeg = 0;
-function spinTick() {
-  spinDeg += 8;
-  var el = document.getElementById("spinEl");
-  if (el) {
-    el.style.cssText = "display:inline-block;width:32px;height:32px;border:3px solid #1c2840;border-top:3px solid #3b82f6;border-radius:50%;-ms-transform:rotate("+spinDeg+"deg);transform:rotate("+spinDeg+"deg);";
-  }
-}
-
 setInterval(tickClock, 1000);
-setInterval(spinTick, 30);
 tickClock();
 
-function esc(s) {
-  return String(s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-}
-
-function fmtH(iso) {
-  if (!iso) return "--:--";
-  var d = new Date(iso);
-  return pad(d.getHours()) + ":" + pad(d.getMinutes());
-}
-
-function diffMin(iso) {
-  return Math.round((new Date(iso).getTime() - Date.now()) / 60000);
-}
-
-function pct(ini, fin) {
-  var a = new Date(ini).getTime();
-  var b = new Date(fin).getTime();
-  var p = ((Date.now() - a) / (b - a)) * 100;
-  return Math.min(100, Math.max(0, p)).toFixed(1);
-}
-
-function ocultarOverlay() {
+function ocultarOverlay(){
   var ov = document.getElementById("overlay");
-  if (ov) ov.style.display = "none";
+  if(ov) ov.style.display = "none";
 }
 
-// ============================================================
-//  MODELO 3D SVG DE SALA (perspectiva isométrica)
-// ============================================================
-function svgSala(estado) {
+function esc(s){
+  return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+function fmtH(iso){
+  if(!iso) return "--:--";
+  var d = new Date(iso);
+  return pad(d.getHours())+":"+pad(d.getMinutes());
+}
+
+function pct(ini, fin){
+  var now = Date.now();
+  var s = new Date(ini).getTime();
+  var e = new Date(fin).getTime();
+  if(now <= s) return 0;
+  if(now >= e) return 100;
+  return Math.round((now - s) / (e - s) * 100);
+}
+
+function diffMin(iso){
+  var d = new Date(iso).getTime() - Date.now();
+  return Math.max(0, Math.round(d / 60000));
+}
+
+function svgSala(estado){
   var colTop, colFront, colSide, colDesk, colChair, colGlow;
-
-  if (estado === "libre") {
-    colTop   = "#0d2e1e"; colFront = "#0a2218"; colSide  = "#082016";
-    colDesk  = "#0f3a24"; colChair = "#0d3020"; colGlow  = "#00e5a0";
-  } else if (estado === "ocupada") {
-    colTop   = "#2e0d10"; colFront = "#220a0c"; colSide  = "#1a0709";
-    colDesk  = "#3a0f14"; colChair = "#300d11"; colGlow  = "#ff4060";
-  } else if (estado === "pronto") {
-    colTop   = "#2e2000"; colFront = "#221800"; colSide  = "#1a1200";
-    colDesk  = "#3a2a00"; colChair = "#302200"; colGlow  = "#ffb800";
+  if(estado === "libre"){
+    colTop="#0d2e1e"; colFront="#0a2218"; colSide="#082016"; colDesk="#0f3a24"; colChair="#0d3020"; colGlow="#00e5a0";
+  } else if(estado === "ocupada"){
+    colTop="#2e0d10"; colFront="#220a0c"; colSide="#1a0709"; colDesk="#3a0f14"; colChair="#300d11"; colGlow="#ff4060";
+  } else if(estado === "pronto"){
+    colTop="#2e2000"; colFront="#221800"; colSide="#1a1200"; colDesk="#3a2a00"; colChair="#302200"; colGlow="#ffb800";
   } else {
-    colTop   = "#141e2e"; colFront = "#0f1822"; colSide  = "#0b121a";
-    colDesk  = "#18243a"; colChair = "#141e30"; colGlow  = "#444444";
+    colTop="#141e2e"; colFront="#0f1822"; colSide="#0b121a"; colDesk="#18243a"; colChair="#141e30"; colGlow="#444444";
   }
-
   return '<svg class="sala-3d" viewBox="0 0 200 110" xmlns="http://www.w3.org/2000/svg">' +
-
-    /* Piso isométrico */
-    '<polygon points="100,10 180,50 100,90 20,50" fill="' + colTop + '" stroke="' + colGlow + '" stroke-width="0.8" stroke-opacity="0.4"/>' +
-
-    /* Pared izquierda */
-    '<polygon points="20,50 20,85 100,125 100,90" fill="' + colFront + '" stroke="' + colGlow + '" stroke-width="0.8" stroke-opacity="0.3"/>' +
-
-    /* Pared derecha */
-    '<polygon points="180,50 180,85 100,125 100,90" fill="' + colSide + '" stroke="' + colGlow + '" stroke-width="0.8" stroke-opacity="0.3"/>' +
-
-    /* Mesa central - superficie */
-    '<polygon points="100,38 130,54 100,70 70,54" fill="' + colDesk + '" stroke="' + colGlow + '" stroke-width="1" stroke-opacity="0.6"/>' +
-
-    /* Mesa - lado izquierdo */
-    '<polygon points="70,54 70,62 100,78 100,70" fill="' + colFront + '" stroke="' + colGlow + '" stroke-width="0.6" stroke-opacity="0.4"/>' +
-
-    /* Mesa - lado derecho */
-    '<polygon points="130,54 130,62 100,78 100,70" fill="' + colSide + '" stroke="' + colGlow + '" stroke-width="0.6" stroke-opacity="0.4"/>' +
-
-    /* Sillas - 4 puntos alrededor de la mesa */
-    /* Silla arriba-izq */
-    '<polygon points="82,32 92,38 84,42 74,36" fill="' + colChair + '" stroke="' + colGlow + '" stroke-width="0.8" stroke-opacity="0.5"/>' +
-    /* Silla arriba-der */
-    '<polygon points="108,32 118,38 126,34 116,28" fill="' + colChair + '" stroke="' + colGlow + '" stroke-width="0.8" stroke-opacity="0.5"/>' +
-    /* Silla abajo-izq */
-    '<polygon points="74,68 84,74 76,78 66,72" fill="' + colChair + '" stroke="' + colGlow + '" stroke-width="0.8" stroke-opacity="0.5"/>' +
-    /* Silla abajo-der */
-    '<polygon points="116,68 126,74 134,70 124,64" fill="' + colChair + '" stroke="' + colGlow + '" stroke-width="0.8" stroke-opacity="0.5"/>' +
-
-    /* Indicador de estado — punto brillante en la mesa */
-    '<circle cx="100" cy="54" r="5" fill="' + colGlow + '" opacity="0.9"/>' +
-    '<circle cx="100" cy="54" r="8" fill="none" stroke="' + colGlow + '" stroke-width="1.5" opacity="0.4"/>' +
-
-  '</svg>';
+    '<polygon points="100,10 180,50 100,90 20,50" fill="'+colTop+'" stroke="'+colGlow+'" stroke-width="0.8" stroke-opacity="0.4"/>' +
+    '<polygon points="20,50 20,85 100,125 100,90" fill="'+colFront+'" stroke="'+colGlow+'" stroke-width="0.8" stroke-opacity="0.3"/>' +
+    '<polygon points="180,50 180,85 100,125 100,90" fill="'+colSide+'" stroke="'+colGlow+'" stroke-width="0.8" stroke-opacity="0.3"/>' +
+    '<polygon points="100,38 130,54 100,70 70,54" fill="'+colDesk+'" stroke="'+colGlow+'" stroke-width="1" stroke-opacity="0.6"/>' +
+    '<polygon points="70,54 70,62 100,78 100,70" fill="'+colFront+'" stroke="'+colGlow+'" stroke-width="0.6" stroke-opacity="0.4"/>' +
+    '<polygon points="130,54 130,62 100,78 100,70" fill="'+colSide+'" stroke="'+colGlow+'" stroke-width="0.6" stroke-opacity="0.4"/>' +
+    '<polygon points="82,32 92,38 84,42 74,36" fill="'+colChair+'" stroke="'+colGlow+'" stroke-width="0.8" stroke-opacity="0.5"/>' +
+    '<polygon points="108,32 118,38 126,34 116,28" fill="'+colChair+'" stroke="'+colGlow+'" stroke-width="0.8" stroke-opacity="0.5"/>' +
+    '<polygon points="74,68 84,74 76,78 66,72" fill="'+colChair+'" stroke="'+colGlow+'" stroke-width="0.8" stroke-opacity="0.5"/>' +
+    '<polygon points="116,68 126,74 134,70 124,64" fill="'+colChair+'" stroke="'+colGlow+'" stroke-width="0.8" stroke-opacity="0.5"/>' +
+    '<circle cx="100" cy="54" r="5" fill="'+colGlow+'" opacity="0.9"/>' +
+    '<circle cx="100" cy="54" r="8" fill="none" stroke="'+colGlow+'" stroke-width="1.5" opacity="0.4"/>' +
+    '</svg>';
 }
 
-// ============================================================
-//  RENDER GRID
-// ============================================================
-function renderGrid(data) {
+function renderGrid(salas){
+  if(!salas || !salas.length){ ocultarOverlay(); return; }
   var html = "";
+  for(var i=0; i<salas.length; i++){
+    var s = salas[i];
+    var badgeClass, badgeTxt;
+    if(s.estado==="libre"){    badgeClass="b-libre";   badgeTxt="Disponible"; }
+    else if(s.estado==="ocupada"){ badgeClass="b-ocupada"; badgeTxt="Ocupada"; }
+    else if(s.estado==="pronto"){  badgeClass="b-pronto";  badgeTxt="Pronto"; }
+    else {                         badgeClass="b-error";   badgeTxt="Error"; }
 
-  for (var i = 0; i < data.salas.length; i++) {
-    var s          = data.salas[i];
-    var badgeTxt   = "Disponible";
-    var badgeClass = "b-libre";
-    if (s.estado === "ocupada") { badgeTxt = "Ocupada"; badgeClass = "b-ocupada"; }
-    if (s.estado === "pronto")  { badgeTxt = "Proxima"; badgeClass = "b-pronto"; }
-    if (s.estado === "error")   { badgeTxt = "Error";   badgeClass = "b-error"; }
-
-    html += '<div class="card"><div class="card-inner ' + s.estado + '">';
+    html += '<div class="card"><div class="card-inner '+s.estado+'">';
     html += '<div class="strip"></div>';
 
-    /* Modelo 3D SVG */
     html += svgSala(s.estado);
 
-    /* Contenido */
     html += '<div class="card-body">';
     html += '<div class="chead">';
-    html += '<span class="sala-name">' + esc(s.nombre) + '</span>';
-    html += '<span class="badge ' + badgeClass + '">' + badgeTxt + '</span>';
+    html += '<span class="sala-name">'+esc(s.nombre)+'</span>';
+    html += '<span class="badge '+badgeClass+'">'+badgeTxt+'</span>';
     html += '</div>';
 
-    if (s.estado === "error") {
+    if(s.estado==="error"){
       html += '<span class="err-msg">&#9888; No se pudo cargar</span>';
-
-    } else if (s.estado === "ocupada" && s.actual) {
+    } else if(s.estado==="ocupada" && s.actual){
       var ev = s.actual;
       html += '<div class="evbox">';
       html += '<span class="ev-label">En uso ahora</span>';
-      if (ev.creador) html += '<span class="ev-persona">&#128100; ' + esc(ev.creador) + '</span>';
-      html += '<span class="ev-hora">&#128336; ' + fmtH(ev.inicio) + ' &ndash; ' + fmtH(ev.fin) + '</span>';
-      html += '<div class="prog-track"><div class="prog-fill" style="width:' + pct(ev.inicio, ev.fin) + '%"></div></div>';
+      if(ev.creador) html += '<span class="ev-persona">&#128100; '+esc(ev.creador)+'</span>';
+      html += '<span class="ev-hora">&#128336; '+fmtH(ev.inicio)+' &ndash; '+fmtH(ev.fin)+'</span>';
+      html += '<div class="prog-track"><div class="prog-fill" style="width:'+pct(ev.inicio,ev.fin)+'%"></div></div>';
       html += '</div>';
-
-    } else if (s.estado === "pronto" && s.proximas.length > 0) {
+    } else if(s.estado==="pronto" && s.proximas.length>0){
       var pev = s.proximas[0];
       html += '<div class="evbox">';
-      html += '<span class="ev-label">Reservada en ' + diffMin(pev.inicio) + ' min</span>';
-      if (pev.creador) html += '<span class="ev-persona">&#128100; ' + esc(pev.creador) + '</span>';
-      html += '<span class="ev-hora">&#128336; ' + fmtH(pev.inicio) + ' &ndash; ' + fmtH(pev.fin) + '</span>';
-      html += '<div class="prog-track"><div class="prog-fill" style="width:0%"></div></div>';
+      html += '<span class="ev-label">Reservada en '+diffMin(pev.inicio)+' min</span>';
+      if(pev.creador) html += '<span class="ev-persona">&#128100; '+esc(pev.creador)+'</span>';
+      html += '<span class="ev-hora">&#128336; '+fmtH(pev.inicio)+' &ndash; '+fmtH(pev.fin)+'</span>';
       html += '</div>';
-
     } else {
       html += '<div class="libre-msg">';
       html += '<div class="libre-check">&#10003;</div>';
       html += '<span class="libre-text">Disponible</span>';
-      html += '<span class="libre-sub">' + (s.proximas.length === 0 ? "Sin reservas hoy" : "") + '</span>';
+      html += '<span class="libre-sub">'+(s.proximas.length===0?"Sin reservas hoy":"")+'</span>';
       html += '</div>';
     }
 
-    /* Proximas */
-    var prxList = (s.estado === "pronto") ? s.proximas.slice(1) : s.proximas;
-    if (prxList.length > 0) {
+    var prxList = (s.estado==="pronto") ? s.proximas.slice(1) : s.proximas;
+    if(prxList.length>0){
       html += '<span class="prox-title">Proximas</span>';
-      for (var j = 0; j < prxList.length; j++) {
+      for(var j=0; j<prxList.length; j++){
         var px = prxList[j];
         html += '<div class="prox-item">';
-        html += '<span class="prox-hora">' + fmtH(px.inicio) + ' &ndash; ' + fmtH(px.fin) + '</span>';
-        if (px.creador) html += '<span class="prox-quien">' + esc(px.creador) + '</span>';
+        html += '<span class="prox-hora">'+fmtH(px.inicio)+' &ndash; '+fmtH(px.fin)+'</span>';
+        if(px.creador) html += '<span class="prox-quien">'+esc(px.creador)+'</span>';
         html += '</div>';
       }
     }
@@ -309,36 +259,30 @@ function renderGrid(data) {
 
   document.getElementById("grid").innerHTML = html;
   var n = new Date();
-  document.getElementById("actTxt").innerHTML = "Act. " + pad(n.getHours()) + ":" + pad(n.getMinutes()) + ":" + pad(n.getSeconds());
+  document.getElementById("actTxt").innerHTML = "Act. "+pad(n.getHours())+":"+pad(n.getMinutes())+":"+pad(n.getSeconds());
   ocultarOverlay();
 }
 
-// ============================================================
-//  JSONP
-// ============================================================
 var cbCount = 0;
-
-function cargarDatos() {
+function cargarDatos(){
   cbCount++;
-  var cbName = "cb" + cbCount;
-
-  window[cbName] = function(data) {
+  var cbName = "cb"+cbCount;
+  window[cbName] = function(data){
     renderGrid(data);
     try {
       var el = document.getElementById("jsonp-script");
-      if (el) el.parentNode.removeChild(el);
+      if(el) el.parentNode.removeChild(el);
       delete window[cbName];
-    } catch(e) {}
+    } catch(e){}
   };
-
   var script = document.createElement("script");
   script.id  = "jsonp-script";
-  script.src = SCRIPT_URL + "?callback=" + cbName + "&t=" + Date.now();
+  script.src = SCRIPT_URL + "?callback="+cbName+"&t="+Date.now();
   document.getElementsByTagName("head")[0].appendChild(script);
 }
 
 cargarDatos();
-setInterval(cargarDatos, 5 * 60 * 1000);
+setInterval(cargarDatos, 60000);
 </script>
 </body>
 </html>
