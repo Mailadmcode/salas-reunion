@@ -3,115 +3,98 @@
 <head>
   <meta charset="UTF-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <title>Salas de Reunion - Semana</title>
+  <title>Salas de Reunion</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-
-    /* FIXED 1920x1080 - MagicInfo S3 compatible */
-    html, body { width:1920px; height:1080px; overflow:hidden; background:#020B3A; color:#fff; font-family:Arial, Helvetica, sans-serif; }
+    html, body { width:1920px; height:1080px; overflow:hidden; background:#0A0E2E; color:#fff; font-family:Arial, Helvetica, sans-serif; }
 
     /* ══ HEADER ══ */
-    #header { position:absolute; left:0; top:0; width:1920px; height:70px; background:#003399; border-bottom:4px solid #FF7D10; }
-    #logo-img  { position:absolute; left:24px; top:13px; height:44px; }
-    #logo-sub  { position:absolute; left:160px; top:26px; font-size:11px; letter-spacing:4px; text-transform:uppercase; color:#AECDFF; font-weight:700; border-left:2px solid #FF7D10; padding-left:14px; }
-    #semana-txt{ position:absolute; left:0; top:0; width:1920px; text-align:center; line-height:70px; font-size:13px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:#AECDFF; }
-    #leg-dot-d { position:absolute; left:630px;  top:29px; width:14px; height:14px; border-radius:7px;  background:#3ED68A; }
-    #leg-disp  { position:absolute; left:650px;  top:26px; font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#E2E2E2; }
-    #leg-dot-p { position:absolute; left:810px;  top:29px; width:14px; height:14px; border-radius:7px;  background:#5599FF; }
-    #leg-prox  { position:absolute; left:830px;  top:26px; font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#E2E2E2; }
-    #leg-dot-o { position:absolute; left:1030px; top:29px; width:14px; height:14px; border-radius:7px;  background:#FF7D10; }
-    #leg-ocup  { position:absolute; left:1050px; top:26px; font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#E2E2E2; }
-    #act-txt   { position:absolute; right:24px; top:6px;  font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#AECDFF; }
-    #clk-time  { position:absolute; right:24px; top:16px; font-size:44px; font-weight:800; letter-spacing:4px; color:#fff; }
-    #clk-date  { position:absolute; right:24px; top:62px; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#AECDFF; }
+    #header { position:absolute; left:0; top:0; width:1920px; height:64px; background:#003399; border-bottom:4px solid #FF7D10; }
+    #logo-img { position:absolute; left:20px; top:10px; height:42px; }
+    #logo-sub { position:absolute; left:150px; top:24px; font-size:11px; letter-spacing:4px; text-transform:uppercase; color:#AECDFF; font-weight:700; border-left:2px solid #FF7D10; padding-left:12px; }
+    #act-txt  { position:absolute; right:20px; top:5px;  font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#AECDFF; }
+    #clk-time { position:absolute; right:20px; top:14px; font-size:40px; font-weight:800; letter-spacing:3px; color:#fff; }
+    #clk-date { position:absolute; right:20px; top:58px; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#AECDFF; }
 
-    /* ══ PLANO ══ */
-    #plano { position:absolute; left:10px; top:82px; width:230px; height:988px; background:#002080; border:2px solid rgba(200,200,255,0.3); border-radius:12px; overflow:hidden; }
-    #plano-title { position:absolute; left:0; top:0; width:230px; height:32px; background:#C8D8FF; font-size:10px; letter-spacing:4px; text-transform:uppercase; color:#020B3A; text-align:center; line-height:32px; font-weight:900; }
+    /* ══ TABLA ══ */
+    /* top:68 (header 64 + 4 gap), height=1080-68-8=1004 */
+    #tabla { position:absolute; left:8px; top:68px; width:1904px; height:1004px; }
 
-    .pr-room { position:absolute; border-radius:10px; border:2px solid rgba(255,255,255,0.4); text-align:center; overflow:hidden; }
-    .pr-num  { position:absolute; left:0; width:100%; font-size:22px; font-weight:900; color:#fff; text-align:center; }
-    .pr-est  { position:absolute; left:0; width:100%; font-size:8px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:rgba(255,255,255,0.92); text-align:center; }
+    /* Fila de cabecera de días */
+    #fila-header { position:absolute; left:0; top:0; width:1904px; height:52px; }
 
-    #pr-villarica           { left:8px; top:40px; width:214px; height:76px; }
-    #pr-villarica .pr-num   { top:16px; }
-    #pr-villarica .pr-est   { top:46px; }
+    /* Celda de la esquina (label "Sala") */
+    #corner {
+      position:absolute; left:0; top:0; width:148px; height:52px;
+      background:#001F70; border:1px solid rgba(255,255,255,0.2); border-radius:8px 0 0 0;
+      font-size:13px; font-weight:900; letter-spacing:3px; text-transform:uppercase;
+      color:#AECDFF; text-align:center; line-height:52px;
+    }
 
-    #pr-6 { left:8px;   top:126px; width:100px; height:120px; }
-    #pr-5 { left:122px; top:126px; width:100px; height:120px; }
-    #pr-4 { left:8px;   top:256px; width:100px; height:120px; }
-    #pr-3 { left:122px; top:256px; width:100px; height:120px; }
-    #pr-2 { left:8px;   top:386px; width:100px; height:120px; }
-    #pr-1 { left:122px; top:386px; width:100px; height:120px; }
-
-    #pr-6 .pr-num, #pr-5 .pr-num,
-    #pr-4 .pr-num, #pr-3 .pr-num,
-    #pr-2 .pr-num, #pr-1 .pr-num { top:28px; font-size:22px; }
-    #pr-6 .pr-est, #pr-5 .pr-est,
-    #pr-4 .pr-est, #pr-3 .pr-est,
-    #pr-2 .pr-est, #pr-1 .pr-est { top:62px; }
-
-    .libre   { background:#28A86E !important; border-color:rgba(255,255,255,0.5) !important; }
-    .ocupada { background:#D95E00 !important; border-color:rgba(255,255,255,0.5) !important; }
-    .pronto  { background:#2266DD !important; border-color:rgba(255,255,255,0.5) !important; }
-
-    /* ══ ÁREA CALENDARIO ══ */
-    /* left:250 (10+230+10), width:1660 */
-    #cal-area { position:absolute; left:250px; top:82px; width:1660px; height:988px; }
-
-    /* Días de la semana — barra encima de cada columna de sala */
-    /* 5 franjas de días, dentro de cada col-head */
-    .col-head {
-      position:absolute; top:0; height:80px;
-      background:#003399;
+    /* Cabeceras de días — 5 columnas, left calculado por JS */
+    .day-head {
+      position:absolute; top:0; height:52px;
       border:1px solid rgba(255,255,255,0.2);
-      border-radius:10px 10px 0 0;
-      text-align:center; overflow:hidden;
+      text-align:center; line-height:52px;
+      font-size:15px; font-weight:900; letter-spacing:2px; text-transform:uppercase; color:#fff;
+      background:#001F70;
     }
-    .col-head-short { display:block; margin-top:8px; font-size:20px; font-weight:900; text-transform:uppercase; letter-spacing:2px; color:#fff; }
-    .col-head-full  { display:block; font-size:9px; color:#AECDFF; text-transform:uppercase; letter-spacing:1px; margin-top:1px; }
-    .col-badge { display:inline-block; margin-top:3px; padding:2px 10px; border-radius:20px; font-size:9px; font-weight:800; letter-spacing:1px; text-transform:uppercase; }
-    .b-libre   { background:#3ED68A; color:#012A1A; }
-    .b-ocupada { background:#FF7D10; color:#fff; }
-    .b-pronto  { background:#5599FF; color:#fff; }
-    .b-error   { background:#444; color:#aaa; }
+    .day-head.hoy { background:#CC3300; color:#fff; }
+    .day-head span { font-size:11px; font-weight:400; color:#AECDFF; margin-left:6px; }
+    .day-head.hoy span { color:#FFD0C0; }
 
-    /* Eje de horas */
-    #cal-axis { position:absolute; left:0; top:80px; width:48px; height:908px; }
-    .axis-lbl { position:absolute; right:5px; font-size:10px; color:#7AA8FF; font-weight:700; white-space:nowrap; }
+    /* Filas de salas */
+    .sala-row { position:absolute; left:0; width:1904px; }
 
-    /* Columnas del calendario */
-    .cal-col { position:absolute; top:80px; height:908px; background:#001F70; border:1px solid rgba(255,255,255,0.12); border-radius:0 0 10px 10px; overflow:hidden; }
-
-    /* Separadores de días DENTRO de la columna */
-    .day-sep  { position:absolute; left:0; right:0; height:2px; background:rgba(255,200,0,0.35); z-index:5; }
-    .day-lbl  {
-      position:absolute; left:0; right:0; height:16px;
-      font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:1px;
-      color:rgba(255,220,100,0.85); text-align:center; line-height:16px;
-      z-index:5; background:rgba(2,11,58,0.55);
+    /* Etiqueta de sala (columna izquierda) */
+    .sala-lbl {
+      position:absolute; left:0; width:148px;
+      background:#001F70; border:1px solid rgba(255,255,255,0.15);
+      font-size:13px; font-weight:900; letter-spacing:1px; text-transform:uppercase;
+      color:#fff; text-align:center;
+      display:table; /* para centrado vertical sin flex */
     }
+    .sala-lbl-inner { display:table-cell; vertical-align:middle; }
+    .sala-dot { width:10px; height:10px; border-radius:5px; display:inline-block; margin-right:6px; vertical-align:middle; }
 
-    .hour-line { position:absolute; left:0; right:0; height:1px; background:#fff; opacity:0.10; }
-    .half-line { position:absolute; left:0; right:0; height:1px; background:#fff; opacity:0.04; }
+    /* Celdas de días dentro de cada sala-row */
+    .day-cell {
+      position:absolute;
+      border:1px solid rgba(255,255,255,0.1);
+      background:#0D1545;
+      overflow:hidden;
+    }
+    .day-cell.hoy { background:#1A0A00; border-color:rgba(255,80,0,0.3); }
+    .day-cell.libre-cell { }
 
-    /* Eventos */
-    .cal-event { position:absolute; left:3px; right:3px; border-radius:7px; padding:3px 6px; border-left:3px solid transparent; overflow:hidden; }
+    /* Texto "Libre" */
+    .libre-txt {
+      position:absolute; left:0; top:0; width:100%; height:100%;
+      font-size:11px; color:rgba(255,255,255,0.2); font-style:italic;
+      text-align:center;
+      display:table;
+    }
+    .libre-txt span { display:table-cell; vertical-align:middle; }
+
+    /* Eventos dentro de celda */
+    .ev-bloque {
+      position:absolute; left:4px; right:4px;
+      border-radius:5px; padding:3px 6px;
+      border-left:3px solid transparent; overflow:hidden;
+    }
     .ev-ocup    { background:#C85200; border-color:#fff; }
     .ev-pronto  { background:#1A55CC; border-color:#fff; }
-    .ev-proxima { background:rgba(255,255,255,0.09); border-color:rgba(255,255,255,0.3); }
-    .ev-pasada  { background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.15); }
-    .ev-t { font-size:10px; font-weight:700; display:block; white-space:nowrap; color:#fff; }
-    .ev-q { font-size:10px; font-weight:600; display:block; white-space:nowrap; overflow:hidden; color:rgba(255,255,255,0.85); }
-    .ev-proxima .ev-t, .ev-pasada .ev-t { color:#AECDFF; }
-    .ev-proxima .ev-q, .ev-pasada .ev-q { color:#7AA8FF; }
-
-    /* Línea ahora */
-    .now-line { position:absolute; left:0; right:0; height:3px; background:#FF7D10; z-index:10; }
-    .now-dot  { position:absolute; left:-5px; top:-5px; width:13px; height:13px; border-radius:7px; background:#FF7D10; border:2px solid #fff; }
+    .ev-proxima { background:rgba(100,140,255,0.18); border-color:rgba(100,140,255,0.5); }
+    .ev-pasada  { background:rgba(255,255,255,0.07); border-color:rgba(255,255,255,0.2); }
+    .ev-hora  { font-size:11px; font-weight:700; color:#fff; display:block; white-space:nowrap; }
+    .ev-user  { font-size:10px; color:rgba(255,255,255,0.85); display:block; white-space:nowrap; overflow:hidden; }
+    .ev-pasada .ev-hora { color:#AECDFF; }
+    .ev-pasada .ev-user { color:#7AA8FF; }
+    .ev-proxima .ev-hora { color:#C8DFFF; }
+    .ev-proxima .ev-user { color:#A0C0FF; }
 
     /* ══ OVERLAY ══ */
-    #overlay { position:fixed; left:0; top:0; width:1920px; height:1080px; background:#020B3A; z-index:999; }
+    #overlay { position:fixed; left:0; top:0; width:1920px; height:1080px; background:#0A0E2E; z-index:999; }
     .spinner { position:absolute; left:944px; top:490px; width:48px; height:48px; border:5px solid #002080; border-top-color:#FF7D10; border-radius:24px; -webkit-animation:spin .9s linear infinite; animation:spin .9s linear infinite; }
     .ov-txt  { position:absolute; left:0; top:556px; width:1920px; font-size:12px; color:#AECDFF; letter-spacing:4px; text-transform:uppercase; font-weight:700; text-align:center; }
     @-webkit-keyframes spin { to { -webkit-transform:rotate(360deg); } }
@@ -125,232 +108,183 @@
 <div id="header">
   <img id="logo-img" src="https://i.imgur.com/fXLdGez.png" alt="Prodalam"/>
   <span id="logo-sub">Estado en tiempo real</span>
-  <span id="semana-txt">Semana actual</span>
-  <div id="leg-dot-d"></div><span id="leg-disp">Disponible</span>
-  <div id="leg-dot-p"></div><span id="leg-prox">Proxima</span>
-  <div id="leg-dot-o"></div><span id="leg-ocup">Ocupada</span>
   <span id="act-txt">Actualizando...</span>
   <span id="clk-time">--:--</span>
   <span id="clk-date">---</span>
 </div>
 
-<div id="plano">
-  <div id="plano-title">Plano de Salas</div>
-  <div class="pr-room libre" id="pr-villarica"><span class="pr-num">VLL</span><span class="pr-est">Disponible</span></div>
-  <div class="pr-room libre" id="pr-6"><span class="pr-num">S.6</span><span class="pr-est">Disponible</span></div>
-  <div class="pr-room libre" id="pr-5"><span class="pr-num">S.5</span><span class="pr-est">Disponible</span></div>
-  <div class="pr-room libre" id="pr-4"><span class="pr-num">S.4</span><span class="pr-est">Disponible</span></div>
-  <div class="pr-room libre" id="pr-3"><span class="pr-num">S.3</span><span class="pr-est">Disponible</span></div>
-  <div class="pr-room libre" id="pr-2"><span class="pr-num">S.2</span><span class="pr-est">Disponible</span></div>
-  <div class="pr-room libre" id="pr-1"><span class="pr-num">S.1</span><span class="pr-est">Disponible</span></div>
-</div>
-
-<div id="cal-area">
-  <div id="cal-axis"></div>
+<div id="tabla">
+  <div id="fila-header">
+    <div id="corner">Sala</div>
+  </div>
+  <!-- filas generadas por JS -->
 </div>
 
 <script>
 var SCRIPT_URL="https://script.google.com/macros/s/AKfycbyn7VSKT-IFULCC2bPx2SlK2W2GlaXQNoKZ44WLQq5Ev94ESTC45vlJgcpmPgaN_IYQ/exec";
 
-// Rango horario visible: 7am a 21pm
-var HORA_INI=7, HORA_FIN=21, TOTAL_H=14;
-var COL_HEIGHT=908; // px altura de zona de eventos
-
-var DIAS_SEMANA=["Lun","Mar","Mie","Jue","Vie"];
-var DIAS_FULL  =["Lunes","Martes","Miercoles","Jueves","Viernes"];
-var DIAS_JS    =["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"];
-var MESES      =["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+var DIAS_SHORT=["Dom","Lun","Mar","Mie","Jue","Vie","Sab"];
+var DIAS_FULL =["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"];
+var MESES     =["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+var DIAS_SEM  =["Lunes","Martes","Miercoles","Jueves","Viernes"];
 
 function pad(n){ return n<10?"0"+n:""+n; }
 function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
-function fmtH(iso){ if(!iso)return"--:--"; var d=new Date(iso); return pad(d.getHours())+":"+pad(d.getMinutes()); }
+function fmtH(iso){ var d=new Date(iso); return pad(d.getHours())+":"+pad(d.getMinutes()); }
+function soloFecha(iso){ var d=new Date(iso); d.setHours(0,0,0,0); return d.getTime(); }
 
-/* Calcula el lunes de la semana de una fecha dada */
 function getLunes(fecha){
   var d=new Date(fecha); var dow=d.getDay();
   var diff=(dow===0)?-6:1-dow;
   d.setDate(d.getDate()+diff); d.setHours(0,0,0,0); return d;
 }
 
-/* Convierte hora ISO a px dentro de la columna de UN día
-   La columna total tiene 5 días, cada día ocupa COL_HEIGHT/5 px
-   dayIndex: 0=lun … 4=vie */
-var DAY_H; // se calcula al inicio de renderGrid
-function eventoPx(iso, dayIndex){
-  var d=new Date(iso);
-  var m=(d.getHours()-HORA_INI)*60+d.getMinutes();
-  var frac=Math.max(0,Math.min(1, m/(TOTAL_H*60)));
-  return Math.round(dayIndex*DAY_H + frac*DAY_H);
-}
-
 /* Reloj */
 function tickClock(){
   var n=new Date();
   document.getElementById("clk-time").innerHTML=pad(n.getHours())+":"+pad(n.getMinutes());
-  document.getElementById("clk-date").innerHTML=DIAS_JS[n.getDay()]+" "+pad(n.getDate())+" "+MESES[n.getMonth()]+" "+n.getFullYear();
+  document.getElementById("clk-date").innerHTML=DIAS_FULL[n.getDay()]+" "+pad(n.getDate())+" "+MESES[n.getMonth()]+" "+n.getFullYear();
 }
 setInterval(tickClock,1000); tickClock();
 
-/* Eje de horas — se repite por cada día */
-function buildAxis(){
-  var ax=document.getElementById("cal-axis"); ax.innerHTML="";
-  for(var d=0;d<5;d++){
-    for(var h=HORA_INI;h<=HORA_FIN;h++){
-      var lbl=document.createElement("span"); lbl.className="axis-lbl";
-      var top=Math.round(d*DAY_H+(h-HORA_INI)*(DAY_H/TOTAL_H)-7);
-      lbl.style.top=top+"px";
-      lbl.innerHTML=(h<12?h+"AM":(h===12?"12PM":(h-12)+"PM"));
-      ax.appendChild(lbl);
-    }
-  }
-}
+/* Layout dims */
+// tabla: 1904 x 1004
+// corner + 5 day cols: left=148, width=(1904-148)/5 = 351px cada una
+var CORNER_W = 148;
+var TABLE_W  = 1904;
+var TABLE_H  = 1004;
+var HEAD_H   = 52;
+var N_DAYS   = 5;
+var COL_W    = Math.floor((TABLE_W - CORNER_W) / N_DAYS); // 351
+var SALAS_NAMES = ["Sala 1","Sala 2","Sala 3","Sala 4","Sala 5","Sala 6","Sala Villarica"];
+var N_SALAS  = SALAS_NAMES.length; // 7
+var ROW_H    = Math.floor((TABLE_H - HEAD_H) / N_SALAS); // ~136
 
-/* Líneas de hora dentro de una columna para los 5 días */
-function buildLines(col){
-  var rowH=DAY_H/TOTAL_H;
-  for(var d=0;d<5;d++){
-    var baseTop=d*DAY_H;
-    for(var h=0;h<=TOTAL_H;h++){
-      var top=Math.round(baseTop+h*rowH);
-      var l=document.createElement("div"); l.className="hour-line"; l.style.top=top+"px"; col.appendChild(l);
-      if(h<TOTAL_H){
-        var lh=document.createElement("div"); lh.className="half-line"; lh.style.top=Math.round(top+rowH/2)+"px"; col.appendChild(lh);
-      }
-    }
-  }
-}
-
-/* Separadores de día */
-function buildDaySeps(col, lunes){
-  for(var d=0;d<5;d++){
-    var top=d*DAY_H;
-    var sep=document.createElement("div"); sep.className="day-sep"; sep.style.top=top+"px"; col.appendChild(sep);
-    var fecha=new Date(lunes); fecha.setDate(lunes.getDate()+d);
-    var lbl=document.createElement("div"); lbl.className="day-lbl";
-    lbl.style.top=(top+2)+"px";
-    lbl.innerHTML=DIAS_SEMANA[d]+" "+pad(fecha.getDate())+"/"+pad(fecha.getMonth()+1);
-    col.appendChild(lbl);
-  }
-}
-
-/* Línea "ahora" */
-function buildNow(col, lunes){
-  var now=new Date();
-  var dow=now.getDay();
-  if(dow<1||dow>5) return; // fin de semana
-  var dayIdx=dow-1; // 0=lun
-  // verificar que "ahora" está dentro de la semana mostrada
-  var lunesFin=new Date(lunes); lunesFin.setDate(lunes.getDate()+4); lunesFin.setHours(23,59,59);
-  if(now<lunes||now>lunesFin) return;
-  var mins=(now.getHours()-HORA_INI)*60+now.getMinutes();
-  if(mins<0||mins>TOTAL_H*60) return;
-  var top=Math.round(dayIdx*DAY_H + (mins/(TOTAL_H*60))*DAY_H);
-  var l=document.createElement("div"); l.className="now-line"; l.style.top=top+"px";
-  l.innerHTML='<div class="now-dot"></div>'; col.appendChild(l);
-}
-
-/* Evento */
-function buildEvent(col, ev, lunes){
-  var inicio=new Date(ev.inicio), fin=new Date(ev.fin);
-  var dow=inicio.getDay();
-  if(dow<1||dow>5) return;
-  var dayIdx=dow-1;
-
-  var topPx  = eventoPx(ev.inicio, dayIdx);
-  var botPx  = eventoPx(ev.fin,    dayIdx);
-  // clamp al rango del día
-  var dayTop = dayIdx*DAY_H, dayBot=(dayIdx+1)*DAY_H;
-  topPx=Math.max(topPx,dayTop); botPx=Math.min(botPx,dayBot);
-  var h=Math.max(botPx-topPx,14);
-
-  // Clasificación
-  var now=Date.now();
-  var iniMs=inicio.getTime(), finMs=fin.getTime();
-  var cls;
-  if(iniMs<=now && finMs>now)          cls="ev-ocup";
-  else if(iniMs>now && iniMs<=now+30*60*1000) cls="ev-pronto";
-  else if(finMs<=now)                   cls="ev-pasada";
-  else                                  cls="ev-proxima";
-
-  var d=document.createElement("div"); d.className="cal-event "+cls;
-  d.style.top=topPx+"px"; d.style.height=h+"px";
-  // offset +18px para dejar espacio al label del día
-  d.style.top=(topPx+18)+"px"; d.style.height=Math.max(h-2,12)+"px";
-  d.innerHTML='<span class="ev-t">'+fmtH(ev.inicio)+"-"+fmtH(ev.fin)+'</span>'
-             +(ev.creador?'<span class="ev-q">'+esc(ev.creador)+'</span>':"");
-  col.appendChild(d);
-}
-
-/* Plano */
-var PLANO_MAP={"Sala 1":"pr-1","Sala 2":"pr-2","Sala 3":"pr-3","Sala 4":"pr-4","Sala 5":"pr-5","Sala 6":"pr-6","Sala Villarica":"pr-villarica"};
-var EST_TXT={libre:"Disponible",ocupada:"Ocupada",pronto:"Proxima",error:"Error"};
-function updatePlano(salas){
-  for(var i=0;i<salas.length;i++){
-    var s=salas[i],id=PLANO_MAP[s.nombre]; if(!id)continue;
-    var el=document.getElementById(id); if(!el)continue;
-    el.className=el.className.replace(/\s*(libre|ocupada|pronto|error)/g,"")+" "+(s.estado||"error");
-    var est=el.querySelector(".pr-est"); if(est)est.innerHTML=EST_TXT[s.estado]||"";
-  }
-}
-
-var SHORT={"Sala 1":"S.1","Sala 2":"S.2","Sala 3":"S.3","Sala 4":"S.4","Sala 5":"S.5","Sala 6":"S.6","Sala Villarica":"VLL"};
+var EST_COLORS = { libre:"#3ED68A", ocupada:"#FF7D10", pronto:"#5599FF", error:"#888" };
 
 function renderGrid(data){
-  var salas=data.salas||data;
-  if(!salas||!salas.length){ocultarOverlay();return;}
+  var salas = data.salas || data;
+  if(!salas||!salas.length){ ocultarOverlay(); return; }
 
-  // Calcular lunes
-  var lunes=getLunes(new Date());
+  var ahora  = new Date();
+  var lunes  = getLunes(ahora);
+  var hoyTs  = soloFecha(ahora);
 
-  // DAY_H = altura de cada franja de día
-  DAY_H=Math.floor(COL_HEIGHT/5);
+  // Construir mapa: nombre -> sala
+  var salaMap = {};
+  for(var i=0;i<salas.length;i++) salaMap[salas[i].nombre]=salas[i];
 
-  updatePlano(salas);
-  buildAxis();
+  // Limpiar tabla excepto corner
+  var tabla = document.getElementById("tabla");
+  var viejos = tabla.querySelectorAll(".sala-row,.day-head");
+  for(var i=0;i<viejos.length;i++) viejos[i].parentNode.removeChild(viejos[i]);
 
-  // Limpiar columnas previas
-  var area=document.getElementById("cal-area");
-  var old=area.querySelectorAll(".cal-col,.col-head");
-  for(var i=0;i<old.length;i++) old[i].parentNode.removeChild(old[i]);
-
-  var n=salas.length, gap=4, axisW=48;
-  var totalW=1660-axisW;
-  var colW=Math.floor((totalW-gap*(n-1))/n);
-
-  // Header semana
-  var viernesD=new Date(lunes); viernesD.setDate(lunes.getDate()+4);
-  document.getElementById("semana-txt").innerHTML=
-    "Semana: "+pad(lunes.getDate())+"/"+pad(lunes.getMonth()+1)+" - "+pad(viernesD.getDate())+"/"+pad(viernesD.getMonth()+1)+"/"+viernesD.getFullYear();
-
-  for(var i=0;i<n;i++){
-    var s=salas[i];
-    var lft=axisW+i*(colW+gap);
-    var bc=s.estado==="libre"?"b-libre":s.estado==="ocupada"?"b-ocupada":s.estado==="pronto"?"b-pronto":"b-error";
-    var bt=s.estado==="libre"?"Disponible":s.estado==="ocupada"?"Ocupada":s.estado==="pronto"?"Proxima":"Error";
-    var sh=SHORT[s.nombre]||s.nombre;
-
-    // Header
-    var ch=document.createElement("div"); ch.className="col-head";
-    ch.style.left=lft+"px"; ch.style.width=colW+"px";
-    ch.innerHTML='<span class="col-head-short">'+sh+'</span>'
-               +'<span class="col-head-full">'+esc(s.nombre)+'</span>'
-               +'<span class="col-badge '+bc+'">'+bt+'</span>';
-    area.appendChild(ch);
-
-    // Columna
-    var col=document.createElement("div"); col.className="cal-col";
-    col.style.left=lft+"px"; col.style.width=colW+"px";
-    buildLines(col);
-    buildDaySeps(col, lunes);
-    // Eventos de la semana
-    var evs=s.eventosSemana||[];
-    for(var j=0;j<evs.length;j++) buildEvent(col, evs[j], lunes);
-    buildNow(col, lunes);
-    area.appendChild(col);
+  // ── Cabeceras de días ──
+  var filaHead = document.getElementById("fila-header");
+  for(var d=0;d<N_DAYS;d++){
+    var fecha = new Date(lunes); fecha.setDate(lunes.getDate()+d);
+    var esHoy = (soloFecha(fecha)===hoyTs);
+    var dh = document.createElement("div");
+    dh.className = "day-head" + (esHoy?" hoy":"");
+    dh.style.left  = (CORNER_W + d*COL_W)+"px";
+    dh.style.width  = COL_W+"px";
+    dh.style.borderRadius = (d===0?"0":"0")+" "+(d===N_DAYS-1?"8px":"0")+" 0 0";
+    var nombreDia = DIAS_SEM[d];
+    var numDia = pad(fecha.getDate())+"/"+pad(fecha.getMonth()+1);
+    dh.innerHTML = nombreDia+"<span>"+numDia+"</span>";
+    filaHead.appendChild(dh);
   }
 
-  var now=new Date();
-  document.getElementById("act-txt").innerHTML="Act. "+pad(now.getHours())+":"+pad(now.getMinutes())+":"+pad(now.getSeconds());
+  // ── Filas de salas ──
+  for(var si=0;si<SALAS_NAMES.length;si++){
+    var nombreSala = SALAS_NAMES[si];
+    var s = salaMap[nombreSala];
+    var topRow = HEAD_H + si*ROW_H;
+
+    var row = document.createElement("div");
+    row.className = "sala-row";
+    row.style.top    = topRow+"px";
+    row.style.height = ROW_H+"px";
+
+    // Label sala
+    var color = s ? (EST_COLORS[s.estado]||"#888") : "#888";
+    var lbl = document.createElement("div");
+    lbl.className = "sala-lbl";
+    lbl.style.height = ROW_H+"px";
+    lbl.style.borderRadius = (si===SALAS_NAMES.length-1?"0 0 0 8px":"0");
+    var shortName = nombreSala==="Sala Villarica"?"S. Villarica":nombreSala;
+    lbl.innerHTML = '<div class="sala-lbl-inner"><div class="sala-dot" style="background:'+color+'"></div>'+esc(shortName)+'</div>';
+    row.appendChild(lbl);
+
+    // Celdas de días
+    for(var d=0;d<N_DAYS;d++){
+      var fecha = new Date(lunes); fecha.setDate(lunes.getDate()+d);
+      var fechaTs = soloFecha(fecha);
+      var esHoy   = (fechaTs===hoyTs);
+      var isLast  = (si===SALAS_NAMES.length-1);
+      var isLastD = (d===N_DAYS-1);
+
+      var cell = document.createElement("div");
+      cell.className = "day-cell"+(esHoy?" hoy":"");
+      cell.style.left   = (CORNER_W + d*COL_W)+"px";
+      cell.style.width  = COL_W+"px";
+      cell.style.height = ROW_H+"px";
+      cell.style.borderRadius = (isLast&&isLastD?"0 0 8px 0":isLast&&d===0?"0 0 0 0":"0");
+
+      // Filtrar eventos de este día para esta sala
+      var evsDia = [];
+      if(s && s.eventosSemana){
+        for(var ei=0;ei<s.eventosSemana.length;ei++){
+          var ev = s.eventosSemana[ei];
+          if(soloFecha(new Date(ev.inicio))===fechaTs) evsDia.push(ev);
+        }
+      }
+
+      if(evsDia.length===0){
+        // Libre
+        var lt = document.createElement("div"); lt.className="libre-txt";
+        lt.innerHTML='<span style="font-size:12px;color:rgba(255,255,255,0.2);font-style:italic;">Libre</span>';
+        cell.appendChild(lt);
+      } else {
+        // Ordenar eventos por hora
+        evsDia.sort(function(a,b){ return new Date(a.inicio)-new Date(b.inicio); });
+
+        var EVH = Math.floor((ROW_H-8)/evsDia.length); // altura por evento
+        EVH = Math.min(EVH, 50); // máximo 50px
+        var now = Date.now();
+
+        for(var ei=0;ei<evsDia.length;ei++){
+          var ev = evsDia[ei];
+          var iniMs = new Date(ev.inicio).getTime();
+          var finMs = new Date(ev.fin).getTime();
+          var cls;
+          if(iniMs<=now && finMs>now)                    cls="ev-ocup";
+          else if(iniMs>now && iniMs<=now+30*60*1000)    cls="ev-pronto";
+          else if(finMs<=now)                             cls="ev-pasada";
+          else                                            cls="ev-proxima";
+
+          var bloque = document.createElement("div");
+          bloque.className = "ev-bloque "+cls;
+          bloque.style.top    = (4 + ei*(EVH+3))+"px";
+          bloque.style.height = EVH+"px";
+          bloque.innerHTML = '<span class="ev-hora">'+fmtH(ev.inicio)+" - "+fmtH(ev.fin)+'</span>'
+                           + (ev.creador?'<span class="ev-user">'+esc(ev.creador)+'</span>':"");
+          cell.appendChild(bloque);
+        }
+      }
+
+      row.appendChild(cell);
+    }
+
+    tabla.appendChild(row);
+  }
+
+  // Actualizar header semana
+  var viernes = new Date(lunes); viernes.setDate(lunes.getDate()+4);
+  document.getElementById("act-txt").innerHTML =
+    "Semana "+pad(lunes.getDate())+"/"+pad(lunes.getMonth()+1)+" - "+pad(viernes.getDate())+"/"+pad(viernes.getMonth()+1)
+    +"   |   Act. "+pad(ahora.getHours())+":"+pad(ahora.getMinutes())+":"+pad(ahora.getSeconds());
+
   ocultarOverlay();
 }
 
@@ -369,17 +303,6 @@ function cargarDatos(){
 }
 cargarDatos();
 setInterval(cargarDatos,60000);
-
-// Actualizar línea ahora cada minuto
-setInterval(function(){
-  var lunes=getLunes(new Date());
-  var cols=document.querySelectorAll(".cal-col");
-  for(var i=0;i<cols.length;i++){
-    var nls=cols[i].querySelectorAll(".now-line");
-    for(var j=0;j<nls.length;j++) nls[j].parentNode.removeChild(nls[j]);
-    buildNow(cols[i], lunes);
-  }
-},60000);
 </script>
 </body>
 </html>
