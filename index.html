@@ -9,11 +9,9 @@
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     html, body {
       width:100%; height:100%; overflow:hidden;
-      background:#040C3A; color:#e6e9f0;
+      background:#040C3A; color:#fff;
       font-family:Arial, Helvetica, sans-serif;
     }
-
-    /* ══ APP ══ */
     .app { display:flex; flex-direction:column; width:100vw; height:100vh; }
 
     /* ══ HEADER ══ */
@@ -25,13 +23,13 @@
     }
     .h-logo { display:flex; align-items:center; gap:10px; flex-shrink:0; }
     .h-logo img { height:40px; }
-    .h-logo-sub { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#AECDFF; }
+    .h-logo-sub { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#fff; font-weight:600; }
     .h-legend { flex:1; display:flex; justify-content:center; gap:28px; }
-    .leg-item { display:flex; align-items:center; gap:8px; font-size:13px; letter-spacing:1px; text-transform:uppercase; color:#AECDFF; font-weight:600; }
-    .leg-dot  { width:13px; height:13px; border-radius:50%; flex-shrink:0; }
+    .leg-item { display:flex; align-items:center; gap:8px; font-size:14px; letter-spacing:1px; text-transform:uppercase; color:#fff; font-weight:700; }
+    .leg-dot  { width:14px; height:14px; border-radius:50%; flex-shrink:0; border:2px solid rgba(255,255,255,0.4); }
     .h-clock  { flex-shrink:0; text-align:right; }
     .clock-lbl  { font-size:10px; letter-spacing:1px; text-transform:uppercase; color:#AECDFF; display:block; }
-    .clock-time { font-size:44px; font-weight:700; letter-spacing:4px; color:#fff; line-height:1; display:block; }
+    .clock-time { font-size:46px; font-weight:700; letter-spacing:4px; color:#fff; line-height:1; display:block; }
     .clock-date { font-size:13px; letter-spacing:2px; text-transform:uppercase; color:#AECDFF; margin-top:3px; display:block; }
 
     /* ══ MAIN ══ */
@@ -39,96 +37,109 @@
 
     /* ══ PLANO ══ */
     .plano {
-      flex-shrink:0; width:110px;
-      background:#00267C; border:2px solid #0A52C6; border-radius:10px;
+      flex-shrink:0; width:160px;
+      background:#00267C; border:2px solid #0A52C6; border-radius:12px;
       display:flex; flex-direction:column; overflow:hidden;
     }
     .plano-title {
-      font-size:9px; letter-spacing:2px; text-transform:uppercase;
-      color:#AECDFF; text-align:center; padding:7px 4px;
-      border-bottom:1px solid #0A52C6; flex-shrink:0; font-weight:700;
+      font-size:11px; letter-spacing:3px; text-transform:uppercase;
+      color:#fff; text-align:center; padding:8px 4px;
+      border-bottom:2px solid #0A52C6; flex-shrink:0; font-weight:700;
+      background:#0A52C6;
     }
-    .plano-body { flex:1; display:flex; flex-direction:column; padding:7px; gap:5px; min-height:0; }
+    .plano-body {
+      flex:1; display:flex; flex-direction:column;
+      padding:8px; gap:6px; min-height:0;
+    }
 
-    /* Villarica */
+    /* Villarica — barra horizontal arriba */
     .plano-villarica {
-      flex-shrink:0; height:44px;
-      border-radius:7px; border:2px solid #0A52C6; background:#0A52C6;
-      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+      flex-shrink:0; height:52px; border-radius:8px;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
       transition:background .4s, border-color .4s;
+      border:2px solid transparent;
     }
-    /* Grid salas */
+    /* Grid 2x3 para salas 6→1 */
     .plano-grid {
       flex:1; display:grid;
       grid-template-columns:1fr 1fr;
       grid-template-rows:repeat(3,1fr);
-      gap:5px; min-height:0;
+      gap:6px; min-height:0;
     }
     .plano-room {
-      border-radius:7px; border:2px solid #0A52C6; background:#0A52C6;
-      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+      border-radius:8px; border:2px solid transparent;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
       transition:background .4s, border-color .4s;
     }
 
-    /* Estados */
-    .libre   { background:#0A52C6 !important; border-color:#0A52C6 !important; }
-    .ocupada { background:#FF7D10 !important; border-color:#FF7D10 !important; }
-    .pronto  { background:#AECDFF !important; border-color:#AECDFF !important; }
+    /* ESTADO LIBRE → fondo azul brillante, texto blanco */
+    .libre   {
+      background:#0A52C6 !important;
+      border-color:#AECDFF !important;
+    }
+    /* ESTADO OCUPADA → fondo naranja, texto blanco */
+    .ocupada {
+      background:#FF7D10 !important;
+      border-color:#fff !important;
+    }
+    /* ESTADO PRONTO → fondo celeste, texto azul oscuro */
+    .pronto  {
+      background:#AECDFF !important;
+      border-color:#fff !important;
+    }
 
-    .pr-name {
-      font-size:13px; font-weight:700; color:#fff; text-align:center; line-height:1.1;
-      text-shadow:0 1px 3px rgba(0,0,0,0.5);
+    .pr-num {
+      font-size:clamp(18px,1.8vw,28px); font-weight:900; line-height:1;
+      color:#fff; text-shadow:0 2px 4px rgba(0,0,0,0.5);
     }
-    .pr-estado {
-      font-size:8px; letter-spacing:1px; text-transform:uppercase;
-      color:rgba(255,255,255,0.75); text-align:center;
+    .pr-est {
+      font-size:clamp(7px,0.65vw,10px); font-weight:700; letter-spacing:1px;
+      text-transform:uppercase; color:#fff; opacity:0.9;
     }
-    .ocupada .pr-name, .ocupada .pr-estado { color:#fff; }
-    .pronto  .pr-name, .pronto .pr-estado  { color:#040C3A; }
+    .pronto .pr-num { color:#040C3A; }
+    .pronto .pr-est { color:#040C3A; opacity:0.8; }
 
     /* ══ CALENDARIO ══ */
     .cal { flex:1; display:flex; flex-direction:column; min-width:0; overflow:hidden; }
 
-    /* Cabecera */
     .cal-head {
       flex-shrink:0; display:flex;
-      padding-left:50px;
-      gap:4px; margin-bottom:4px;
+      padding-left:54px; gap:4px; margin-bottom:4px;
     }
     .col-head {
       flex:1; min-width:0;
-      background:#00267C; border:1px solid #0A52C6; border-radius:8px 8px 0 0;
-      padding:8px 4px; text-align:center;
+      background:#00267C; border:2px solid #0A52C6; border-radius:8px 8px 0 0;
+      padding:8px 6px; text-align:center;
     }
-    .col-head-name {
-      font-size:clamp(11px,1.1vw,18px); font-weight:700;
-      text-transform:uppercase; letter-spacing:2px; color:#fff;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block;
+    .col-head-short {
+      font-size:clamp(13px,1.3vw,20px); font-weight:900;
+      text-transform:uppercase; letter-spacing:2px; color:#fff; display:block;
+    }
+    .col-head-full {
+      font-size:clamp(9px,0.7vw,11px); color:#AECDFF;
+      text-transform:uppercase; letter-spacing:1px; display:block; margin-top:1px;
     }
     .col-badge {
       display:inline-block; margin-top:5px;
       padding:3px 10px; border-radius:20px;
-      font-size:clamp(9px,0.7vw,11px); font-weight:700; letter-spacing:1px; text-transform:uppercase;
+      font-size:clamp(9px,0.65vw,11px); font-weight:700; letter-spacing:1px; text-transform:uppercase;
     }
     .b-libre   { background:#0A52C6; color:#fff; border:1px solid #AECDFF; }
-    .b-ocupada { background:#FF7D10; color:#fff; border:1px solid #FF7D10; }
-    .b-pronto  { background:#AECDFF; color:#040C3A; border:1px solid #AECDFF; }
-    .b-error   { background:#1a1a1a; color:#888;   border:1px solid #444; }
+    .b-ocupada { background:#FF7D10; color:#fff; border:2px solid #fff; }
+    .b-pronto  { background:#AECDFF; color:#040C3A; border:1px solid #fff; }
+    .b-error   { background:#333;    color:#aaa;  border:1px solid #555; }
 
-    /* Grid de horas */
+    /* Grid horas */
     .cal-grid { flex:1; display:flex; min-height:0; overflow:hidden; }
 
-    .cal-axis {
-      flex-shrink:0; width:50px;
-      display:flex; flex-direction:column;
-    }
+    .cal-axis { flex-shrink:0; width:54px; display:flex; flex-direction:column; }
     .axis-slot {
       flex:1; display:flex; align-items:flex-start;
       justify-content:flex-end; padding-right:8px;
     }
     .axis-slot span {
-      font-size:clamp(9px,0.7vw,12px); color:#AECDFF;
-      font-weight:600; letter-spacing:1px;
+      font-size:clamp(10px,0.75vw,13px); color:#AECDFF;
+      font-weight:700; letter-spacing:1px;
       transform:translateY(-50%); white-space:nowrap;
     }
 
@@ -139,7 +150,7 @@
       overflow:hidden;
     }
 
-    .hour-line { position:absolute; left:0; right:0; height:1px; background:#0A52C6; opacity:0.6; }
+    .hour-line { position:absolute; left:0; right:0; height:1px; background:#0A52C6; opacity:0.7; }
     .half-line { position:absolute; left:0; right:0; height:1px; background:#0A52C6; opacity:0.2; }
 
     /* Eventos */
@@ -148,14 +159,31 @@
       border-radius:6px; padding:4px 7px;
       border-left:4px solid transparent; overflow:hidden;
     }
-    .cal-event.ocupada { background:rgba(255,125,16,0.25); border-color:#FF7D10; }
-    .cal-event.pronto  { background:rgba(174,205,255,0.2);  border-color:#AECDFF; }
-    .cal-event.proxima { background:rgba(10,82,198,0.35);   border-color:#0A52C6; }
-    .ev-t { font-size:clamp(9px,0.75vw,12px); font-weight:700; display:block; white-space:nowrap; }
-    .ev-q { font-size:clamp(10px,0.8vw,13px); color:#e6e9f0; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .cal-event.ocupada .ev-t { color:#FF7D10; }
-    .cal-event.pronto  .ev-t { color:#AECDFF; }
-    .cal-event.proxima .ev-t { color:#AECDFF; }
+    /* Ocupada: naranja sólido con texto blanco */
+    .cal-event.ocupada {
+      background:#FF7D10;
+      border-color:#fff;
+    }
+    /* Próxima <30min: celeste sólido con texto oscuro */
+    .cal-event.pronto {
+      background:#AECDFF;
+      border-color:#fff;
+    }
+    /* Próxima normal: azul sólido */
+    .cal-event.proxima {
+      background:#0A52C6;
+      border-color:#AECDFF;
+    }
+    .ev-t {
+      font-size:clamp(10px,0.8vw,13px); font-weight:700;
+      display:block; white-space:nowrap; color:#fff;
+    }
+    .ev-q {
+      font-size:clamp(11px,0.85vw,14px); font-weight:600;
+      display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#fff;
+    }
+    .cal-event.pronto .ev-t { color:#040C3A; }
+    .cal-event.pronto .ev-q { color:#040C3A; }
 
     /* Línea de ahora */
     .now-line {
@@ -165,6 +193,7 @@
     .now-dot {
       position:absolute; left:-5px; top:-5px;
       width:13px; height:13px; border-radius:50%; background:#FF7D10;
+      border:2px solid #fff;
     }
 
     /* ══ OVERLAY ══ */
@@ -173,11 +202,11 @@
       display:flex; align-items:center; justify-content:center; flex-direction:column; gap:16px;
     }
     .spinner {
-      width:42px; height:42px;
+      width:44px; height:44px;
       border:4px solid #00267C; border-top-color:#FF7D10;
       border-radius:50%; animation:spin .9s linear infinite;
     }
-    .ov-txt { font-size:12px; color:#AECDFF; letter-spacing:3px; text-transform:uppercase; }
+    .ov-txt { font-size:12px; color:#AECDFF; letter-spacing:3px; text-transform:uppercase; font-weight:700; }
     @keyframes spin { to { transform:rotate(360deg); } }
   </style>
 </head>
@@ -193,11 +222,11 @@
   <!-- HEADER -->
   <div class="header">
     <div class="h-logo">
-      <img src="https://i.imgur.com/fXLdGez.png" alt="Logo"/>
+      <img src="logo.png" alt="Prodalam"/>
       <span class="h-logo-sub">Estado en tiempo real</span>
     </div>
     <div class="h-legend">
-      <div class="leg-item"><div class="leg-dot" style="background:#0A52C6;border:2px solid #AECDFF"></div>Disponible</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#0A52C6"></div>Disponible</div>
       <div class="leg-item"><div class="leg-dot" style="background:#AECDFF"></div>Próxima (&lt;30 min)</div>
       <div class="leg-item"><div class="leg-dot" style="background:#FF7D10"></div>Ocupada</div>
     </div>
@@ -215,17 +244,19 @@
     <div class="plano">
       <div class="plano-title">Plano</div>
       <div class="plano-body">
+        <!-- Villarica arriba, ancho completo -->
         <div class="plano-villarica libre" id="pr-villarica">
-          <div class="pr-name">Villarica</div>
-          <div class="pr-estado">Disponible</div>
+          <div class="pr-num">VLL</div>
+          <div class="pr-est">Disponible</div>
         </div>
+        <!-- Grid: fila1=[S6,S5] fila2=[S4,S3] fila3=[S2,S1] -->
         <div class="plano-grid">
-          <div class="plano-room libre" id="pr-6"><div class="pr-name">S.6</div><div class="pr-estado">OK</div></div>
-          <div class="plano-room libre" id="pr-5"><div class="pr-name">S.5</div><div class="pr-estado">OK</div></div>
-          <div class="plano-room libre" id="pr-4"><div class="pr-name">S.4</div><div class="pr-estado">OK</div></div>
-          <div class="plano-room libre" id="pr-3"><div class="pr-name">S.3</div><div class="pr-estado">OK</div></div>
-          <div class="plano-room libre" id="pr-2"><div class="pr-name">S.2</div><div class="pr-estado">OK</div></div>
-          <div class="plano-room libre" id="pr-1"><div class="pr-name">S.1</div><div class="pr-estado">OK</div></div>
+          <div class="plano-room libre" id="pr-6"><div class="pr-num">S.6</div><div class="pr-est">OK</div></div>
+          <div class="plano-room libre" id="pr-5"><div class="pr-num">S.5</div><div class="pr-est">OK</div></div>
+          <div class="plano-room libre" id="pr-4"><div class="pr-num">S.4</div><div class="pr-est">OK</div></div>
+          <div class="plano-room libre" id="pr-3"><div class="pr-num">S.3</div><div class="pr-est">OK</div></div>
+          <div class="plano-room libre" id="pr-2"><div class="pr-num">S.2</div><div class="pr-est">OK</div></div>
+          <div class="plano-room libre" id="pr-1"><div class="pr-num">S.1</div><div class="pr-est">OK</div></div>
         </div>
       </div>
     </div>
@@ -245,174 +276,118 @@
 <script>
 var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyn7VSKT-IFULCC2bPx2SlK2W2GlaXQNoKZ44WLQq5Ev94ESTC45vlJgcpmPgaN_IYQ/exec";
 
-var HORA_INI = 7;
-var HORA_FIN = 21;
-var TOTAL_H  = HORA_FIN - HORA_INI;
-
+var HORA_INI = 7, HORA_FIN = 21, TOTAL_H = HORA_FIN - HORA_INI;
 var DIAS  = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
 var MESES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 
 function pad(n){ return n<10?"0"+n:""+n; }
-
 function tickClock(){
-  var n = new Date();
-  document.getElementById("clkTime").textContent = pad(n.getHours())+":"+pad(n.getMinutes());
-  document.getElementById("clkDate").textContent = DIAS[n.getDay()]+" "+pad(n.getDate())+" "+MESES[n.getMonth()]+" "+n.getFullYear();
+  var n=new Date();
+  document.getElementById("clkTime").textContent=pad(n.getHours())+":"+pad(n.getMinutes());
+  document.getElementById("clkDate").textContent=DIAS[n.getDay()]+" "+pad(n.getDate())+" "+MESES[n.getMonth()]+" "+n.getFullYear();
 }
-setInterval(tickClock,1000);
-tickClock();
+setInterval(tickClock,1000); tickClock();
 
 function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 function fmtH(iso){ if(!iso)return"--:--"; var d=new Date(iso); return pad(d.getHours())+":"+pad(d.getMinutes()); }
-
-function horaPct(iso){
-  var d = new Date(iso);
-  var mins = (d.getHours()-HORA_INI)*60+d.getMinutes();
-  return Math.max(0,Math.min(100, mins/(TOTAL_H*60)*100));
-}
+function horaPct(iso){ var d=new Date(iso),m=(d.getHours()-HORA_INI)*60+d.getMinutes(); return Math.max(0,Math.min(100,m/(TOTAL_H*60)*100)); }
 
 function buildAxis(){
-  var ax = document.getElementById("cal-axis");
-  ax.innerHTML = "";
-  for(var h=HORA_INI; h<=HORA_FIN; h++){
-    var sl = document.createElement("div");
-    sl.className = "axis-slot";
-    var lbl = h<12? h+"AM": (h===12?"12PM":(h-12)+"PM");
-    sl.innerHTML = "<span>"+lbl+"</span>";
+  var ax=document.getElementById("cal-axis"); ax.innerHTML="";
+  for(var h=HORA_INI;h<=HORA_FIN;h++){
+    var sl=document.createElement("div"); sl.className="axis-slot";
+    sl.innerHTML="<span>"+(h<12?h+"AM":h===12?"12PM":(h-12)+"PM")+"</span>";
     ax.appendChild(sl);
   }
 }
 
 function buildLines(col){
-  for(var h=0; h<=TOTAL_H; h++){
-    var pct = h/TOTAL_H*100;
-    var l = document.createElement("div");
-    l.className="hour-line"; l.style.top=pct+"%"; col.appendChild(l);
-    if(h<TOTAL_H){
-      var lh = document.createElement("div");
-      lh.className="half-line"; lh.style.top=(pct+50/TOTAL_H)+"%"; col.appendChild(lh);
-    }
+  for(var h=0;h<=TOTAL_H;h++){
+    var p=h/TOTAL_H*100;
+    var l=document.createElement("div"); l.className="hour-line"; l.style.top=p+"%"; col.appendChild(l);
+    if(h<TOTAL_H){ var lh=document.createElement("div"); lh.className="half-line"; lh.style.top=(p+50/TOTAL_H)+"%"; col.appendChild(lh); }
   }
 }
 
 function buildNow(col){
-  var now = new Date();
-  var mins = (now.getHours()-HORA_INI)*60+now.getMinutes();
+  var now=new Date(), mins=(now.getHours()-HORA_INI)*60+now.getMinutes();
   if(mins<0||mins>TOTAL_H*60) return;
-  var pct = mins/(TOTAL_H*60)*100;
-  var l = document.createElement("div");
-  l.className="now-line"; l.style.top=pct+"%";
-  l.innerHTML='<div class="now-dot"></div>';
-  col.appendChild(l);
+  var l=document.createElement("div"); l.className="now-line"; l.style.top=(mins/(TOTAL_H*60)*100)+"%";
+  l.innerHTML='<div class="now-dot"></div>'; col.appendChild(l);
 }
 
-function buildEvent(col, ev, cls){
-  var top = horaPct(ev.inicio);
-  var bot = horaPct(ev.fin);
-  var h   = Math.max(bot-top, 1.8);
-  var d   = document.createElement("div");
-  d.className="cal-event "+cls;
+function buildEvent(col,ev,cls){
+  var top=horaPct(ev.inicio), bot=horaPct(ev.fin), h=Math.max(bot-top,1.8);
+  var d=document.createElement("div"); d.className="cal-event "+cls;
   d.style.top=top+"%"; d.style.height=h+"%";
-  d.innerHTML =
-    '<span class="ev-t">'+fmtH(ev.inicio)+" – "+fmtH(ev.fin)+'</span>'+
-    (ev.creador?'<span class="ev-q">'+esc(ev.creador)+'</span>':"");
+  d.innerHTML='<span class="ev-t">'+fmtH(ev.inicio)+" – "+fmtH(ev.fin)+'</span>'+(ev.creador?'<span class="ev-q">'+esc(ev.creador)+'</span>':"");
   col.appendChild(d);
 }
 
-var PLANO_MAP = {
-  "Sala 1":"pr-1","Sala 2":"pr-2","Sala 3":"pr-3",
-  "Sala 4":"pr-4","Sala 5":"pr-5","Sala 6":"pr-6",
-  "Sala Villarica":"pr-villarica"
-};
-var ESTADO_TXT = { libre:"Disponible", ocupada:"Ocupada", pronto:"Próxima", error:"Error" };
+var PLANO_MAP={"Sala 1":"pr-1","Sala 2":"pr-2","Sala 3":"pr-3","Sala 4":"pr-4","Sala 5":"pr-5","Sala 6":"pr-6","Sala Villarica":"pr-villarica"};
+var EST_TXT={libre:"Disponible",ocupada:"Ocupada",pronto:"Próxima",error:"Error"};
 
 function updatePlano(salas){
   for(var i=0;i<salas.length;i++){
-    var s=salas[i], id=PLANO_MAP[s.nombre];
-    if(!id) continue;
-    var el=document.getElementById(id);
-    if(!el) continue;
-    el.className = el.className.replace(/\s*(libre|ocupada|pronto|error)/g,"")+" "+(s.estado||"error");
-    var est=el.querySelector(".pr-estado");
-    if(est) est.textContent = ESTADO_TXT[s.estado]||"";
+    var s=salas[i],id=PLANO_MAP[s.nombre]; if(!id)continue;
+    var el=document.getElementById(id); if(!el)continue;
+    el.className=el.className.replace(/\s*(libre|ocupada|pronto|error)/g,"")+" "+(s.estado||"error");
+    var est=el.querySelector(".pr-est"); if(est) est.textContent=EST_TXT[s.estado]||"";
   }
 }
 
+var SHORT={"Sala 1":"S.1","Sala 2":"S.2","Sala 3":"S.3","Sala 4":"S.4","Sala 5":"S.5","Sala 6":"S.6","Sala Villarica":"VLL"};
+
 function renderGrid(salas){
   if(!salas||!salas.length){ ocultarOverlay(); return; }
-
-  buildAxis();
-  updatePlano(salas);
-
-  var head=document.getElementById("cal-head");
-  var cols=document.getElementById("cal-cols");
+  buildAxis(); updatePlano(salas);
+  var head=document.getElementById("cal-head"), cols=document.getElementById("cal-cols");
   head.innerHTML=""; cols.innerHTML="";
 
   for(var i=0;i<salas.length;i++){
     var s=salas[i];
     var bc=s.estado==="libre"?"b-libre":s.estado==="ocupada"?"b-ocupada":s.estado==="pronto"?"b-pronto":"b-error";
     var bt=s.estado==="libre"?"Disponible":s.estado==="ocupada"?"Ocupada":s.estado==="pronto"?"Próxima":"Error";
-    // Nombre corto para la cabecera
-    var shortName = s.nombre.replace("Sala ","S.").replace("Sala","S.");
+    var sh=SHORT[s.nombre]||s.nombre;
 
-    var ch=document.createElement("div");
-    ch.className="col-head";
-    ch.innerHTML='<span class="col-head-name">'+esc(s.nombre)+'</span>'
+    var ch=document.createElement("div"); ch.className="col-head";
+    ch.innerHTML='<span class="col-head-short">'+sh+'</span>'
+               +'<span class="col-head-full">'+esc(s.nombre)+'</span>'
                +'<span class="col-badge '+bc+'">'+bt+'</span>';
     head.appendChild(ch);
 
-    var col=document.createElement("div");
-    col.className="cal-col";
+    var col=document.createElement("div"); col.className="cal-col";
     buildLines(col);
-
     if(s.actual) buildEvent(col,s.actual,"ocupada");
-    if(s.proximas){
-      for(var j=0;j<s.proximas.length;j++){
-        var ev=s.proximas[j];
-        var cls=(new Date(ev.inicio)-Date.now()<30*60*1000)?"pronto":"proxima";
-        buildEvent(col,ev,cls);
-      }
+    if(s.proximas) for(var j=0;j<s.proximas.length;j++){
+      var ev=s.proximas[j];
+      buildEvent(col,ev,(new Date(ev.inicio)-Date.now()<30*60*1000)?"pronto":"proxima");
     }
     buildNow(col);
     cols.appendChild(col);
   }
-
   var n=new Date();
   document.getElementById("actTxt").textContent="Act. "+pad(n.getHours())+":"+pad(n.getMinutes())+":"+pad(n.getSeconds());
   ocultarOverlay();
 }
 
-function ocultarOverlay(){
-  var ov=document.getElementById("overlay");
-  if(ov) ov.style.display="none";
-}
+function ocultarOverlay(){ var ov=document.getElementById("overlay"); if(ov) ov.style.display="none"; }
 
 var cbCount=0;
 function cargarDatos(){
-  cbCount++;
-  var cbName="cb"+cbCount;
-  window[cbName]=function(data){
+  cbCount++; var cn="cb"+cbCount;
+  window[cn]=function(data){
     renderGrid(data.salas||data);
-    try{
-      var el=document.getElementById("jsonp-script");
-      if(el) el.parentNode.removeChild(el);
-      delete window[cbName];
-    }catch(e){}
+    try{ var el=document.getElementById("jsonp-script"); if(el)el.parentNode.removeChild(el); delete window[cn]; }catch(e){}
   };
-  var sc=document.createElement("script");
-  sc.id="jsonp-script";
-  sc.src=SCRIPT_URL+"?callback="+cbName+"&t="+Date.now();
-  document.head.appendChild(sc);
+  var sc=document.createElement("script"); sc.id="jsonp-script";
+  sc.src=SCRIPT_URL+"?callback="+cn+"&t="+Date.now(); document.head.appendChild(sc);
 }
-
 cargarDatos();
 setInterval(cargarDatos,60000);
-
 setInterval(function(){
-  var ls=document.querySelectorAll(".now-line");
-  for(var i=0;i<ls.length;i++) ls[i].parentNode.removeChild(ls[i]);
-  var cs=document.querySelectorAll(".cal-col");
-  for(var i=0;i<cs.length;i++) buildNow(cs[i]);
+  var ls=document.querySelectorAll(".now-line"); for(var i=0;i<ls.length;i++) ls[i].parentNode.removeChild(ls[i]);
+  var cs=document.querySelectorAll(".cal-col"); for(var i=0;i<cs.length;i++) buildNow(cs[i]);
 },60000);
 </script>
 </body>
