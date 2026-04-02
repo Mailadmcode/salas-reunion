@@ -1,434 +1,591 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8"/>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Salas de Reunion</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Ocupación de Salas</title>
+
   <style>
-    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-    html, body {
-      width:100%; height:100%; overflow:hidden;
-      background:#090d18; color:#e6e9f0;
-      font-family:Arial, Helvetica, sans-serif;
+    /* ==========================================================
+       ESTILOS GENERALES
+       Compatible con WebKit antiguo: sin flex ni grid.
+       Usa tablas y floats.
+    ========================================================== */
+
+    * {
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    /* ══ LAYOUT PRINCIPAL ══ */
-    .app { display:flex; flex-direction:column; width:100vw; height:100vh; }
-
-    /* ══ HEADER ══ */
-    .header {
-      flex-shrink:0;
-      background:#0d1528;
-      border-bottom:2px solid #1c2840;
-      padding:0 1.5vw;
-      height:7vh; min-height:52px;
-      display:flex; align-items:center;
-    }
-    .h-logo { display:flex; align-items:center; gap:0.8vw; flex:0 0 auto; }
-    .h-logo img { height:5vh; min-height:32px; max-height:48px; display:block; }
-    .h-logo span { font-size:clamp(8px,0.7vw,11px); letter-spacing:2px; text-transform:uppercase; color:#5a6a88; }
-    .h-legend { flex:1; text-align:center; }
-    .leg-item { display:inline-block; margin:0 1vw; font-size:clamp(9px,0.8vw,13px); letter-spacing:1px; text-transform:uppercase; color:#5a6a88; vertical-align:middle; }
-    .leg-dot  { display:inline-block; width:clamp(7px,0.6vw,11px); height:clamp(7px,0.6vw,11px); border-radius:50%; margin-right:5px; vertical-align:middle; }
-    .h-clock  { flex:0 0 auto; text-align:right; }
-    .clock-lbl  { font-size:clamp(7px,0.6vw,10px); letter-spacing:1px; text-transform:uppercase; color:#5a6a88; display:block; }
-    .clock-time { font-size:clamp(22px,3.2vw,52px); font-weight:700; letter-spacing:4px; color:#fff; line-height:1; display:block; }
-    .clock-date { font-size:clamp(9px,0.85vw,14px); letter-spacing:2px; text-transform:uppercase; color:#5a6a88; margin-top:3px; display:block; }
-
-    /* ══ BODY: plano + calendario ══ */
-    .body { flex:1; display:flex; overflow:hidden; padding:1vh 1vw 1vh 1vw; gap:1vw; min-height:0; }
-
-    /* ══ PLANO IZQUIERDA ══ */
-    .plano {
-      flex:0 0 auto;
-      width:clamp(90px,10vw,160px);
-      display:flex; flex-direction:column;
-      background:#0d1528; border:1px solid #1c2840; border-radius:10px;
-      overflow:hidden;
-    }
-    .plano-title {
-      text-align:center; font-size:clamp(7px,0.55vw,10px);
-      letter-spacing:2px; text-transform:uppercase; color:#5a6a88;
-      padding:6px 0; border-bottom:1px solid #1c2840; flex-shrink:0;
-    }
-    .plano-rooms { flex:1; display:flex; flex-direction:column-reverse; padding:6px 6px; gap:4px; min-height:0; }
-    .plano-room {
-      flex:1; border-radius:7px; display:flex; flex-direction:column;
-      align-items:center; justify-content:center;
-      border:1.5px solid #1c2840; background:#101623;
-      transition:background 0.4s, border-color 0.4s;
-      min-height:0; padding:2px;
-    }
-    .plano-room.libre   { background:#0a2e1e; border-color:#00e5a0; }
-    .plano-room.ocupada { background:#2e0a10; border-color:#ff4060; }
-    .plano-room.pronto  { background:#2e2000; border-color:#ffb800; }
-    .plano-room-name {
-      font-size:clamp(7px,0.65vw,11px); font-weight:700;
-      text-transform:uppercase; letter-spacing:1px; color:#fff;
-      text-align:center; line-height:1.2;
-    }
-    .plano-room-dot {
-      width:clamp(6px,0.5vw,9px); height:clamp(6px,0.5vw,9px);
-      border-radius:50%; background:#1c2840; margin-top:3px; flex-shrink:0;
-    }
-    .plano-room.libre   .plano-room-dot { background:#00e5a0; }
-    .plano-room.ocupada .plano-room-dot { background:#ff4060; }
-    .plano-room.pronto  .plano-room-dot { background:#ffb800; }
-
-    /* ══ CALENDARIO DERECHA ══ */
-    .cal { flex:1; display:flex; flex-direction:column; min-width:0; overflow:hidden; }
-
-    /* Cabecera de columnas */
-    .cal-head { flex-shrink:0; display:flex; margin-left:clamp(36px,3.5vw,56px); gap:4px; padding-bottom:4px; }
-    .cal-col-head {
-      flex:1; background:#0d1528; border:1px solid #1c2840; border-radius:8px 8px 0 0;
-      padding:clamp(4px,0.6vh,8px) 4px; text-align:center; min-width:0;
-    }
-    .col-name {
-      font-size:clamp(9px,0.9vw,15px); font-weight:700;
-      text-transform:uppercase; letter-spacing:1px; color:#fff;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block;
-    }
-    .col-badge {
-      display:inline-block; margin-top:3px;
-      padding:2px 8px; border-radius:20px;
-      font-size:clamp(7px,0.6vw,10px); font-weight:700; letter-spacing:1px; text-transform:uppercase;
-    }
-    .b-libre   { background:#0a2e1e; color:#00e5a0; border:1px solid #00e5a0; }
-    .b-ocupada { background:#2e0a10; color:#ff4060; border:1px solid #ff4060; }
-    .b-pronto  { background:#2e2000; color:#ffb800; border:1px solid #ffb800; }
-    .b-error   { background:#1a1a1a; color:#888;    border:1px solid #444; }
-
-    /* Grid de horas */
-    .cal-grid { flex:1; display:flex; overflow:hidden; min-height:0; position:relative; }
-
-    /* Eje de horas */
-    .cal-axis { flex-shrink:0; width:clamp(36px,3.5vw,56px); display:flex; flex-direction:column; position:relative; }
-    .axis-slot {
-      flex:1; display:flex; align-items:flex-start; justify-content:flex-end;
-      padding-right:6px; min-height:0;
-    }
-    .axis-slot span {
-      font-size:clamp(7px,0.6vw,10px); color:#3a4a62; letter-spacing:1px;
-      transform:translateY(-50%); display:block; white-space:nowrap;
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      background-color: #F0F2F5;
+      color: #1A1A2E;
+      height: 100%;
+      overflow: hidden;
     }
 
-    /* Columnas de salas */
-    .cal-cols { flex:1; display:flex; gap:4px; overflow:hidden; min-width:0; }
-    .cal-col  { flex:1; position:relative; background:#0d1528; border:1px solid #1c2840; border-radius:0 0 8px 8px; min-width:0; overflow:hidden; }
-
-    /* Líneas de hora */
-    .hour-line {
-      position:absolute; left:0; right:0; height:1px;
-      background:#1c2840; pointer-events:none;
-    }
-    .hour-line.half { background:#131e30; }
-
-    /* Evento en columna */
-    .cal-event {
-      position:absolute; left:3px; right:3px;
-      border-radius:5px; padding:3px 5px; overflow:hidden;
-      border-left:3px solid transparent;
-      cursor:default;
-    }
-    .cal-event.libre   { background:#0a2e1e; border-color:#00e5a0; }
-    .cal-event.ocupada { background:#2e0a10; border-color:#ff4060; }
-    .cal-event.pronto  { background:#2e2000; border-color:#ffb800; }
-    .ev-time  { font-size:clamp(7px,0.6vw,10px); font-weight:700; display:block; white-space:nowrap; }
-    .ev-quien { font-size:clamp(8px,0.7vw,11px); display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#e6e9f0; }
-    .cal-event.libre   .ev-time { color:#00e5a0; }
-    .cal-event.ocupada .ev-time { color:#ff4060; }
-    .cal-event.pronto  .ev-time { color:#ffb800; }
-
-    /* Línea de "ahora" */
-    .now-line {
-      position:absolute; left:0; right:0; height:2px;
-      background:#3b82f6; pointer-events:none; z-index:10;
-    }
-    .now-dot {
-      position:absolute; left:-4px; top:-4px;
-      width:10px; height:10px; border-radius:50%; background:#3b82f6;
+    /* ==========================================================
+       ENCABEZADO
+    ========================================================== */
+    #encabezado {
+      background-color: #1A1A2E;
+      color: #FFFFFF;
+      padding: 10px 18px;
+      overflow: hidden;
+      height: 52px;
     }
 
-    /* ══ OVERLAY ══ */
-    #overlay {
-      position:fixed; inset:0; background:#090d18; z-index:999;
-      display:flex; align-items:center; justify-content:center; flex-direction:column; gap:14px;
+    #encabezado h1 {
+      font-size: 20px;
+      font-weight: bold;
+      float: left;
+      line-height: 32px;
+      letter-spacing: 1px;
     }
-    .spinner {
-      width:38px; height:38px;
-      border:3px solid #1c2840; border-top-color:#3b82f6;
-      border-radius:50%; animation:spin 0.9s linear infinite;
+
+    #info-actualizacion {
+      float: right;
+      font-size: 11px;
+      color: #A0A8C0;
+      line-height: 32px;
+      text-align: right;
     }
-    .ov-text { font-size:10px; color:#5a6a88; letter-spacing:3px; text-transform:uppercase; }
-    @keyframes spin { to { transform:rotate(360deg); } }
+
+    #estado-carga {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #4CAF50;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+
+    #estado-carga.cargando {
+      background-color: #FFC107;
+    }
+
+    #estado-carga.error {
+      background-color: #F44336;
+    }
+
+    /* ==========================================================
+       CONTENEDOR PRINCIPAL (panel izquierdo + panel derecho)
+    ========================================================== */
+    #contenedor-principal {
+      overflow: hidden;
+      /* Altura total menos el encabezado (52px) */
+      height: calc(100vh - 52px);
+    }
+
+    /* ==========================================================
+       PANEL IZQUIERDO — Plano de salas (20%)
+    ========================================================== */
+    #panel-izquierdo {
+      float: left;
+      width: 20%;
+      height: 100%;
+      background-color: #FFFFFF;
+      border-right: 3px solid #1A1A2E;
+      overflow: hidden;
+      padding: 12px;
+    }
+
+    #panel-izquierdo h2 {
+      font-size: 13px;
+      color: #1A1A2E;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #E84545;
+      padding-bottom: 6px;
+    }
+
+    #panel-izquierdo img {
+      width: 100%;
+      display: block;
+      border: 1px solid #CCC;
+    }
+
+    #panel-izquierdo p.plano-placeholder {
+      background-color: #F0F2F5;
+      border: 2px dashed #BBBBBB;
+      color: #888;
+      font-size: 12px;
+      text-align: center;
+      padding: 30px 10px;
+      margin-top: 8px;
+    }
+
+    /* ==========================================================
+       PANEL DERECHO — Tabla de ocupación (80%)
+    ========================================================== */
+    #panel-derecho {
+      float: left;
+      width: 80%;
+      height: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 12px;
+    }
+
+    /* Wrapper que ocupa todo el alto del panel derecho */
+    #contenido-tabla {
+      height: 100%;
+    }
+
+    /* ==========================================================
+       TABLA DE SALAS
+    ========================================================== */
+    #tabla-ocupacion {
+      width: 100%;
+      height: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    /* Encabezado de la tabla */
+    #tabla-ocupacion thead tr {
+      background-color: #1A1A2E;
+      color: #FFFFFF;
+    }
+
+    #tabla-ocupacion thead th {
+      padding: 10px 8px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: bold;
+      border: 1px solid #2E2E4E;
+      letter-spacing: 0.5px;
+    }
+
+    /* Columna de nombre de sala */
+    #tabla-ocupacion thead th:first-child {
+      text-align: left;
+      background-color: #0D0D1A;
+      width: 160px;
+    }
+
+    /* Filas de salas — altura uniforme repartida */
+    #tabla-ocupacion tbody {
+      height: 100%;
+    }
+
+    #tabla-ocupacion tbody tr {
+      background-color: #FFFFFF;
+      height: 1%;  /* truco: con height:100% en tbody, 1% se reparte equitativamente */
+    }
+
+    #tabla-ocupacion tbody tr:nth-child(even) {
+      background-color: #F7F8FA;
+    }
+
+    /* Celda nombre de sala */
+    #tabla-ocupacion tbody td.nombre-sala {
+      font-weight: bold;
+      font-size: 13px;
+      color: #1A1A2E;
+      padding: 10px 8px;
+      border: 1px solid #DCDDE1;
+      vertical-align: middle;
+      background-color: #EAECF2;
+      width: 160px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Celdas de días */
+    #tabla-ocupacion tbody td.celda-dia {
+      padding: 6px 8px;
+      border: 1px solid #DCDDE1;
+      vertical-align: middle;
+      min-width: 160px;
+    }
+
+    /* Sin eventos */
+    .sin-eventos {
+      color: #BBBBBB;
+      font-size: 11px;
+      text-align: center;
+      padding: 14px 0;
+      font-style: italic;
+    }
+
+    /* Bloque de evento individual */
+    .bloque-evento {
+      background-color: #E8F4FD;
+      border-left: 3px solid #2196F3;
+      border-radius: 2px;
+      padding: 5px 8px;
+      margin-bottom: 4px;
+      font-size: 13px;
+      line-height: 1.4;
+      overflow: hidden;
+    }
+
+    .bloque-evento:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Hora e organizador en la misma línea */
+    .evento-hora {
+      font-weight: bold;
+      color: #1565C0;
+      font-size: 13px;
+      display: inline;
+    }
+
+    .evento-organizador {
+      color: #444;
+      font-size: 13px;
+      display: inline;
+      margin-left: 5px;
+    }
+
+    /* Error en celda */
+    .celda-error {
+      color: #C62828;
+      font-size: 11px;
+      font-style: italic;
+      padding: 6px;
+    }
+
+    /* ==========================================================
+       DÍA ACTUAL DESTACADO
+    ========================================================== */
+    #tabla-ocupacion thead th.dia-hoy {
+      background-color: #E84545;
+    }
+
+    #tabla-ocupacion tbody td.celda-hoy {
+      background-color: #FFF5F5;
+    }
+
+    .bloque-evento.evento-hoy {
+      background-color: #FDECEA;
+      border-left-color: #E84545;
+    }
+
+    .evento-hora.hora-hoy {
+      color: #C62828;
+    }
+
+    /* ==========================================================
+       MENSAJE DE CARGA Y ERROR GLOBAL
+    ========================================================== */
+    #mensaje-global {
+      text-align: center;
+      padding: 40px;
+      font-size: 16px;
+      color: #888;
+    }
+
+    /* ==========================================================
+       CLEARFIX
+    ========================================================== */
+    .clearfix:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
   </style>
 </head>
 <body>
 
-<div id="overlay">
-  <div class="spinner"></div>
-  <span class="ov-text">Cargando...</span>
-</div>
-
-<div class="app">
-
-  <!-- HEADER -->
-  <div class="header">
-    <div class="h-logo">
-      <img src="https://i.imgur.com/fXLdGez.png" alt="Logo"/>
-      <span>Estado en tiempo real</span>
-    </div>
-    <div class="h-legend">
-      <span class="leg-item"><span class="leg-dot" style="background:#00e5a0"></span>Disponible</span>
-      <span class="leg-item"><span class="leg-dot" style="background:#ffb800"></span>Próxima (&lt;30 min)</span>
-      <span class="leg-item"><span class="leg-dot" style="background:#ff4060"></span>Ocupada</span>
-    </div>
-    <div class="h-clock">
-      <span class="clock-lbl" id="actTxt">Actualizando...</span>
-      <span class="clock-time" id="clkTime">--:--</span>
-      <span class="clock-date" id="clkDate">---</span>
+  <!-- ENCABEZADO -->
+  <div id="encabezado">
+    <h1>&#128197; Ocupación de Salas — Semana Actual</h1>
+    <div id="info-actualizacion">
+      <span id="estado-carga"></span>
+      <span id="texto-actualizacion">Cargando...</span>
     </div>
   </div>
 
-  <!-- BODY -->
-  <div class="body">
+  <!-- CONTENEDOR PRINCIPAL -->
+  <div id="contenedor-principal" class="clearfix">
 
-    <!-- PLANO -->
-    <div class="plano">
-      <div class="plano-title">Plano</div>
-      <div class="plano-rooms" id="plano-rooms">
-        <!-- generado por JS -->
+    <!-- PANEL IZQUIERDO: Plano -->
+    <div id="panel-izquierdo">
+      <h2>Plano de Salas</h2>
+      <!--
+        Reemplaza "plano.png" por la ruta real de tu imagen.
+        El archivo debe estar en la misma carpeta que este HTML
+        dentro del reproductor MagicInfo.
+        Si no tienes plano, puedes eliminar esta etiqueta img.
+      -->
+      <img src="plano.png" alt="Plano de salas"
+           onerror="this.style.display='none'; document.getElementById('plano-placeholder').style.display='block';">
+      <p class="plano-placeholder" id="plano-placeholder" style="display:none;">
+        Agrega el archivo<br><strong>plano.png</strong><br>en la misma carpeta
+      </p>
+    </div>
+
+    <!-- PANEL DERECHO: Tabla de ocupación -->
+    <div id="panel-derecho">
+      <div id="contenido-tabla">
+        <div id="mensaje-global">Cargando datos de salas...</div>
       </div>
     </div>
 
-    <!-- CALENDARIO -->
-    <div class="cal">
-      <!-- Cabecera columnas -->
-      <div class="cal-head" id="cal-head"></div>
-      <!-- Grid -->
-      <div class="cal-grid">
-        <!-- Eje horas -->
-        <div class="cal-axis" id="cal-axis"></div>
-        <!-- Columnas -->
-        <div class="cal-cols" id="cal-cols"></div>
-      </div>
-    </div>
+  </div><!-- fin contenedor-principal -->
 
-  </div>
-</div>
 
-<script>
-var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyn7VSKT-IFULCC2bPx2SlK2W2GlaXQNoKZ44WLQq5Ev94ESTC45vlJgcpmPgaN_IYQ/exec";
+  <script>
+    /* ==========================================================
+       CONFIGURACIÓN PRINCIPAL
+       ¡IMPORTANTE! Reemplaza la URL por la de tu Apps Script
+       publicado como Web App.
+    ========================================================== */
+    var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyiqhNOkcDySimG5rx7cb8BBveqn7E7vEt1Jj06IKR3pjFgriDo6CsGRxYV1MzfWD50eA/exec";
 
-// Rango de horas a mostrar
-var HORA_INI = 7;   // 07:00
-var HORA_FIN = 21;  // 21:00
-var TOTAL_H  = HORA_FIN - HORA_INI; // 14 horas
+    /* Intervalo de actualización en milisegundos (5 minutos) */
+    var INTERVALO_MS = 5 * 60 * 1000;
 
-var DIAS  = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
-var MESES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+    /* ==========================================================
+       UTILIDADES DE FECHA (sin librerías externas)
+    ========================================================== */
 
-function pad(n){ return n<10?"0"+n:""+n; }
-
-/* ── RELOJ ── */
-function tickClock(){
-  var n = new Date();
-  document.getElementById("clkTime").textContent = pad(n.getHours())+":"+pad(n.getMinutes());
-  document.getElementById("clkDate").textContent = DIAS[n.getDay()]+" "+pad(n.getDate())+" "+MESES[n.getMonth()]+" "+n.getFullYear();
-}
-setInterval(tickClock,1000); tickClock();
-
-/* ── HELPERS ── */
-function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
-function fmtH(iso){ if(!iso)return"--:--"; var d=new Date(iso); return pad(d.getHours())+":"+pad(d.getMinutes()); }
-function diffMin(iso){ return Math.max(0,Math.round((new Date(iso)-Date.now())/60000)); }
-function pct(ini,fin){ var n=Date.now(),s=new Date(ini),e=new Date(fin); if(n<=s)return 0; if(n>=e)return 100; return Math.round((n-s)/(e-s)*100); }
-
-/* ── POSICIÓN EN EL EJE DE HORAS ── */
-function horaPct(iso){
-  var d = new Date(iso);
-  var mins = (d.getHours() - HORA_INI)*60 + d.getMinutes();
-  return Math.max(0, Math.min(100, mins / (TOTAL_H*60) * 100));
-}
-
-/* ── CONSTRUCCIÓN DEL EJE ── */
-function buildAxis(){
-  var axis = document.getElementById("cal-axis");
-  axis.innerHTML = "";
-  for(var h=HORA_INI; h<=HORA_FIN; h++){
-    var slot = document.createElement("div");
-    slot.className = "axis-slot";
-    var hStr = h < 12 ? h+"AM" : (h===12?"12PM":(h-12)+"PM");
-    slot.innerHTML = "<span>"+hStr+"</span>";
-    axis.appendChild(slot);
-  }
-}
-
-/* ── LÍNEAS DE HORA en una columna ── */
-function buildHourLines(col){
-  for(var h=0; h<=TOTAL_H; h++){
-    var pctH = h/TOTAL_H*100;
-    var line = document.createElement("div");
-    line.className = "hour-line";
-    line.style.top = pctH+"%";
-    col.appendChild(line);
-    // media hora
-    if(h < TOTAL_H){
-      var half = document.createElement("div");
-      half.className = "hour-line half";
-      half.style.top = (pctH + 50/TOTAL_H)+"%";
-      col.appendChild(half);
+    /* Retorna "YYYY-MM-DD" para la fecha actual en Chile.
+       Nota: en MagicInfo el navegador puede tener la zona
+       del sistema; si el reproductor está en Chile, new Date()
+       ya será hora local. */
+    function obtenerFechaKeyHoy() {
+      var hoy = new Date();
+      var y = hoy.getFullYear();
+      var m = hoy.getMonth() + 1;
+      var d = hoy.getDate();
+      return y + "-" + (m < 10 ? "0" + m : m) + "-" + (d < 10 ? "0" + d : d);
     }
-  }
-}
 
-/* ── LÍNEA DE AHORA ── */
-function buildNowLine(col){
-  var now = new Date();
-  var mins = (now.getHours()-HORA_INI)*60+now.getMinutes();
-  if(mins<0||mins>TOTAL_H*60) return;
-  var pctNow = mins/(TOTAL_H*60)*100;
-  var line = document.createElement("div");
-  line.className = "now-line";
-  line.style.top = pctNow+"%";
-  line.innerHTML = '<div class="now-dot"></div>';
-  col.appendChild(line);
-}
+    /* Formatea hora actual como "HH:MM:SS DD/MM/YYYY" */
+    function formatearAhora() {
+      var d = new Date();
+      var hh = d.getHours();   var mm = d.getMinutes();   var ss = d.getSeconds();
+      var dd = d.getDate();    var mo = d.getMonth() + 1; var yy = d.getFullYear();
+      function p(n) { return n < 10 ? "0" + n : "" + n; }
+      return p(hh) + ":" + p(mm) + ":" + p(ss) + "  " + p(dd) + "/" + p(mo) + "/" + yy;
+    }
 
-/* ── EVENTO EN COLUMNA ── */
-function buildEvent(col, ev, estado){
-  var topPct  = horaPct(ev.inicio);
-  var botPct  = horaPct(ev.fin);
-  var heightPct = Math.max(botPct - topPct, 2);
+    /* ==========================================================
+       ESTADO GLOBAL
+    ========================================================== */
+    var estadoCarga    = document.getElementById("estado-carga");
+    var textoActual    = document.getElementById("texto-actualizacion");
+    var contenidoTabla = document.getElementById("contenido-tabla");
 
-  var div = document.createElement("div");
-  div.className = "cal-event "+estado;
-  div.style.top    = topPct+"%";
-  div.style.height = heightPct+"%";
-  div.innerHTML =
-    '<span class="ev-time">'+fmtH(ev.inicio)+" – "+fmtH(ev.fin)+'</span>'+
-    (ev.creador?'<span class="ev-quien">'+esc(ev.creador)+'</span>':'');
-  col.appendChild(div);
-}
+    /* ==========================================================
+       PETICIÓN A APPS SCRIPT (XMLHttpRequest ES5)
+    ========================================================== */
+    function cargarDatos() {
+      /* Indicar que está cargando */
+      estadoCarga.className = "cargando";
+      textoActual.innerHTML = "Actualizando...";
 
-/* ── PLANO ── */
-// Orden de abajo a arriba (flex-direction:column-reverse invertirá visualmente)
-var ORDEN_PLANO = ["Sala 1","Sala 2","Sala 3","Sala 4","Sala 5","Sala 6","Sala Villarica"];
+      var xhr = new XMLHttpRequest();
+      /* Agregar timestamp para evitar caché */
+      var url = APPS_SCRIPT_URL + "?t=" + new Date().getTime();
 
-function buildPlano(salas){
-  var container = document.getElementById("plano-rooms");
-  container.innerHTML = "";
-  // Construimos en orden 1→Villarica; column-reverse lo muestra Villarica arriba
-  for(var i=0; i<ORDEN_PLANO.length; i++){
-    var nombre = ORDEN_PLANO[i];
-    var sala = null;
-    for(var j=0;j<salas.length;j++){ if(salas[j].nombre===nombre){ sala=salas[j]; break; } }
-    var estado = sala ? sala.estado : "error";
+      xhr.open("GET", url, true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState !== 4) { return; }
 
-    var div = document.createElement("div");
-    div.className = "plano-room "+estado;
-    div.id = "plano-"+i;
+        if (xhr.status === 200) {
+          try {
+            var respuesta = JSON.parse(xhr.responseText);
+            if (respuesta.ok) {
+              renderizarTabla(respuesta.datos);
+              estadoCarga.className = "";
+              textoActual.innerHTML = "Actualizado: " + formatearAhora();
+            } else {
+              mostrarErrorGlobal("Error del servidor: " + (respuesta.error || "desconocido"));
+            }
+          } catch (e) {
+            mostrarErrorGlobal("Error al procesar respuesta: " + e.message);
+          }
+        } else {
+          mostrarErrorGlobal("Error de red (HTTP " + xhr.status + ")");
+        }
+      };
 
-    var nameDiv = document.createElement("div");
-    nameDiv.className = "plano-room-name";
-    nameDiv.textContent = nombre.replace("Sala ","S.");
-    div.appendChild(nameDiv);
+      xhr.onerror = function() {
+        mostrarErrorGlobal("No se pudo conectar con el servidor.");
+      };
 
-    var dot = document.createElement("div");
-    dot.className = "plano-room-dot";
-    div.appendChild(dot);
+      xhr.send();
+    }
 
-    container.appendChild(div);
-  }
-}
+    /* ==========================================================
+       CALCULAR TAMAÑO DE BLOQUE SEGÚN MÁXIMO DE EVENTOS POR FILA
+       Recibe el número máximo de eventos que tiene cualquier
+       celda de esa fila (sala) y devuelve estilos inline
+       para que todo quepa sin desbordar.
+    ========================================================== */
+    function calcularEstilosBloque(maxEventos) {
+      /* Valores base (1 evento) → valores mínimos (10+ eventos) */
+      var fontSize, padding, marginB, iconSize;
 
-/* ── RENDER PRINCIPAL ── */
-function renderGrid(salas){
-  if(!salas||!salas.length){ ocultarOverlay(); return; }
-
-  buildAxis();
-  buildPlano(salas);
-
-  /* Cabecera */
-  var head = document.getElementById("cal-head");
-  head.innerHTML = "";
-  /* Columnas */
-  var cols = document.getElementById("cal-cols");
-  cols.innerHTML = "";
-
-  for(var i=0; i<salas.length; i++){
-    var s = salas[i];
-    var bc = s.estado==="libre"?"b-libre":s.estado==="ocupada"?"b-ocupada":s.estado==="pronto"?"b-pronto":"b-error";
-    var bt = s.estado==="libre"?"Disponible":s.estado==="ocupada"?"Ocupada":s.estado==="pronto"?"Próxima":"Error";
-
-    /* Cabecera de columna */
-    var ch = document.createElement("div");
-    ch.className = "cal-col-head";
-    ch.innerHTML = '<span class="col-name">'+esc(s.nombre)+'</span><span class="col-badge '+bc+'">'+bt+'</span>';
-    head.appendChild(ch);
-
-    /* Columna */
-    var col = document.createElement("div");
-    col.className = "cal-col";
-    buildHourLines(col);
-
-    /* Evento actual */
-    if(s.actual){ buildEvent(col, s.actual, "ocupada"); }
-
-    /* Próximas */
-    if(s.proximas){
-      for(var j=0;j<s.proximas.length;j++){
-        var ev = s.proximas[j];
-        var evEstado = (new Date(ev.inicio)-Date.now() < 30*60*1000) ? "pronto" : "libre";
-        buildEvent(col, ev, evEstado);
+      if (maxEventos <= 1) {
+        fontSize = 14; padding = "6px 8px"; marginB = 5; iconSize = 14;
+      } else if (maxEventos === 2) {
+        fontSize = 13; padding = "5px 7px"; marginB = 4; iconSize = 13;
+      } else if (maxEventos === 3) {
+        fontSize = 12; padding = "4px 7px"; marginB = 4; iconSize = 12;
+      } else if (maxEventos === 4) {
+        fontSize = 12; padding = "3px 6px"; marginB = 3; iconSize = 12;
+      } else if (maxEventos === 5) {
+        fontSize = 11; padding = "3px 6px"; marginB = 3; iconSize = 11;
+      } else if (maxEventos === 6) {
+        fontSize = 11; padding = "2px 5px"; marginB = 2; iconSize = 11;
+      } else if (maxEventos === 7) {
+        fontSize = 10; padding = "2px 5px"; marginB = 2; iconSize = 10;
+      } else if (maxEventos === 8) {
+        fontSize = 10; padding = "2px 4px"; marginB = 2; iconSize = 10;
+      } else if (maxEventos === 9) {
+        fontSize = 9;  padding = "1px 4px"; marginB = 1; iconSize = 9;
+      } else {
+        /* 10 o más */
+        fontSize = 9;  padding = "1px 3px"; marginB = 1; iconSize = 9;
       }
+
+      return {
+        bloque: "padding:" + padding + ";margin-bottom:" + marginB + "px;font-size:" + fontSize + "px;",
+        texto:  "font-size:" + fontSize + "px;",
+        ultimo: "padding:" + padding + ";margin-bottom:0;font-size:" + fontSize + "px;"
+      };
     }
 
-    buildNowLine(col);
-    cols.appendChild(col);
-  }
+    /* ==========================================================
+       RENDERIZAR TABLA
+    ========================================================== */
+    function renderizarTabla(datos) {
+      var hoyKey = obtenerFechaKeyHoy();
+      var dias   = datos.dias;
+      var salas  = datos.salas;
 
-  var n = new Date();
-  document.getElementById("actTxt").textContent = "Act. "+pad(n.getHours())+":"+pad(n.getMinutes())+":"+pad(n.getSeconds());
-  ocultarOverlay();
-}
+      /* Construir HTML de la tabla como string (ES5) */
+      var html = '<table id="tabla-ocupacion">';
 
-function ocultarOverlay(){
-  var ov = document.getElementById("overlay");
-  if(ov) ov.style.display="none";
-}
+      /* --- ENCABEZADO --- */
+      html += "<thead><tr>";
+      html += '<th>Sala</th>';
+      for (var d = 0; d < dias.length; d++) {
+        var claseHoy = (dias[d].key === hoyKey) ? ' class="dia-hoy"' : '';
+        html += "<th" + claseHoy + ">" + escapeHtml(dias[d].label) + "</th>";
+      }
+      html += "</tr></thead>";
 
-/* ── JSONP ── */
-var cbCount=0;
-function cargarDatos(){
-  cbCount++;
-  var cbName="cb"+cbCount;
-  window[cbName]=function(data){
-    renderGrid(data.salas||data);
-    try{
-      var el=document.getElementById("jsonp-script");
-      if(el)el.parentNode.removeChild(el);
-      delete window[cbName];
-    }catch(e){}
-  };
-  var s=document.createElement("script");
-  s.id="jsonp-script";
-  s.src=SCRIPT_URL+"?callback="+cbName+"&t="+Date.now();
-  document.head.appendChild(s);
-}
+      /* --- CUERPO --- */
+      html += "<tbody>";
+      for (var s = 0; s < salas.length; s++) {
+        var sala = salas[s];
 
-cargarDatos();
-setInterval(cargarDatos, 60000);
+        /* Calcular máximo de eventos en cualquier celda de esta fila (sala).
+           Esto define el tamaño de bloque para TODA la fila,
+           así todos los días tienen bloques del mismo tamaño. */
+        var maxEventosFila = 0;
+        if (!sala.error) {
+          for (var dk = 0; dk < dias.length; dk++) {
+            var evsDia = sala.eventos[dias[dk].key] || [];
+            if (evsDia.length > maxEventosFila) {
+              maxEventosFila = evsDia.length;
+            }
+          }
+        }
+        var estilos = calcularEstilosBloque(maxEventosFila);
 
-/* Actualizar línea de "ahora" cada minuto */
-setInterval(function(){
-  var lines = document.querySelectorAll(".now-line");
-  for(var i=0;i<lines.length;i++) lines[i].parentNode.removeChild(lines[i]);
-  var cols = document.querySelectorAll(".cal-col");
-  for(var i=0;i<cols.length;i++) buildNowLine(cols[i]);
-}, 60000);
-</script>
+        html += "<tr>";
+        html += '<td class="nombre-sala">' + escapeHtml(sala.nombre) + "</td>";
+
+        for (var dd = 0; dd < dias.length; dd++) {
+          var diaKey   = dias[dd].key;
+          var esHoy    = (diaKey === hoyKey);
+          var claseCelda = "celda-dia" + (esHoy ? " celda-hoy" : "");
+
+          html += '<td class="' + claseCelda + '">';
+
+          if (sala.error) {
+            html += '<span class="celda-error">&#9888; ' + escapeHtml(sala.error) + "</span>";
+          } else {
+            var eventos = sala.eventos[diaKey] || [];
+            if (eventos.length === 0) {
+              html += '<div class="sin-eventos">&#10003; Libre</div>';
+            } else {
+              for (var ev = 0; ev < eventos.length; ev++) {
+                var evento    = eventos[ev];
+                var esUltimo  = (ev === eventos.length - 1);
+                var claseEvento = "bloque-evento" + (esHoy ? " evento-hoy" : "");
+                var claseHora   = "evento-hora"   + (esHoy ? " hora-hoy"   : "");
+                var estiloBloque = esUltimo ? estilos.ultimo : estilos.bloque;
+
+                /* Abreviar organizador: solo la parte antes del @ */
+                var nombreCorto = "";
+                if (evento.organizador) {
+                  var partes = evento.organizador.split("@");
+                  nombreCorto = partes[0];
+                }
+
+                html += '<div class="' + claseEvento + '" style="' + estiloBloque + '">';
+                html += '<span class="' + claseHora + '" style="' + estilos.texto + '">';
+                html += escapeHtml(evento.inicio) + "–" + escapeHtml(evento.fin);
+                html += "</span>";
+                if (nombreCorto) {
+                  html += '<span class="evento-organizador" style="' + estilos.texto + '">&#128100; ' + escapeHtml(nombreCorto) + "</span>";
+                }
+                html += "</div>";
+              }
+            }
+          }
+
+          html += "</td>";
+        }
+
+        html += "</tr>";
+      }
+      html += "</tbody></table>";
+
+      contenidoTabla.innerHTML = html;
+    }
+
+    /* ==========================================================
+       MOSTRAR ERROR GLOBAL
+    ========================================================== */
+    function mostrarErrorGlobal(mensaje) {
+      estadoCarga.className = "error";
+      textoActual.innerHTML = "Error — reintentando en 5 min";
+      contenidoTabla.innerHTML =
+        '<div id="mensaje-global" style="color:#C62828;">&#9888; ' +
+        escapeHtml(mensaje) +
+        '<br><span style="font-size:13px;color:#888;">Se reintentará automáticamente.</span></div>';
+    }
+
+    /* ==========================================================
+       ESCAPE HTML (seguridad básica)
+    ========================================================== */
+    function escapeHtml(texto) {
+      if (!texto) { return ""; }
+      return String(texto)
+        .replace(/&/g,  "&amp;")
+        .replace(/</g,  "&lt;")
+        .replace(/>/g,  "&gt;")
+        .replace(/"/g,  "&quot;")
+        .replace(/'/g,  "&#39;");
+    }
+
+    /* ==========================================================
+       INICIO Y ACTUALIZACIÓN AUTOMÁTICA
+    ========================================================== */
+
+    /* Carga inicial al abrir la página */
+    cargarDatos();
+
+    /* Recarga automática cada 5 minutos */
+    setInterval(cargarDatos, INTERVALO_MS);
+
+  </script>
 </body>
 </html>
