@@ -10,57 +10,78 @@
     * { margin:0; padding:0; box-sizing:border-box; }
     html,body { width:100%; height:100%; overflow:hidden; background:#090d18; color:#e6e9f0; font-family:Arial,Helvetica,sans-serif; font-size:14px; }
     .wrap { width:100%; height:100%; display:table; table-layout:fixed; }
-    .hrow { display:table-row; height:58px; }
+
+    /* HEADER */
+    .hrow { display:table-row; height:64px; }
     .hcell { display:table-cell; background:#0d1528; border-bottom:2px solid #1c2840; padding:0 24px; vertical-align:middle; }
     .htable { width:100%; border-collapse:collapse; }
     .htable td { vertical-align:middle; padding:0; }
-    .brand-title { font-size:20px; font-weight:700; letter-spacing:4px; text-transform:uppercase; color:#ffffff; display:block; }
-    .brand-sub { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#5a6a88; display:block; margin-top:2px; }
+    .logo-img { height:42px; display:block; }
+    .brand-sub { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#5a6a88; display:block; margin-top:3px; }
     .legend { text-align:center; }
-    .leg-item { display:inline-block; margin:0 10px; font-size:10px; letter-spacing:1px; text-transform:uppercase; color:#5a6a88; vertical-align:middle; }
-    .leg-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:5px; vertical-align:middle; }
+    .leg-item { display:inline-block; margin:0 12px; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#5a6a88; vertical-align:middle; }
+    .leg-dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; vertical-align:middle; }
     .hright { text-align:right; }
     .act-txt { font-size:9px; letter-spacing:1px; text-transform:uppercase; color:#5a6a88; display:block; margin-bottom:3px; }
-    .clock-time { font-size:26px; font-weight:700; letter-spacing:4px; color:#ffffff; line-height:1; display:block; }
-    .clock-date { font-size:9px; letter-spacing:1px; text-transform:uppercase; color:#5a6a88; margin-top:2px; display:block; }
+    .clock-time { font-size:28px; font-weight:700; letter-spacing:4px; color:#ffffff; line-height:1; display:block; }
+    .clock-date { font-size:10px; letter-spacing:1px; text-transform:uppercase; color:#5a6a88; margin-top:2px; display:block; }
+
+    /* GRID */
     .grow { display:table-row; }
-    .gcell { display:table-cell; padding:16px 20px; vertical-align:top; }
+    .gcell { display:table-cell; padding:14px 16px; vertical-align:top; }
     .grid { font-size:0; width:100%; }
-    .card { display:inline-block; vertical-align:top; width:14.28%; padding:0 6px 12px 6px; font-size:13px; box-sizing:border-box; }
-    .card-inner { background:#101623; border:1px solid #1c2840; border-radius:10px; position:relative; padding:12px 12px 12px 17px; min-height:260px; }
-    .strip { position:absolute; left:0; top:0; bottom:0; width:5px; border-radius:10px 0 0 10px; background:#1c2840; }
-    .libre .strip { background:#00e5a0; }
+    .card { display:inline-block; vertical-align:top; width:14.28%; padding:0 5px 10px 5px; font-size:13px; box-sizing:border-box; }
+
+    /* CARD */
+    .card-inner { background:#101623; border:1px solid #1c2840; border-radius:12px; position:relative; overflow:hidden; }
+    .strip { position:absolute; left:0; top:0; bottom:0; width:5px; background:#1c2840; }
+    .libre .strip   { background:#00e5a0; }
     .ocupada .strip { background:#ff4060; }
-    .pronto .strip { background:#ffb800; }
-    .error .strip { background:#444444; }
+    .pronto .strip  { background:#ffb800; }
+    .error .strip   { background:#444444; }
+
+    /* MODELO 3D SVG */
+    .sala-3d { width:100%; height:110px; display:block; }
+
+    /* CONTENIDO */
+    .card-body { padding:10px 12px 12px 16px; }
     .chead { border-bottom:1px solid #1c2840; padding-bottom:8px; margin-bottom:10px; }
-    .sala-name { font-size:15px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#ffffff; display:block; margin-bottom:5px; }
-    .badge { display:inline-block; padding:2px 8px; border-radius:20px; font-size:9px; font-weight:700; letter-spacing:1px; text-transform:uppercase; }
-    .b-libre { background:#0a2e1e; color:#00e5a0; border:1px solid #00e5a0; }
+    .sala-name { font-size:18px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#ffffff; display:block; margin-bottom:6px; }
+    .badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; }
+    .b-libre   { background:#0a2e1e; color:#00e5a0; border:1px solid #00e5a0; }
     .b-ocupada { background:#2e0a10; color:#ff4060; border:1px solid #ff4060; }
-    .b-pronto { background:#2e2000; color:#ffb800; border:1px solid #ffb800; }
-    .b-error { background:#1a1a1a; color:#888888; border:1px solid #444444; }
-    .evbox { background:#18202f; border-radius:7px; padding:9px 10px; margin-bottom:8px; }
-    .ev-label { font-size:8px; letter-spacing:2px; text-transform:uppercase; color:#5a6a88; display:block; margin-bottom:4px; }
-    .ev-titulo { font-size:12px; font-weight:700; color:#ffffff; display:block; margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .ev-creador { font-size:10px; color:#5a6a88; display:block; margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .ev-hora { font-size:11px; font-weight:700; display:block; }
-    .libre .ev-hora { color:#00e5a0; }
+    .b-pronto  { background:#2e2000; color:#ffb800; border:1px solid #ffb800; }
+    .b-error   { background:#1a1a1a; color:#888888; border:1px solid #444444; }
+
+    /* INFO EVENTO */
+    .evbox { background:#18202f; border-radius:8px; padding:10px 11px; margin-bottom:8px; }
+    .ev-label { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#5a6a88; display:block; margin-bottom:5px; }
+    .ev-persona { font-size:15px; font-weight:700; color:#ffffff; display:block; margin-bottom:5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .ev-hora { font-size:14px; font-weight:700; display:block; margin-bottom:5px; }
+    .libre .ev-hora   { color:#00e5a0; }
     .ocupada .ev-hora { color:#ff4060; }
-    .pronto .ev-hora { color:#ffb800; }
-    .prog-track { height:3px; background:#1c2840; border-radius:2px; margin-top:7px; overflow:hidden; }
-    .prog-fill { height:3px; border-radius:2px; }
+    .pronto .ev-hora  { color:#ffb800; }
+    .prog-track { height:4px; background:#1c2840; border-radius:2px; margin-top:6px; overflow:hidden; }
+    .prog-fill { height:4px; border-radius:2px; }
     .ocupada .prog-fill { background:#ff4060; }
-    .pronto .prog-fill { background:#ffb800; }
-    .libre-msg { text-align:center; padding:18px 0 10px 0; }
-    .libre-check { display:inline-block; width:34px; height:34px; border-radius:50%; background:#0a2e1e; border:1px solid #00e5a0; line-height:34px; text-align:center; font-size:16px; color:#00e5a0; margin-bottom:6px; }
-    .libre-text { display:block; font-size:12px; font-weight:700; color:#00e5a0; margin-bottom:3px; }
-    .libre-sub { display:block; font-size:10px; color:#5a6a88; }
-    .prox-title { font-size:8px; letter-spacing:2px; text-transform:uppercase; color:#5a6a88; display:block; margin-bottom:4px; }
-    .prox-item { background:#18202f; border-radius:5px; padding:5px 7px; margin-bottom:3px; }
-    .prox-hora { font-size:10px; font-weight:700; color:#3b82f6; display:block; }
-    .prox-nombre { font-size:10px; color:#e6e9f0; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .err-msg { font-size:10px; color:#888888; display:block; padding:6px 0; }
+    .pronto .prog-fill  { background:#ffb800; }
+
+    /* LIBRE */
+    .libre-msg { text-align:center; padding:14px 0 8px 0; }
+    .libre-check { display:inline-block; width:38px; height:38px; border-radius:50%; background:#0a2e1e; border:1px solid #00e5a0; line-height:38px; text-align:center; font-size:20px; color:#00e5a0; margin-bottom:7px; }
+    .libre-text { display:block; font-size:15px; font-weight:700; color:#00e5a0; margin-bottom:3px; }
+    .libre-sub  { display:block; font-size:11px; color:#5a6a88; }
+
+    /* PROXIMAS */
+    .prox-title { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#5a6a88; display:block; margin-bottom:4px; }
+    .prox-item  { background:#18202f; border-radius:5px; padding:5px 8px; margin-bottom:3px; }
+    .prox-hora  { font-size:11px; font-weight:700; color:#3b82f6; display:block; }
+    .prox-quien { font-size:11px; color:#e6e9f0; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+    /* ERROR */
+    .err-msg { font-size:11px; color:#888888; display:block; padding:6px 0; }
+
+    /* OVERLAY */
     #overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:#090d18; z-index:999; text-align:center; }
     .ov-center { position:absolute; top:50%; left:50%; margin-top:-30px; margin-left:-70px; width:140px; text-align:center; }
     .ov-text { font-size:10px; color:#5a6a88; letter-spacing:3px; text-transform:uppercase; margin-top:12px; display:block; }
@@ -80,16 +101,16 @@
   <div class="hrow">
     <div class="hcell">
       <table class="htable"><tr>
-        <td style="width:28%">
-          <span class="brand-title">Salas de Reunion</span>
+        <td style="width:25%">
+          <img src="https://i.imgur.com/fXLdGez.png" class="logo-img" alt="Logo"/>
           <span class="brand-sub">Estado en tiempo real</span>
         </td>
-        <td style="width:44%" class="legend">
+        <td style="width:50%" class="legend">
           <span class="leg-item"><span class="leg-dot" style="background:#00e5a0"></span>Disponible</span>
           <span class="leg-item"><span class="leg-dot" style="background:#ffb800"></span>Proxima (&lt;30 min)</span>
           <span class="leg-item"><span class="leg-dot" style="background:#ff4060"></span>Ocupada</span>
         </td>
-        <td style="width:28%" class="hright">
+        <td style="width:25%" class="hright">
           <span class="act-txt" id="actTxt">Cargando...</span>
           <span class="clock-time" id="clkTime">--:--</span>
           <span class="clock-date" id="clkDate">---</span>
@@ -105,14 +126,8 @@
 </div>
 
 <script>
-// ============================================================
-//  REEMPLAZA ESTA URL CON LA DE TU APPS SCRIPT
-// ============================================================
-var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwuB4VUlCXOD0pbFbLmcHvTfK5rEHqSVnqq-JBILPOX_-Jyg40DSAy07lWYcHWK56U/exec";
+var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyz-i4RUop0HEoRwcfGQfmTET5vtOuSEXWAY0sJRbURdS4SmehtBa5Psa-mW6opN5W6/exec";
 
-// ============================================================
-//  RELOJ
-// ============================================================
 var DIAS  = ["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"];
 var MESES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 
@@ -137,9 +152,6 @@ setInterval(tickClock, 1000);
 setInterval(spinTick, 30);
 tickClock();
 
-// ============================================================
-//  HELPERS
-// ============================================================
 function esc(s) {
   return String(s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 }
@@ -167,6 +179,63 @@ function ocultarOverlay() {
 }
 
 // ============================================================
+//  MODELO 3D SVG DE SALA (perspectiva isométrica)
+// ============================================================
+function svgSala(estado) {
+  var colTop, colFront, colSide, colDesk, colChair, colGlow;
+
+  if (estado === "libre") {
+    colTop   = "#0d2e1e"; colFront = "#0a2218"; colSide  = "#082016";
+    colDesk  = "#0f3a24"; colChair = "#0d3020"; colGlow  = "#00e5a0";
+  } else if (estado === "ocupada") {
+    colTop   = "#2e0d10"; colFront = "#220a0c"; colSide  = "#1a0709";
+    colDesk  = "#3a0f14"; colChair = "#300d11"; colGlow  = "#ff4060";
+  } else if (estado === "pronto") {
+    colTop   = "#2e2000"; colFront = "#221800"; colSide  = "#1a1200";
+    colDesk  = "#3a2a00"; colChair = "#302200"; colGlow  = "#ffb800";
+  } else {
+    colTop   = "#141e2e"; colFront = "#0f1822"; colSide  = "#0b121a";
+    colDesk  = "#18243a"; colChair = "#141e30"; colGlow  = "#444444";
+  }
+
+  return '<svg class="sala-3d" viewBox="0 0 200 110" xmlns="http://www.w3.org/2000/svg">' +
+
+    /* Piso isométrico */
+    '<polygon points="100,10 180,50 100,90 20,50" fill="' + colTop + '" stroke="' + colGlow + '" stroke-width="0.8" stroke-opacity="0.4"/>' +
+
+    /* Pared izquierda */
+    '<polygon points="20,50 20,85 100,125 100,90" fill="' + colFront + '" stroke="' + colGlow + '" stroke-width="0.8" stroke-opacity="0.3"/>' +
+
+    /* Pared derecha */
+    '<polygon points="180,50 180,85 100,125 100,90" fill="' + colSide + '" stroke="' + colGlow + '" stroke-width="0.8" stroke-opacity="0.3"/>' +
+
+    /* Mesa central - superficie */
+    '<polygon points="100,38 130,54 100,70 70,54" fill="' + colDesk + '" stroke="' + colGlow + '" stroke-width="1" stroke-opacity="0.6"/>' +
+
+    /* Mesa - lado izquierdo */
+    '<polygon points="70,54 70,62 100,78 100,70" fill="' + colFront + '" stroke="' + colGlow + '" stroke-width="0.6" stroke-opacity="0.4"/>' +
+
+    /* Mesa - lado derecho */
+    '<polygon points="130,54 130,62 100,78 100,70" fill="' + colSide + '" stroke="' + colGlow + '" stroke-width="0.6" stroke-opacity="0.4"/>' +
+
+    /* Sillas - 4 puntos alrededor de la mesa */
+    /* Silla arriba-izq */
+    '<polygon points="82,32 92,38 84,42 74,36" fill="' + colChair + '" stroke="' + colGlow + '" stroke-width="0.8" stroke-opacity="0.5"/>' +
+    /* Silla arriba-der */
+    '<polygon points="108,32 118,38 126,34 116,28" fill="' + colChair + '" stroke="' + colGlow + '" stroke-width="0.8" stroke-opacity="0.5"/>' +
+    /* Silla abajo-izq */
+    '<polygon points="74,68 84,74 76,78 66,72" fill="' + colChair + '" stroke="' + colGlow + '" stroke-width="0.8" stroke-opacity="0.5"/>' +
+    /* Silla abajo-der */
+    '<polygon points="116,68 126,74 134,70 124,64" fill="' + colChair + '" stroke="' + colGlow + '" stroke-width="0.8" stroke-opacity="0.5"/>' +
+
+    /* Indicador de estado — punto brillante en la mesa */
+    '<circle cx="100" cy="54" r="5" fill="' + colGlow + '" opacity="0.9"/>' +
+    '<circle cx="100" cy="54" r="8" fill="none" stroke="' + colGlow + '" stroke-width="1.5" opacity="0.4"/>' +
+
+  '</svg>';
+}
+
+// ============================================================
 //  RENDER GRID
 // ============================================================
 function renderGrid(data) {
@@ -182,8 +251,16 @@ function renderGrid(data) {
 
     html += '<div class="card"><div class="card-inner ' + s.estado + '">';
     html += '<div class="strip"></div>';
-    html += '<div class="chead"><span class="sala-name">' + esc(s.nombre) + '</span>';
-    html += '<span class="badge ' + badgeClass + '">' + badgeTxt + '</span></div>';
+
+    /* Modelo 3D SVG */
+    html += svgSala(s.estado);
+
+    /* Contenido */
+    html += '<div class="card-body">';
+    html += '<div class="chead">';
+    html += '<span class="sala-name">' + esc(s.nombre) + '</span>';
+    html += '<span class="badge ' + badgeClass + '">' + badgeTxt + '</span>';
+    html += '</div>';
 
     if (s.estado === "error") {
       html += '<span class="err-msg">&#9888; No se pudo cargar</span>';
@@ -191,10 +268,9 @@ function renderGrid(data) {
     } else if (s.estado === "ocupada" && s.actual) {
       var ev = s.actual;
       html += '<div class="evbox">';
-      html += '<span class="ev-label">En curso ahora</span>';
-      html += '<span class="ev-titulo">' + esc(ev.titulo) + '</span>';
-      if (ev.creador) html += '<span class="ev-creador">' + esc(ev.creador) + '</span>';
-      html += '<span class="ev-hora">' + fmtH(ev.inicio) + ' - ' + fmtH(ev.fin) + '</span>';
+      html += '<span class="ev-label">En uso ahora</span>';
+      if (ev.creador) html += '<span class="ev-persona">&#128100; ' + esc(ev.creador) + '</span>';
+      html += '<span class="ev-hora">&#128336; ' + fmtH(ev.inicio) + ' &ndash; ' + fmtH(ev.fin) + '</span>';
       html += '<div class="prog-track"><div class="prog-fill" style="width:' + pct(ev.inicio, ev.fin) + '%"></div></div>';
       html += '</div>';
 
@@ -202,44 +278,43 @@ function renderGrid(data) {
       var pev = s.proximas[0];
       html += '<div class="evbox">';
       html += '<span class="ev-label">Reservada en ' + diffMin(pev.inicio) + ' min</span>';
-      html += '<span class="ev-titulo">' + esc(pev.titulo) + '</span>';
-      if (pev.creador) html += '<span class="ev-creador">' + esc(pev.creador) + '</span>';
-      html += '<span class="ev-hora">' + fmtH(pev.inicio) + ' - ' + fmtH(pev.fin) + '</span>';
+      if (pev.creador) html += '<span class="ev-persona">&#128100; ' + esc(pev.creador) + '</span>';
+      html += '<span class="ev-hora">&#128336; ' + fmtH(pev.inicio) + ' &ndash; ' + fmtH(pev.fin) + '</span>';
       html += '<div class="prog-track"><div class="prog-fill" style="width:0%"></div></div>';
       html += '</div>';
 
     } else {
       html += '<div class="libre-msg">';
       html += '<div class="libre-check">&#10003;</div>';
-      html += '<span class="libre-text">Sala disponible</span>';
+      html += '<span class="libre-text">Disponible</span>';
       html += '<span class="libre-sub">' + (s.proximas.length === 0 ? "Sin reservas hoy" : "") + '</span>';
       html += '</div>';
     }
 
+    /* Proximas */
     var prxList = (s.estado === "pronto") ? s.proximas.slice(1) : s.proximas;
     if (prxList.length > 0) {
-      html += '<span class="prox-title">Proximas reservas</span>';
+      html += '<span class="prox-title">Proximas</span>';
       for (var j = 0; j < prxList.length; j++) {
         var px = prxList[j];
         html += '<div class="prox-item">';
-        html += '<span class="prox-hora">' + fmtH(px.inicio) + ' - ' + fmtH(px.fin) + '</span>';
-        html += '<span class="prox-nombre">' + esc(px.titulo) + '</span>';
+        html += '<span class="prox-hora">' + fmtH(px.inicio) + ' &ndash; ' + fmtH(px.fin) + '</span>';
+        if (px.creador) html += '<span class="prox-quien">' + esc(px.creador) + '</span>';
         html += '</div>';
       }
     }
 
-    html += '</div></div>';
+    html += '</div></div></div>';
   }
 
   document.getElementById("grid").innerHTML = html;
-
   var n = new Date();
   document.getElementById("actTxt").innerHTML = "Act. " + pad(n.getHours()) + ":" + pad(n.getMinutes()) + ":" + pad(n.getSeconds());
   ocultarOverlay();
 }
 
 // ============================================================
-//  JSONP — funciona en IE sin problemas de CORS
+//  JSONP
 // ============================================================
 var cbCount = 0;
 
@@ -247,10 +322,8 @@ function cargarDatos() {
   cbCount++;
   var cbName = "cb" + cbCount;
 
-  // Crear función callback global
   window[cbName] = function(data) {
     renderGrid(data);
-    // Limpiar script y función
     try {
       var el = document.getElementById("jsonp-script");
       if (el) el.parentNode.removeChild(el);
@@ -258,14 +331,12 @@ function cargarDatos() {
     } catch(e) {}
   };
 
-  // Crear tag script dinámico — esto funciona en IE7+
   var script = document.createElement("script");
   script.id  = "jsonp-script";
   script.src = SCRIPT_URL + "?callback=" + cbName + "&t=" + Date.now();
   document.getElementsByTagName("head")[0].appendChild(script);
 }
 
-// Carga inicial + refresco cada 5 minutos
 cargarDatos();
 setInterval(cargarDatos, 5 * 60 * 1000);
 </script>
