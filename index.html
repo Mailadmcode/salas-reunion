@@ -8,11 +8,10 @@
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     html,body { width:100%; height:100%; overflow:hidden; background:#090d18; color:#e6e9f0; font-family:Arial,Helvetica,sans-serif; font-size:14px; }
-    .wrap { width:100%; height:100%; display:table; table-layout:fixed; }
+    .wrap { width:100%; height:100%; display:flex; flex-direction:column; }
 
     /* HEADER */
-    .hrow { display:table-row; height:64px; }
-    .hcell { display:table-cell; background:#0d1528; border-bottom:2px solid #1c2840; padding:0 24px; vertical-align:middle; }
+    .header { background:#0d1528; border-bottom:2px solid #1c2840; padding:0 24px; height:72px; display:flex; align-items:center; flex-shrink:0; }
     .htable { width:100%; border-collapse:collapse; }
     .htable td { vertical-align:middle; padding:0; }
     .logo-img { height:42px; display:block; }
@@ -21,29 +20,26 @@
     .leg-item { display:inline-block; margin:0 12px; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#5a6a88; vertical-align:middle; }
     .leg-dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; vertical-align:middle; }
     .hright { text-align:right; }
-    .act-txt { font-size:9px; letter-spacing:1px; text-transform:uppercase; color:#5a6a88; display:block; margin-bottom:3px; }
-    .clock-time { font-size:28px; font-weight:700; letter-spacing:4px; color:#ffffff; line-height:1; display:block; }
-    .clock-date { font-size:10px; letter-spacing:1px; text-transform:uppercase; color:#5a6a88; margin-top:2px; display:block; }
+    .act-txt { font-size:9px; letter-spacing:1px; text-transform:uppercase; color:#5a6a88; display:block; margin-bottom:2px; }
+    .clock-time { font-size:42px; font-weight:700; letter-spacing:5px; color:#ffffff; line-height:1; display:block; }
+    .clock-date { font-size:13px; letter-spacing:2px; text-transform:uppercase; color:#5a6a88; margin-top:4px; display:block; }
 
-    /* GRID */
-    .grow { display:table-row; }
-    .gcell { display:table-cell; padding:14px 16px; vertical-align:top; }
-    .grid { font-size:0; width:100%; }
-    .card { display:inline-block; vertical-align:top; width:14.28%; padding:0 5px 10px 5px; font-size:13px; box-sizing:border-box; }
-    .card-inner { background:#101623; border:1px solid #1c2840; border-radius:12px; position:relative; overflow:hidden; }
-    .strip { position:absolute; left:0; top:0; bottom:0; width:5px; background:#1c2840; }
+    /* CONTENT AREA */
+    .content { flex:1; display:flex; flex-direction:column; overflow:hidden; padding:12px 16px 8px 16px; gap:10px; min-height:0; }
+
+    /* GRID TARJETAS */
+    .grid { display:flex; gap:8px; flex-shrink:0; }
+    .card { flex:1; min-width:0; }
+    .card-inner { background:#101623; border:1px solid #1c2840; border-radius:12px; position:relative; overflow:hidden; padding:12px 12px 12px 17px; }
+    .strip { position:absolute; left:0; top:0; bottom:0; width:5px; border-radius:12px 0 0 12px; background:#1c2840; }
     .libre .strip   { background:#00e5a0; }
     .ocupada .strip { background:#ff4060; }
     .pronto .strip  { background:#ffb800; }
     .error .strip   { background:#444444; }
 
-    /* MODELO 3D SVG */
-    .sala-3d { width:100%; height:110px; display:block; }
-
-    /* CARD BODY */
-    .card-body { padding:10px 12px 12px 16px; }
-    .chead { border-bottom:1px solid #1c2840; padding-bottom:8px; margin-bottom:10px; }
-    .sala-name { font-size:18px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#ffffff; display:block; margin-bottom:6px; }
+    /* CARD CONTENT */
+    .chead { border-bottom:1px solid #1c2840; padding-bottom:8px; margin-bottom:8px; }
+    .sala-name { font-size:18px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#ffffff; display:block; margin-bottom:5px; }
     .badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; }
     .b-libre   { background:#0a2e1e; color:#00e5a0; border:1px solid #00e5a0; }
     .b-ocupada { background:#2e0a10; color:#ff4060; border:1px solid #ff4060; }
@@ -51,35 +47,39 @@
     .b-error   { background:#1a1a1a; color:#888888; border:1px solid #444444; }
 
     /* INFO EVENTO */
-    .evbox { background:#18202f; border-radius:8px; padding:10px 11px; margin-bottom:8px; }
-    .ev-label { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#5a6a88; display:block; margin-bottom:5px; }
-    .ev-persona { font-size:15px; font-weight:700; color:#ffffff; display:block; margin-bottom:5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .ev-hora { font-size:14px; font-weight:700; display:block; margin-bottom:5px; }
+    .evbox { background:#18202f; border-radius:8px; padding:8px 10px; margin-bottom:6px; }
+    .ev-label { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#5a6a88; display:block; margin-bottom:4px; }
+    .ev-persona { font-size:15px; font-weight:700; color:#ffffff; display:block; margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .ev-hora { font-size:14px; font-weight:700; display:block; margin-bottom:4px; }
     .libre .ev-hora   { color:#00e5a0; }
     .ocupada .ev-hora { color:#ff4060; }
     .pronto .ev-hora  { color:#ffb800; }
-    .prog-track { height:4px; background:#1c2840; border-radius:2px; margin-top:6px; overflow:hidden; }
+    .prog-track { height:4px; background:#1c2840; border-radius:2px; margin-top:4px; overflow:hidden; }
     .prog-fill { height:4px; border-radius:2px; }
     .ocupada .prog-fill { background:#ff4060; }
     .pronto .prog-fill  { background:#ffb800; }
 
     /* LIBRE */
-    .libre-msg { text-align:center; padding:14px 0 8px 0; }
-    .libre-check { display:inline-block; width:38px; height:38px; border-radius:50%; background:#0a2e1e; border:1px solid #00e5a0; line-height:38px; text-align:center; font-size:20px; color:#00e5a0; margin-bottom:7px; }
-    .libre-text { display:block; font-size:15px; font-weight:700; color:#00e5a0; margin-bottom:3px; }
-    .libre-sub  { display:block; font-size:11px; color:#5a6a88; }
+    .libre-msg { text-align:center; padding:10px 0 6px 0; }
+    .libre-check { display:inline-block; width:34px; height:34px; border-radius:50%; background:#0a2e1e; border:1px solid #00e5a0; line-height:34px; text-align:center; font-size:18px; color:#00e5a0; margin-bottom:5px; }
+    .libre-text { display:block; font-size:14px; font-weight:700; color:#00e5a0; margin-bottom:2px; }
+    .libre-sub  { display:block; font-size:10px; color:#5a6a88; }
 
     /* PROXIMAS */
-    .prox-title { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#5a6a88; display:block; margin-bottom:4px; }
-    .prox-item  { background:#18202f; border-radius:5px; padding:5px 8px; margin-bottom:3px; }
+    .prox-title { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#5a6a88; display:block; margin-bottom:3px; }
+    .prox-item  { background:#18202f; border-radius:5px; padding:4px 7px; margin-bottom:3px; }
     .prox-hora  { font-size:11px; font-weight:700; color:#3b82f6; display:block; }
     .prox-quien { font-size:11px; color:#e6e9f0; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
     /* ERROR */
     .err-msg { font-size:11px; color:#888888; display:block; padding:6px 0; }
 
+    /* PLANO */
+    .plano-wrap { flex:1; background:#0d1528; border:1px solid #1c2840; border-radius:12px; overflow:hidden; display:flex; align-items:center; justify-content:center; padding:16px; min-height:0; }
+    .plano-svg { width:100%; height:100%; }
+
     /* OVERLAY */
-    #overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:#090d18; z-index:999; text-align:center; }
+    #overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:#090d18; z-index:999; }
     .ov-center { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; }
     .ov-text { font-size:10px; color:#5a6a88; letter-spacing:3px; text-transform:uppercase; margin-top:12px; display:block; }
     .spinner { width:36px; height:36px; border:3px solid #1c2840; border-top-color:#3b82f6; border-radius:50%; display:inline-block; animation:spin 0.9s linear infinite; }
@@ -96,29 +96,93 @@
 </div>
 
 <div class="wrap">
-  <div class="hrow">
-    <div class="hcell">
-      <table class="htable"><tr>
-        <td style="width:25%">
-          <img src="https://i.imgur.com/fXLdGez.png" class="logo-img" alt="Logo"/>
-          <span class="brand-sub">Estado en tiempo real</span>
-        </td>
-        <td style="width:50%" class="legend">
-          <span class="leg-item"><span class="leg-dot" style="background:#00e5a0"></span>Disponible</span>
-          <span class="leg-item"><span class="leg-dot" style="background:#ffb800"></span>Proxima (&lt;30 min)</span>
-          <span class="leg-item"><span class="leg-dot" style="background:#ff4060"></span>Ocupada</span>
-        </td>
-        <td style="width:25%" class="hright">
-          <span class="act-txt" id="actTxt">Cargando...</span>
-          <span class="clock-time" id="clkTime">--:--</span>
-          <span class="clock-date" id="clkDate">---</span>
-        </td>
-      </tr></table>
-    </div>
+  <!-- HEADER -->
+  <div class="header">
+    <table class="htable"><tr>
+      <td style="width:25%">
+        <img src="https://i.imgur.com/fXLdGez.png" class="logo-img" alt="Logo"/>
+        <span class="brand-sub">Estado en tiempo real</span>
+      </td>
+      <td style="width:50%" class="legend">
+        <span class="leg-item"><span class="leg-dot" style="background:#00e5a0"></span>Disponible</span>
+        <span class="leg-item"><span class="leg-dot" style="background:#ffb800"></span>Proxima (&lt;30 min)</span>
+        <span class="leg-item"><span class="leg-dot" style="background:#ff4060"></span>Ocupada</span>
+      </td>
+      <td style="width:25%" class="hright">
+        <span class="act-txt" id="actTxt">Cargando...</span>
+        <span class="clock-time" id="clkTime">--:--</span>
+        <span class="clock-date" id="clkDate">---</span>
+      </td>
+    </tr></table>
   </div>
-  <div class="grow">
-    <div class="gcell">
-      <div class="grid" id="grid"></div>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <!-- TARJETAS -->
+    <div class="grid" id="grid"></div>
+
+    <!-- PLANO DE SALAS -->
+    <div class="plano-wrap">
+      <svg id="plano-svg" class="plano-svg" viewBox="0 0 960 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+
+        <!-- Pasillo central -->
+        <line x1="0" y1="100" x2="960" y2="100" stroke="#1c2840" stroke-width="1" stroke-dasharray="8,5"/>
+        <text x="480" y="96" text-anchor="middle" font-size="9" fill="#2a3a55" letter-spacing="4" font-family="Arial,sans-serif">P A S I L L O</text>
+
+        <!-- ══ SALAS ARRIBA (6 y Villarica) ══ -->
+
+        <!-- SALA 6 — arriba izq -->
+        <rect id="plano-bg-6" x="10" y="10" width="130" height="78" rx="7" fill="#101623" stroke="#1c2840" stroke-width="1.5"/>
+        <rect id="plano-strip-6" x="10" y="82" width="130" height="6" rx="3" fill="#1c2840"/>
+        <text x="75" y="45" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" font-family="Arial,sans-serif" letter-spacing="1">SALA 6</text>
+        <text id="plano-estado-6" x="75" y="65" text-anchor="middle" font-size="11" fill="#5a6a88" font-family="Arial,sans-serif">---</text>
+        <circle id="plano-dot-6" cx="75" cy="79" r="6" fill="#1c2840"/>
+
+        <!-- SALA VILLARICA — arriba grande -->
+        <rect id="plano-bg-villarica" x="155" y="10" width="280" height="78" rx="7" fill="#101623" stroke="#1c2840" stroke-width="1.5"/>
+        <rect id="plano-strip-villarica" x="155" y="82" width="280" height="6" rx="3" fill="#1c2840"/>
+        <text x="295" y="45" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" font-family="Arial,sans-serif" letter-spacing="1">SALA VILLARICA</text>
+        <text id="plano-estado-villarica" x="295" y="65" text-anchor="middle" font-size="11" fill="#5a6a88" font-family="Arial,sans-serif">---</text>
+        <circle id="plano-dot-villarica" cx="295" cy="79" r="6" fill="#1c2840"/>
+
+        <!-- ══ SALAS ABAJO (1–5) ══ -->
+
+        <!-- SALA 1 -->
+        <rect id="plano-bg-1" x="10" y="112" width="130" height="78" rx="7" fill="#101623" stroke="#1c2840" stroke-width="1.5"/>
+        <rect id="plano-strip-1" x="10" y="112" width="130" height="6" rx="3" fill="#1c2840"/>
+        <text x="75" y="148" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" font-family="Arial,sans-serif" letter-spacing="1">SALA 1</text>
+        <text id="plano-estado-1" x="75" y="168" text-anchor="middle" font-size="11" fill="#5a6a88" font-family="Arial,sans-serif">---</text>
+        <circle id="plano-dot-1" cx="75" cy="183" r="6" fill="#1c2840"/>
+
+        <!-- SALA 2 -->
+        <rect id="plano-bg-2" x="155" y="112" width="130" height="78" rx="7" fill="#101623" stroke="#1c2840" stroke-width="1.5"/>
+        <rect id="plano-strip-2" x="155" y="112" width="130" height="6" rx="3" fill="#1c2840"/>
+        <text x="220" y="148" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" font-family="Arial,sans-serif" letter-spacing="1">SALA 2</text>
+        <text id="plano-estado-2" x="220" y="168" text-anchor="middle" font-size="11" fill="#5a6a88" font-family="Arial,sans-serif">---</text>
+        <circle id="plano-dot-2" cx="220" cy="183" r="6" fill="#1c2840"/>
+
+        <!-- SALA 3 -->
+        <rect id="plano-bg-3" x="300" y="112" width="130" height="78" rx="7" fill="#101623" stroke="#1c2840" stroke-width="1.5"/>
+        <rect id="plano-strip-3" x="300" y="112" width="130" height="6" rx="3" fill="#1c2840"/>
+        <text x="365" y="148" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" font-family="Arial,sans-serif" letter-spacing="1">SALA 3</text>
+        <text id="plano-estado-3" x="365" y="168" text-anchor="middle" font-size="11" fill="#5a6a88" font-family="Arial,sans-serif">---</text>
+        <circle id="plano-dot-3" cx="365" cy="183" r="6" fill="#1c2840"/>
+
+        <!-- SALA 4 -->
+        <rect id="plano-bg-4" x="445" y="112" width="130" height="78" rx="7" fill="#101623" stroke="#1c2840" stroke-width="1.5"/>
+        <rect id="plano-strip-4" x="445" y="112" width="130" height="6" rx="3" fill="#1c2840"/>
+        <text x="510" y="148" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" font-family="Arial,sans-serif" letter-spacing="1">SALA 4</text>
+        <text id="plano-estado-4" x="510" y="168" text-anchor="middle" font-size="11" fill="#5a6a88" font-family="Arial,sans-serif">---</text>
+        <circle id="plano-dot-4" cx="510" cy="183" r="6" fill="#1c2840"/>
+
+        <!-- SALA 5 -->
+        <rect id="plano-bg-5" x="590" y="112" width="130" height="78" rx="7" fill="#101623" stroke="#1c2840" stroke-width="1.5"/>
+        <rect id="plano-strip-5" x="590" y="112" width="130" height="6" rx="3" fill="#1c2840"/>
+        <text x="655" y="148" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff" font-family="Arial,sans-serif" letter-spacing="1">SALA 5</text>
+        <text id="plano-estado-5" x="655" y="168" text-anchor="middle" font-size="11" fill="#5a6a88" font-family="Arial,sans-serif">---</text>
+        <circle id="plano-dot-5" cx="655" cy="183" r="6" fill="#1c2840"/>
+
+      </svg>
     </div>
   </div>
 </div>
@@ -168,31 +232,36 @@ function diffMin(iso){
   return Math.max(0, Math.round(d / 60000));
 }
 
-function svgSala(estado){
-  var colTop, colFront, colSide, colDesk, colChair, colGlow;
-  if(estado === "libre"){
-    colTop="#0d2e1e"; colFront="#0a2218"; colSide="#082016"; colDesk="#0f3a24"; colChair="#0d3020"; colGlow="#00e5a0";
-  } else if(estado === "ocupada"){
-    colTop="#2e0d10"; colFront="#220a0c"; colSide="#1a0709"; colDesk="#3a0f14"; colChair="#300d11"; colGlow="#ff4060";
-  } else if(estado === "pronto"){
-    colTop="#2e2000"; colFront="#221800"; colSide="#1a1200"; colDesk="#3a2a00"; colChair="#302200"; colGlow="#ffb800";
-  } else {
-    colTop="#141e2e"; colFront="#0f1822"; colSide="#0b121a"; colDesk="#18243a"; colChair="#141e30"; colGlow="#444444";
+var PLANO_IDS = {
+  "Sala 1": "1", "Sala 2": "2", "Sala 3": "3",
+  "Sala 4": "4", "Sala 5": "5", "Sala 6": "6",
+  "Sala Villarica": "villarica"
+};
+
+var COLORES = {
+  libre:   { color: "#00e5a0", bg: "#0a2e1e", border: "#00e5a0", txt: "Disponible" },
+  ocupada: { color: "#ff4060", bg: "#2e0a10", border: "#ff4060", txt: "Ocupada"    },
+  pronto:  { color: "#ffb800", bg: "#2e2000", border: "#ffb800", txt: "Pronto"     },
+  error:   { color: "#444444", bg: "#1a1a1a", border: "#444444", txt: "Error"      }
+};
+
+function actualizarPlano(salas){
+  for(var i=0; i<salas.length; i++){
+    var s   = salas[i];
+    var pid = PLANO_IDS[s.nombre];
+    if(!pid) continue;
+    var col = COLORES[s.estado] || COLORES.error;
+
+    var dot   = document.getElementById("plano-dot-"   + pid);
+    var strip = document.getElementById("plano-strip-" + pid);
+    var bg    = document.getElementById("plano-bg-"    + pid);
+    var txt   = document.getElementById("plano-estado-"+ pid);
+
+    if(dot)   { dot.setAttribute("fill", col.color); }
+    if(strip) { strip.setAttribute("fill", col.color); }
+    if(bg)    { bg.setAttribute("stroke", col.border); bg.setAttribute("fill", col.bg); }
+    if(txt)   { txt.textContent = col.txt; txt.setAttribute("fill", col.color); }
   }
-  return '<svg class="sala-3d" viewBox="0 0 200 110" xmlns="http://www.w3.org/2000/svg">' +
-    '<polygon points="100,10 180,50 100,90 20,50" fill="'+colTop+'" stroke="'+colGlow+'" stroke-width="0.8" stroke-opacity="0.4"/>' +
-    '<polygon points="20,50 20,85 100,125 100,90" fill="'+colFront+'" stroke="'+colGlow+'" stroke-width="0.8" stroke-opacity="0.3"/>' +
-    '<polygon points="180,50 180,85 100,125 100,90" fill="'+colSide+'" stroke="'+colGlow+'" stroke-width="0.8" stroke-opacity="0.3"/>' +
-    '<polygon points="100,38 130,54 100,70 70,54" fill="'+colDesk+'" stroke="'+colGlow+'" stroke-width="1" stroke-opacity="0.6"/>' +
-    '<polygon points="70,54 70,62 100,78 100,70" fill="'+colFront+'" stroke="'+colGlow+'" stroke-width="0.6" stroke-opacity="0.4"/>' +
-    '<polygon points="130,54 130,62 100,78 100,70" fill="'+colSide+'" stroke="'+colGlow+'" stroke-width="0.6" stroke-opacity="0.4"/>' +
-    '<polygon points="82,32 92,38 84,42 74,36" fill="'+colChair+'" stroke="'+colGlow+'" stroke-width="0.8" stroke-opacity="0.5"/>' +
-    '<polygon points="108,32 118,38 126,34 116,28" fill="'+colChair+'" stroke="'+colGlow+'" stroke-width="0.8" stroke-opacity="0.5"/>' +
-    '<polygon points="74,68 84,74 76,78 66,72" fill="'+colChair+'" stroke="'+colGlow+'" stroke-width="0.8" stroke-opacity="0.5"/>' +
-    '<polygon points="116,68 126,74 134,70 124,64" fill="'+colChair+'" stroke="'+colGlow+'" stroke-width="0.8" stroke-opacity="0.5"/>' +
-    '<circle cx="100" cy="54" r="5" fill="'+colGlow+'" opacity="0.9"/>' +
-    '<circle cx="100" cy="54" r="8" fill="none" stroke="'+colGlow+'" stroke-width="1.5" opacity="0.4"/>' +
-    '</svg>';
 }
 
 function renderGrid(salas){
@@ -201,17 +270,13 @@ function renderGrid(salas){
   for(var i=0; i<salas.length; i++){
     var s = salas[i];
     var badgeClass, badgeTxt;
-    if(s.estado==="libre"){    badgeClass="b-libre";   badgeTxt="Disponible"; }
-    else if(s.estado==="ocupada"){ badgeClass="b-ocupada"; badgeTxt="Ocupada"; }
-    else if(s.estado==="pronto"){  badgeClass="b-pronto";  badgeTxt="Pronto"; }
-    else {                         badgeClass="b-error";   badgeTxt="Error"; }
+    if(s.estado==="libre"){        badgeClass="b-libre";   badgeTxt="Disponible"; }
+    else if(s.estado==="ocupada"){ badgeClass="b-ocupada"; badgeTxt="Ocupada";    }
+    else if(s.estado==="pronto"){  badgeClass="b-pronto";  badgeTxt="Pronto";     }
+    else {                         badgeClass="b-error";   badgeTxt="Error";      }
 
     html += '<div class="card"><div class="card-inner '+s.estado+'">';
     html += '<div class="strip"></div>';
-
-    html += svgSala(s.estado);
-
-    html += '<div class="card-body">';
     html += '<div class="chead">';
     html += '<span class="sala-name">'+esc(s.nombre)+'</span>';
     html += '<span class="badge '+badgeClass+'">'+badgeTxt+'</span>';
@@ -254,10 +319,12 @@ function renderGrid(salas){
       }
     }
 
-    html += '</div></div></div>';
+    html += '</div></div>';
   }
 
   document.getElementById("grid").innerHTML = html;
+  actualizarPlano(salas);
+
   var n = new Date();
   document.getElementById("actTxt").innerHTML = "Act. "+pad(n.getHours())+":"+pad(n.getMinutes())+":"+pad(n.getSeconds());
   ocultarOverlay();
