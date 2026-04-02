@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta http-equiv="refresh" content="300"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Salas de Reunion</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html,body { width:100%; height:100%; overflow:hidden; background:#090d18; color:#e6e9f0; font-family:Arial,Helvetica,sans-serif; font-size:14px; }
+    .wrap { width:100%; height:100%; display:table; table-layout:fixed; }
+    .hrow { display:table-row; height:58px; }
+    .hcell { display:table-cell; background:#0d1528; border-bottom:2px solid #1c2840; padding:0 24px; vertical-align:middle; }
+    .htable { width:100%; border-collapse:collapse; }
+    .htable td { vertical-align:middle; padding:0; }
+    .brand-title { font-size:20px; font-weight:700; letter-spacing:4px; text-transform:uppercase; color:#ffffff; display:block; }
+    .brand-sub { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#5a6a88; display:block; margin-top:2px; }
+    .legend { text-align:center; }
+    .leg-item { display:inline-block; margin:0 10px; font-size:10px; letter-spacing:1px; text-transform:uppercase; color:#5a6a88; vertical-align:middle; }
+    .leg-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:5px; vertical-align:middle; }
+    .hright { text-align:right; }
+    .act-txt { font-size:9px; letter-spacing:1px; text-transform:uppercase; color:#5a6a88; display:block; margin-bottom:3px; }
+    .clock-time { font-size:26px; font-weight:700; letter-spacing:4px; color:#ffffff; line-height:1; display:block; }
+    .clock-date { font-size:9px; letter-spacing:1px; text-transform:uppercase; color:#5a6a88; margin-top:2px; display:block; }
+    .grow { display:table-row; }
+    .gcell { display:table-cell; padding:16px 20px; vertical-align:top; }
+    .grid { font-size:0; width:100%; }
+    .card { display:inline-block; vertical-align:top; width:14.28%; padding:0 6px 12px 6px; font-size:13px; box-sizing:border-box; }
+    .card-inner { background:#101623; border:1px solid #1c2840; border-radius:10px; position:relative; padding:12px 12px 12px 17px; min-height:260px; }
+    .strip { position:absolute; left:0; top:0; bottom:0; width:5px; border-radius:10px 0 0 10px; background:#1c2840; }
+    .libre .strip { background:#00e5a0; }
+    .ocupada .strip { background:#ff4060; }
+    .pronto .strip { background:#ffb800; }
+    .error .strip { background:#444444; }
+    .chead { border-bottom:1px solid #1c2840; padding-bottom:8px; margin-bottom:10px; }
+    .sala-name { font-size:15px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#ffffff; display:block; margin-bottom:5px; }
+    .badge { display:inline-block; padding:2px 8px; border-radius:20px; font-size:9px; font-weight:700; letter-spacing:1px; text-transform:uppercase; }
+    .b-libre { background:#0a2e1e; color:#00e5a0; border:1px solid #00e5a0; }
+    .b-ocupada { background:#2e0a10; color:#ff4060; border:1px solid #ff4060; }
+    .b-pronto { background:#2e2000; color:#ffb800; border:1px solid #ffb800; }
+    .b-error { background:#1a1a1a; color:#888888; border:1px solid #444444; }
+    .evbox { background:#18202f; border-radius:7px; padding:9px 10px; margin-bottom:8px; }
+    .ev-label { font-size:8px; letter-spacing:2px; text-transform:uppercase; color:#5a6a88; display:block; margin-bottom:4px; }
+    .ev-titulo { font-size:12px; font-weight:700; color:#ffffff; display:block; margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .ev-creador { font-size:10px; color:#5a6a88; display:block; margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .ev-hora { font-size:11px; font-weight:700; display:block; }
+    .libre .ev-hora { color:#00e5a0; }
+    .ocupada .ev-hora { color:#ff4060; }
+    .pronto .ev-hora { color:#ffb800; }
+    .prog-track { height:3px; background:#1c2840; border-radius:2px; margin-top:7px; overflow:hidden; }
+    .prog-fill { height:3px; border-radius:2px; }
+    .ocupada .prog-fill { background:#ff4060; }
+    .pronto .prog-fill { background:#ffb800; }
+    .libre-msg { text-align:center; padding:18px 0 10px 0; }
+    .libre-check { display:inline-block; width:34px; height:34px; border-radius:50%; background:#0a2e1e; border:1px solid #00e5a0; line-height:34px; text-align:center; font-size:16px; color:#00e5a0; margin-bottom:6px; }
+    .libre-text { display:block; font-size:12px; font-weight:700; color:#00e5a0; margin-bottom:3px; }
+    .libre-sub { display:block; font-size:10px; color:#5a6a88; }
+    .prox-title { font-size:8px; letter-spacing:2px; text-transform:uppercase; color:#5a6a88; display:block; margin-bottom:4px; }
+    .prox-item { background:#18202f; border-radius:5px; padding:5px 7px; margin-bottom:3px; }
+    .prox-hora { font-size:10px; font-weight:700; color:#3b82f6; display:block; }
+    .prox-nombre { font-size:10px; color:#e6e9f0; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .err-msg { font-size:10px; color:#888888; display:block; padding:6px 0; }
+    #overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:#090d18; z-index:999; text-align:center; }
+    .ov-center { position:absolute; top:50%; left:50%; margin-top:-30px; margin-left:-70px; width:140px; text-align:center; }
+    .ov-text { font-size:10px; color:#5a6a88; letter-spacing:3px; text-transform:uppercase; margin-top:12px; display:block; }
+    .spin-box { display:inline-block; width:32px; height:32px; border:3px solid #1c2840; border-top:3px solid #3b82f6; border-radius:50%; }
+  </style>
+</head>
+<body>
+
+<div id="overlay">
+  <div class="ov-center">
+    <div class="spin-box" id="spinEl"></div>
+    <span class="ov-text">Cargando...</span>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hrow">
+    <div class="hcell">
+      <table class="htable"><tr>
+        <td style="width:28%">
+          <span class="brand-title">Salas de Reunion</span>
+          <span class="brand-sub">Estado en tiempo real</span>
+        </td>
+        <td style="width:44%" class="legend">
+          <span class="leg-item"><span class="leg-dot" style="background:#00e5a0"></span>Disponible</span>
+          <span class="leg-item"><span class="leg-dot" style="background:#ffb800"></span>Proxima (&lt;30 min)</span>
+          <span class="leg-item"><span class="leg-dot" style="background:#ff4060"></span>Ocupada</span>
+        </td>
+        <td style="width:28%" class="hright">
+          <span class="act-txt" id="actTxt">Cargando...</span>
+          <span class="clock-time" id="clkTime">--:--</span>
+          <span class="clock-date" id="clkDate">---</span>
+        </td>
+      </tr></table>
+    </div>
+  </div>
+  <div class="grow">
+    <div class="gcell">
+      <div class="grid" id="grid"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+//  REEMPLAZA ESTA URL CON LA DE TU APPS SCRIPT
+// ============================================================
+var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwuB4VUlCXOD0pbFbLmcHvTfK5rEHqSVnqq-JBILPOX_-Jyg40DSAy07lWYcHWK56U/exec";
+
+// ============================================================
+//  RELOJ
+// ============================================================
+var DIAS  = ["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"];
+var MESES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+
+function pad(n) { return (n < 10 ? "0" : "") + n; }
+
+function tickClock() {
+  var d = new Date();
+  document.getElementById("clkTime").innerHTML = pad(d.getHours()) + ":" + pad(d.getMinutes());
+  document.getElementById("clkDate").innerHTML = DIAS[d.getDay()] + " " + d.getDate() + " " + MESES[d.getMonth()] + " " + d.getFullYear();
+}
+
+var spinDeg = 0;
+function spinTick() {
+  spinDeg += 8;
+  var el = document.getElementById("spinEl");
+  if (el) {
+    el.style.cssText = "display:inline-block;width:32px;height:32px;border:3px solid #1c2840;border-top:3px solid #3b82f6;border-radius:50%;-ms-transform:rotate("+spinDeg+"deg);transform:rotate("+spinDeg+"deg);";
+  }
+}
+
+setInterval(tickClock, 1000);
+setInterval(spinTick, 30);
+tickClock();
+
+// ============================================================
+//  HELPERS
+// ============================================================
+function esc(s) {
+  return String(s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+function fmtH(iso) {
+  if (!iso) return "--:--";
+  var d = new Date(iso);
+  return pad(d.getHours()) + ":" + pad(d.getMinutes());
+}
+
+function diffMin(iso) {
+  return Math.round((new Date(iso).getTime() - Date.now()) / 60000);
+}
+
+function pct(ini, fin) {
+  var a = new Date(ini).getTime();
+  var b = new Date(fin).getTime();
+  var p = ((Date.now() - a) / (b - a)) * 100;
+  return Math.min(100, Math.max(0, p)).toFixed(1);
+}
+
+function ocultarOverlay() {
+  var ov = document.getElementById("overlay");
+  if (ov) ov.style.display = "none";
+}
+
+// ============================================================
+//  RENDER GRID
+// ============================================================
+function renderGrid(data) {
+  var html = "";
+
+  for (var i = 0; i < data.salas.length; i++) {
+    var s          = data.salas[i];
+    var badgeTxt   = "Disponible";
+    var badgeClass = "b-libre";
+    if (s.estado === "ocupada") { badgeTxt = "Ocupada"; badgeClass = "b-ocupada"; }
+    if (s.estado === "pronto")  { badgeTxt = "Proxima"; badgeClass = "b-pronto"; }
+    if (s.estado === "error")   { badgeTxt = "Error";   badgeClass = "b-error"; }
+
+    html += '<div class="card"><div class="card-inner ' + s.estado + '">';
+    html += '<div class="strip"></div>';
+    html += '<div class="chead"><span class="sala-name">' + esc(s.nombre) + '</span>';
+    html += '<span class="badge ' + badgeClass + '">' + badgeTxt + '</span></div>';
+
+    if (s.estado === "error") {
+      html += '<span class="err-msg">&#9888; No se pudo cargar</span>';
+
+    } else if (s.estado === "ocupada" && s.actual) {
+      var ev = s.actual;
+      html += '<div class="evbox">';
+      html += '<span class="ev-label">En curso ahora</span>';
+      html += '<span class="ev-titulo">' + esc(ev.titulo) + '</span>';
+      if (ev.creador) html += '<span class="ev-creador">' + esc(ev.creador) + '</span>';
+      html += '<span class="ev-hora">' + fmtH(ev.inicio) + ' - ' + fmtH(ev.fin) + '</span>';
+      html += '<div class="prog-track"><div class="prog-fill" style="width:' + pct(ev.inicio, ev.fin) + '%"></div></div>';
+      html += '</div>';
+
+    } else if (s.estado === "pronto" && s.proximas.length > 0) {
+      var pev = s.proximas[0];
+      html += '<div class="evbox">';
+      html += '<span class="ev-label">Reservada en ' + diffMin(pev.inicio) + ' min</span>';
+      html += '<span class="ev-titulo">' + esc(pev.titulo) + '</span>';
+      if (pev.creador) html += '<span class="ev-creador">' + esc(pev.creador) + '</span>';
+      html += '<span class="ev-hora">' + fmtH(pev.inicio) + ' - ' + fmtH(pev.fin) + '</span>';
+      html += '<div class="prog-track"><div class="prog-fill" style="width:0%"></div></div>';
+      html += '</div>';
+
+    } else {
+      html += '<div class="libre-msg">';
+      html += '<div class="libre-check">&#10003;</div>';
+      html += '<span class="libre-text">Sala disponible</span>';
+      html += '<span class="libre-sub">' + (s.proximas.length === 0 ? "Sin reservas hoy" : "") + '</span>';
+      html += '</div>';
+    }
+
+    var prxList = (s.estado === "pronto") ? s.proximas.slice(1) : s.proximas;
+    if (prxList.length > 0) {
+      html += '<span class="prox-title">Proximas reservas</span>';
+      for (var j = 0; j < prxList.length; j++) {
+        var px = prxList[j];
+        html += '<div class="prox-item">';
+        html += '<span class="prox-hora">' + fmtH(px.inicio) + ' - ' + fmtH(px.fin) + '</span>';
+        html += '<span class="prox-nombre">' + esc(px.titulo) + '</span>';
+        html += '</div>';
+      }
+    }
+
+    html += '</div></div>';
+  }
+
+  document.getElementById("grid").innerHTML = html;
+
+  var n = new Date();
+  document.getElementById("actTxt").innerHTML = "Act. " + pad(n.getHours()) + ":" + pad(n.getMinutes()) + ":" + pad(n.getSeconds());
+  ocultarOverlay();
+}
+
+// ============================================================
+//  JSONP — funciona en IE sin problemas de CORS
+// ============================================================
+var cbCount = 0;
+
+function cargarDatos() {
+  cbCount++;
+  var cbName = "cb" + cbCount;
+
+  // Crear función callback global
+  window[cbName] = function(data) {
+    renderGrid(data);
+    // Limpiar script y función
+    try {
+      var el = document.getElementById("jsonp-script");
+      if (el) el.parentNode.removeChild(el);
+      delete window[cbName];
+    } catch(e) {}
+  };
+
+  // Crear tag script dinámico — esto funciona en IE7+
+  var script = document.createElement("script");
+  script.id  = "jsonp-script";
+  script.src = SCRIPT_URL + "?callback=" + cbName + "&t=" + Date.now();
+  document.getElementsByTagName("head")[0].appendChild(script);
+}
+
+// Carga inicial + refresco cada 5 minutos
+cargarDatos();
+setInterval(cargarDatos, 5 * 60 * 1000);
+</script>
+</body>
+</html>
