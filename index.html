@@ -13,87 +13,100 @@
       font-family:Arial, Helvetica, sans-serif;
     }
 
-    /* ══ LAYOUT PRINCIPAL ══ */
+    /* ══ APP ══ */
     .app { display:flex; flex-direction:column; width:100vw; height:100vh; }
 
     /* ══ HEADER ══ */
     .header {
-      flex-shrink:0;
-      background:#0d1528;
-      border-bottom:2px solid #1c2840;
-      padding:0 1.5vw;
-      height:7vh; min-height:52px;
-      display:flex; align-items:center;
+      flex-shrink:0; height:64px;
+      background:#0d1528; border-bottom:2px solid #1c2840;
+      display:flex; align-items:center; padding:0 20px; gap:20px;
     }
-    .h-logo { display:flex; align-items:center; gap:0.8vw; flex:0 0 auto; }
-    .h-logo img { height:5vh; min-height:32px; max-height:48px; display:block; }
-    .h-logo span { font-size:clamp(8px,0.7vw,11px); letter-spacing:2px; text-transform:uppercase; color:#5a6a88; }
-    .h-legend { flex:1; text-align:center; }
-    .leg-item { display:inline-block; margin:0 1vw; font-size:clamp(9px,0.8vw,13px); letter-spacing:1px; text-transform:uppercase; color:#5a6a88; vertical-align:middle; }
-    .leg-dot  { display:inline-block; width:clamp(7px,0.6vw,11px); height:clamp(7px,0.6vw,11px); border-radius:50%; margin-right:5px; vertical-align:middle; }
-    .h-clock  { flex:0 0 auto; text-align:right; }
-    .clock-lbl  { font-size:clamp(7px,0.6vw,10px); letter-spacing:1px; text-transform:uppercase; color:#5a6a88; display:block; }
-    .clock-time { font-size:clamp(22px,3.2vw,52px); font-weight:700; letter-spacing:4px; color:#fff; line-height:1; display:block; }
-    .clock-date { font-size:clamp(9px,0.85vw,14px); letter-spacing:2px; text-transform:uppercase; color:#5a6a88; margin-top:3px; display:block; }
+    .h-logo { display:flex; align-items:center; gap:10px; flex-shrink:0; }
+    .h-logo img { height:38px; }
+    .h-logo-sub { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#5a6a88; }
+    .h-legend { flex:1; display:flex; justify-content:center; gap:24px; }
+    .leg-item { display:flex; align-items:center; gap:6px; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#5a6a88; }
+    .leg-dot  { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+    .h-clock  { flex-shrink:0; text-align:right; }
+    .clock-lbl  { font-size:9px; letter-spacing:1px; text-transform:uppercase; color:#5a6a88; display:block; }
+    .clock-time { font-size:38px; font-weight:700; letter-spacing:4px; color:#fff; line-height:1; display:block; }
+    .clock-date { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#5a6a88; margin-top:2px; display:block; }
 
-    /* ══ BODY: plano + calendario ══ */
-    .body { flex:1; display:flex; overflow:hidden; padding:1vh 1vw 1vh 1vw; gap:1vw; min-height:0; }
+    /* ══ MAIN ══ */
+    .main { flex:1; display:flex; overflow:hidden; min-height:0; padding:10px; gap:10px; }
 
-    /* ══ PLANO IZQUIERDA ══ */
+    /* ══ PLANO ══ */
     .plano {
-      flex:0 0 auto;
-      width:clamp(90px,10vw,160px);
-      display:flex; flex-direction:column;
+      flex-shrink:0; width:130px;
       background:#0d1528; border:1px solid #1c2840; border-radius:10px;
-      overflow:hidden;
+      display:flex; flex-direction:column; overflow:hidden;
     }
     .plano-title {
-      text-align:center; font-size:clamp(7px,0.55vw,10px);
-      letter-spacing:2px; text-transform:uppercase; color:#5a6a88;
-      padding:6px 0; border-bottom:1px solid #1c2840; flex-shrink:0;
+      font-size:9px; letter-spacing:2px; text-transform:uppercase;
+      color:#5a6a88; text-align:center; padding:8px 4px;
+      border-bottom:1px solid #1c2840; flex-shrink:0;
     }
-    .plano-rooms { flex:1; display:flex; flex-direction:column-reverse; padding:6px 6px; gap:4px; min-height:0; }
+    .plano-body { flex:1; display:flex; flex-direction:column; padding:8px; gap:5px; min-height:0; }
+
+    /* Villarica ocupa el ancho, salas 1-6 se dividen en dos columnas */
+    .plano-villarica {
+      flex-shrink:0; height:48px;
+      border-radius:6px; border:1.5px solid #1c2840; background:#101623;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+    }
+    .plano-grid {
+      flex:1; display:grid;
+      grid-template-columns:1fr 1fr;
+      grid-template-rows:repeat(3,1fr);
+      gap:5px; min-height:0;
+    }
     .plano-room {
-      flex:1; border-radius:7px; display:flex; flex-direction:column;
-      align-items:center; justify-content:center;
-      border:1.5px solid #1c2840; background:#101623;
-      transition:background 0.4s, border-color 0.4s;
-      min-height:0; padding:2px;
+      border-radius:6px; border:1.5px solid #1c2840; background:#101623;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+      transition:background .4s, border-color .4s;
     }
+    /* Orden en grid: Sala 6 top-left, Sala 5 top-right, etc → abajo-izq Sala 1 */
+    /* grid-template: row1=[6,5], row2=[4,3], row3=[2,1]  col1=izq col2=der */
     .plano-room.libre   { background:#0a2e1e; border-color:#00e5a0; }
     .plano-room.ocupada { background:#2e0a10; border-color:#ff4060; }
     .plano-room.pronto  { background:#2e2000; border-color:#ffb800; }
-    .plano-room-name {
-      font-size:clamp(7px,0.65vw,11px); font-weight:700;
-      text-transform:uppercase; letter-spacing:1px; color:#fff;
-      text-align:center; line-height:1.2;
-    }
-    .plano-room-dot {
-      width:clamp(6px,0.5vw,9px); height:clamp(6px,0.5vw,9px);
-      border-radius:50%; background:#1c2840; margin-top:3px; flex-shrink:0;
-    }
-    .plano-room.libre   .plano-room-dot { background:#00e5a0; }
-    .plano-room.ocupada .plano-room-dot { background:#ff4060; }
-    .plano-room.pronto  .plano-room-dot { background:#ffb800; }
+    .plano-villarica.libre   { background:#0a2e1e; border-color:#00e5a0; }
+    .plano-villarica.ocupada { background:#2e0a10; border-color:#ff4060; }
+    .plano-villarica.pronto  { background:#2e2000; border-color:#ffb800; }
 
-    /* ══ CALENDARIO DERECHA ══ */
+    .pr-name { font-size:10px; font-weight:700; color:#fff; text-align:center; line-height:1.1; }
+    .pr-dot  { width:7px; height:7px; border-radius:50%; background:#1c2840; }
+    .plano-room.libre   .pr-dot { background:#00e5a0; }
+    .plano-room.ocupada .pr-dot { background:#ff4060; }
+    .plano-room.pronto  .pr-dot { background:#ffb800; }
+    .plano-villarica.libre   .pr-dot { background:#00e5a0; }
+    .plano-villarica.ocupada .pr-dot { background:#ff4060; }
+    .plano-villarica.pronto  .pr-dot { background:#ffb800; }
+
+    /* ══ CALENDARIO ══ */
     .cal { flex:1; display:flex; flex-direction:column; min-width:0; overflow:hidden; }
 
-    /* Cabecera de columnas */
-    .cal-head { flex-shrink:0; display:flex; margin-left:clamp(36px,3.5vw,56px); gap:4px; padding-bottom:4px; }
-    .cal-col-head {
-      flex:1; background:#0d1528; border:1px solid #1c2840; border-radius:8px 8px 0 0;
-      padding:clamp(4px,0.6vh,8px) 4px; text-align:center; min-width:0;
+    /* Cabecera de columnas (salas) */
+    .cal-head {
+      flex-shrink:0; display:flex;
+      padding-left:44px; /* ancho eje horas */
+      gap:4px; margin-bottom:4px;
     }
-    .col-name {
-      font-size:clamp(9px,0.9vw,15px); font-weight:700;
+    .col-head {
+      flex:1; min-width:0;
+      background:#0d1528; border:1px solid #1c2840; border-radius:8px 8px 0 0;
+      padding:6px 4px; text-align:center;
+    }
+    .col-head-name {
+      font-size:clamp(10px,1vw,15px); font-weight:700;
       text-transform:uppercase; letter-spacing:1px; color:#fff;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block;
     }
     .col-badge {
-      display:inline-block; margin-top:3px;
+      display:inline-block; margin-top:4px;
       padding:2px 8px; border-radius:20px;
-      font-size:clamp(7px,0.6vw,10px); font-weight:700; letter-spacing:1px; text-transform:uppercase;
+      font-size:9px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
     }
     .b-libre   { background:#0a2e1e; color:#00e5a0; border:1px solid #00e5a0; }
     .b-ocupada { background:#2e0a10; color:#ff4060; border:1px solid #ff4060; }
@@ -101,50 +114,48 @@
     .b-error   { background:#1a1a1a; color:#888;    border:1px solid #444; }
 
     /* Grid de horas */
-    .cal-grid { flex:1; display:flex; overflow:hidden; min-height:0; position:relative; }
+    .cal-grid { flex:1; display:flex; min-height:0; overflow:hidden; }
 
-    /* Eje de horas */
-    .cal-axis { flex-shrink:0; width:clamp(36px,3.5vw,56px); display:flex; flex-direction:column; position:relative; }
+    .cal-axis {
+      flex-shrink:0; width:44px;
+      display:flex; flex-direction:column;
+    }
     .axis-slot {
-      flex:1; display:flex; align-items:flex-start; justify-content:flex-end;
-      padding-right:6px; min-height:0;
+      flex:1; display:flex; align-items:flex-start;
+      justify-content:flex-end; padding-right:6px;
     }
     .axis-slot span {
-      font-size:clamp(7px,0.6vw,10px); color:#3a4a62; letter-spacing:1px;
-      transform:translateY(-50%); display:block; white-space:nowrap;
+      font-size:9px; color:#3a4a62; letter-spacing:1px;
+      transform:translateY(-50%); white-space:nowrap;
     }
 
-    /* Columnas de salas */
-    .cal-cols { flex:1; display:flex; gap:4px; overflow:hidden; min-width:0; }
-    .cal-col  { flex:1; position:relative; background:#0d1528; border:1px solid #1c2840; border-radius:0 0 8px 8px; min-width:0; overflow:hidden; }
-
-    /* Líneas de hora */
-    .hour-line {
-      position:absolute; left:0; right:0; height:1px;
-      background:#1c2840; pointer-events:none;
+    .cal-cols { flex:1; display:flex; gap:4px; min-width:0; }
+    .cal-col  {
+      flex:1; min-width:0; position:relative;
+      background:#0d1528; border:1px solid #1c2840; border-radius:0 0 8px 8px;
+      overflow:hidden;
     }
-    .hour-line.half { background:#131e30; }
 
-    /* Evento en columna */
+    .hour-line { position:absolute; left:0; right:0; height:1px; background:#1c2840; }
+    .half-line { position:absolute; left:0; right:0; height:1px; background:#111928; }
+
     .cal-event {
       position:absolute; left:3px; right:3px;
-      border-radius:5px; padding:3px 5px; overflow:hidden;
-      border-left:3px solid transparent;
-      cursor:default;
+      border-radius:5px; padding:3px 6px;
+      border-left:3px solid transparent; overflow:hidden;
     }
-    .cal-event.libre   { background:#0a2e1e; border-color:#00e5a0; }
-    .cal-event.ocupada { background:#2e0a10; border-color:#ff4060; }
-    .cal-event.pronto  { background:#2e2000; border-color:#ffb800; }
-    .ev-time  { font-size:clamp(7px,0.6vw,10px); font-weight:700; display:block; white-space:nowrap; }
-    .ev-quien { font-size:clamp(8px,0.7vw,11px); display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#e6e9f0; }
-    .cal-event.libre   .ev-time { color:#00e5a0; }
-    .cal-event.ocupada .ev-time { color:#ff4060; }
-    .cal-event.pronto  .ev-time { color:#ffb800; }
+    .cal-event.ocupada { background:rgba(46,10,16,0.9); border-color:#ff4060; }
+    .cal-event.pronto  { background:rgba(46,32,0,0.9);  border-color:#ffb800; }
+    .cal-event.proxima { background:rgba(10,46,30,0.9); border-color:#00e5a0; }
+    .ev-t { font-size:clamp(8px,0.65vw,10px); font-weight:700; display:block; white-space:nowrap; }
+    .ev-q { font-size:clamp(9px,0.7vw,11px); color:#e6e9f0; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .cal-event.ocupada .ev-t { color:#ff4060; }
+    .cal-event.pronto  .ev-t { color:#ffb800; }
+    .cal-event.proxima .ev-t { color:#00e5a0; }
 
-    /* Línea de "ahora" */
     .now-line {
       position:absolute; left:0; right:0; height:2px;
-      background:#3b82f6; pointer-events:none; z-index:10;
+      background:#3b82f6; z-index:10; pointer-events:none;
     }
     .now-dot {
       position:absolute; left:-4px; top:-4px;
@@ -156,12 +167,8 @@
       position:fixed; inset:0; background:#090d18; z-index:999;
       display:flex; align-items:center; justify-content:center; flex-direction:column; gap:14px;
     }
-    .spinner {
-      width:38px; height:38px;
-      border:3px solid #1c2840; border-top-color:#3b82f6;
-      border-radius:50%; animation:spin 0.9s linear infinite;
-    }
-    .ov-text { font-size:10px; color:#5a6a88; letter-spacing:3px; text-transform:uppercase; }
+    .spinner { width:38px; height:38px; border:3px solid #1c2840; border-top-color:#3b82f6; border-radius:50%; animation:spin .9s linear infinite; }
+    .ov-txt { font-size:10px; color:#5a6a88; letter-spacing:3px; text-transform:uppercase; }
     @keyframes spin { to { transform:rotate(360deg); } }
   </style>
 </head>
@@ -169,7 +176,7 @@
 
 <div id="overlay">
   <div class="spinner"></div>
-  <span class="ov-text">Cargando...</span>
+  <span class="ov-txt">Cargando...</span>
 </div>
 
 <div class="app">
@@ -178,12 +185,12 @@
   <div class="header">
     <div class="h-logo">
       <img src="https://i.imgur.com/fXLdGez.png" alt="Logo"/>
-      <span>Estado en tiempo real</span>
+      <span class="h-logo-sub">Estado en tiempo real</span>
     </div>
     <div class="h-legend">
-      <span class="leg-item"><span class="leg-dot" style="background:#00e5a0"></span>Disponible</span>
-      <span class="leg-item"><span class="leg-dot" style="background:#ffb800"></span>Próxima (&lt;30 min)</span>
-      <span class="leg-item"><span class="leg-dot" style="background:#ff4060"></span>Ocupada</span>
+      <div class="leg-item"><div class="leg-dot" style="background:#00e5a0"></div>Disponible</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#ffb800"></div>Próxima (&lt;30 min)</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#ff4060"></div>Ocupada</div>
     </div>
     <div class="h-clock">
       <span class="clock-lbl" id="actTxt">Actualizando...</span>
@@ -192,26 +199,35 @@
     </div>
   </div>
 
-  <!-- BODY -->
-  <div class="body">
+  <!-- MAIN -->
+  <div class="main">
 
     <!-- PLANO -->
     <div class="plano">
-      <div class="plano-title">Plano</div>
-      <div class="plano-rooms" id="plano-rooms">
-        <!-- generado por JS -->
+      <div class="plano-title">Plano de Salas</div>
+      <div class="plano-body">
+        <!-- Villarica arriba -->
+        <div class="plano-villarica" id="pr-villarica">
+          <div class="pr-name">Villarica</div>
+          <div class="pr-dot"></div>
+        </div>
+        <!-- Grid 2x3: fila1=[6,5] fila2=[4,3] fila3=[2,1] -->
+        <div class="plano-grid">
+          <div class="plano-room" id="pr-6"><div class="pr-name">Sala 6</div><div class="pr-dot"></div></div>
+          <div class="plano-room" id="pr-5"><div class="pr-name">Sala 5</div><div class="pr-dot"></div></div>
+          <div class="plano-room" id="pr-4"><div class="pr-name">Sala 4</div><div class="pr-dot"></div></div>
+          <div class="plano-room" id="pr-3"><div class="pr-name">Sala 3</div><div class="pr-dot"></div></div>
+          <div class="plano-room" id="pr-2"><div class="pr-name">Sala 2</div><div class="pr-dot"></div></div>
+          <div class="plano-room" id="pr-1"><div class="pr-name">Sala 1</div><div class="pr-dot"></div></div>
+        </div>
       </div>
     </div>
 
     <!-- CALENDARIO -->
     <div class="cal">
-      <!-- Cabecera columnas -->
       <div class="cal-head" id="cal-head"></div>
-      <!-- Grid -->
       <div class="cal-grid">
-        <!-- Eje horas -->
         <div class="cal-axis" id="cal-axis"></div>
-        <!-- Columnas -->
         <div class="cal-cols" id="cal-cols"></div>
       </div>
     </div>
@@ -222,171 +238,141 @@
 <script>
 var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyn7VSKT-IFULCC2bPx2SlK2W2GlaXQNoKZ44WLQq5Ev94ESTC45vlJgcpmPgaN_IYQ/exec";
 
-// Rango de horas a mostrar
-var HORA_INI = 7;   // 07:00
-var HORA_FIN = 21;  // 21:00
-var TOTAL_H  = HORA_FIN - HORA_INI; // 14 horas
+var HORA_INI = 7;
+var HORA_FIN = 21;
+var TOTAL_H  = HORA_FIN - HORA_INI;
 
 var DIAS  = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
 var MESES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 
 function pad(n){ return n<10?"0"+n:""+n; }
 
-/* ── RELOJ ── */
 function tickClock(){
   var n = new Date();
   document.getElementById("clkTime").textContent = pad(n.getHours())+":"+pad(n.getMinutes());
   document.getElementById("clkDate").textContent = DIAS[n.getDay()]+" "+pad(n.getDate())+" "+MESES[n.getMonth()]+" "+n.getFullYear();
 }
-setInterval(tickClock,1000); tickClock();
+setInterval(tickClock,1000);
+tickClock();
 
-/* ── HELPERS ── */
 function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 function fmtH(iso){ if(!iso)return"--:--"; var d=new Date(iso); return pad(d.getHours())+":"+pad(d.getMinutes()); }
-function diffMin(iso){ return Math.max(0,Math.round((new Date(iso)-Date.now())/60000)); }
-function pct(ini,fin){ var n=Date.now(),s=new Date(ini),e=new Date(fin); if(n<=s)return 0; if(n>=e)return 100; return Math.round((n-s)/(e-s)*100); }
 
-/* ── POSICIÓN EN EL EJE DE HORAS ── */
 function horaPct(iso){
   var d = new Date(iso);
-  var mins = (d.getHours() - HORA_INI)*60 + d.getMinutes();
-  return Math.max(0, Math.min(100, mins / (TOTAL_H*60) * 100));
+  var mins = (d.getHours()-HORA_INI)*60+d.getMinutes();
+  return Math.max(0,Math.min(100, mins/(TOTAL_H*60)*100));
 }
 
-/* ── CONSTRUCCIÓN DEL EJE ── */
+/* ── EJE HORAS ── */
 function buildAxis(){
-  var axis = document.getElementById("cal-axis");
-  axis.innerHTML = "";
+  var ax = document.getElementById("cal-axis");
+  ax.innerHTML = "";
   for(var h=HORA_INI; h<=HORA_FIN; h++){
-    var slot = document.createElement("div");
-    slot.className = "axis-slot";
-    var hStr = h < 12 ? h+"AM" : (h===12?"12PM":(h-12)+"PM");
-    slot.innerHTML = "<span>"+hStr+"</span>";
-    axis.appendChild(slot);
+    var s = document.createElement("div");
+    s.className = "axis-slot";
+    var lbl = h<12? h+"AM": (h===12?"12PM":(h-12)+"PM");
+    s.innerHTML = "<span>"+lbl+"</span>";
+    ax.appendChild(s);
   }
 }
 
-/* ── LÍNEAS DE HORA en una columna ── */
-function buildHourLines(col){
+/* ── LÍNEAS HORA ── */
+function buildLines(col){
   for(var h=0; h<=TOTAL_H; h++){
-    var pctH = h/TOTAL_H*100;
-    var line = document.createElement("div");
-    line.className = "hour-line";
-    line.style.top = pctH+"%";
-    col.appendChild(line);
-    // media hora
-    if(h < TOTAL_H){
-      var half = document.createElement("div");
-      half.className = "hour-line half";
-      half.style.top = (pctH + 50/TOTAL_H)+"%";
-      col.appendChild(half);
+    var pct = h/TOTAL_H*100;
+    var l = document.createElement("div");
+    l.className = "hour-line"; l.style.top = pct+"%"; col.appendChild(l);
+    if(h<TOTAL_H){
+      var lh = document.createElement("div");
+      lh.className = "half-line"; lh.style.top = (pct+50/TOTAL_H)+"%"; col.appendChild(lh);
     }
   }
 }
 
-/* ── LÍNEA DE AHORA ── */
-function buildNowLine(col){
+/* ── LÍNEA AHORA ── */
+function buildNow(col){
   var now = new Date();
   var mins = (now.getHours()-HORA_INI)*60+now.getMinutes();
   if(mins<0||mins>TOTAL_H*60) return;
-  var pctNow = mins/(TOTAL_H*60)*100;
-  var line = document.createElement("div");
-  line.className = "now-line";
-  line.style.top = pctNow+"%";
-  line.innerHTML = '<div class="now-dot"></div>';
-  col.appendChild(line);
+  var pct = mins/(TOTAL_H*60)*100;
+  var l = document.createElement("div");
+  l.className="now-line"; l.style.top=pct+"%";
+  l.innerHTML='<div class="now-dot"></div>';
+  col.appendChild(l);
 }
 
-/* ── EVENTO EN COLUMNA ── */
-function buildEvent(col, ev, estado){
-  var topPct  = horaPct(ev.inicio);
-  var botPct  = horaPct(ev.fin);
-  var heightPct = Math.max(botPct - topPct, 2);
-
-  var div = document.createElement("div");
-  div.className = "cal-event "+estado;
-  div.style.top    = topPct+"%";
-  div.style.height = heightPct+"%";
-  div.innerHTML =
-    '<span class="ev-time">'+fmtH(ev.inicio)+" – "+fmtH(ev.fin)+'</span>'+
-    (ev.creador?'<span class="ev-quien">'+esc(ev.creador)+'</span>':'');
-  col.appendChild(div);
+/* ── EVENTO ── */
+function buildEvent(col, ev, cls){
+  var top = horaPct(ev.inicio);
+  var bot = horaPct(ev.fin);
+  var h   = Math.max(bot-top, 1.5);
+  var d   = document.createElement("div");
+  d.className = "cal-event "+cls;
+  d.style.top    = top+"%";
+  d.style.height = h+"%";
+  d.innerHTML =
+    '<span class="ev-t">'+fmtH(ev.inicio)+"–"+fmtH(ev.fin)+'</span>'+
+    (ev.creador?'<span class="ev-q">'+esc(ev.creador)+'</span>':"");
+  col.appendChild(d);
 }
 
 /* ── PLANO ── */
-// Orden de abajo a arriba (flex-direction:column-reverse invertirá visualmente)
-var ORDEN_PLANO = ["Sala 1","Sala 2","Sala 3","Sala 4","Sala 5","Sala 6","Sala Villarica"];
-
-function buildPlano(salas){
-  var container = document.getElementById("plano-rooms");
-  container.innerHTML = "";
-  // Construimos en orden 1→Villarica; column-reverse lo muestra Villarica arriba
-  for(var i=0; i<ORDEN_PLANO.length; i++){
-    var nombre = ORDEN_PLANO[i];
-    var sala = null;
-    for(var j=0;j<salas.length;j++){ if(salas[j].nombre===nombre){ sala=salas[j]; break; } }
-    var estado = sala ? sala.estado : "error";
-
-    var div = document.createElement("div");
-    div.className = "plano-room "+estado;
-    div.id = "plano-"+i;
-
-    var nameDiv = document.createElement("div");
-    nameDiv.className = "plano-room-name";
-    nameDiv.textContent = nombre.replace("Sala ","S.");
-    div.appendChild(nameDiv);
-
-    var dot = document.createElement("div");
-    dot.className = "plano-room-dot";
-    div.appendChild(dot);
-
-    container.appendChild(div);
+var PLANO_MAP = {
+  "Sala 1":"pr-1","Sala 2":"pr-2","Sala 3":"pr-3",
+  "Sala 4":"pr-4","Sala 5":"pr-5","Sala 6":"pr-6",
+  "Sala Villarica":"pr-villarica"
+};
+function updatePlano(salas){
+  for(var i=0;i<salas.length;i++){
+    var s = salas[i];
+    var id = PLANO_MAP[s.nombre];
+    if(!id) continue;
+    var el = document.getElementById(id);
+    if(!el) continue;
+    el.className = el.className.replace(/\s*(libre|ocupada|pronto|error)/g,"");
+    el.className += " "+(s.estado||"error");
   }
 }
 
-/* ── RENDER PRINCIPAL ── */
+/* ── RENDER ── */
 function renderGrid(salas){
   if(!salas||!salas.length){ ocultarOverlay(); return; }
 
   buildAxis();
-  buildPlano(salas);
+  updatePlano(salas);
 
-  /* Cabecera */
   var head = document.getElementById("cal-head");
-  head.innerHTML = "";
-  /* Columnas */
   var cols = document.getElementById("cal-cols");
+  head.innerHTML = "";
   cols.innerHTML = "";
 
-  for(var i=0; i<salas.length; i++){
+  for(var i=0;i<salas.length;i++){
     var s = salas[i];
     var bc = s.estado==="libre"?"b-libre":s.estado==="ocupada"?"b-ocupada":s.estado==="pronto"?"b-pronto":"b-error";
     var bt = s.estado==="libre"?"Disponible":s.estado==="ocupada"?"Ocupada":s.estado==="pronto"?"Próxima":"Error";
 
-    /* Cabecera de columna */
+    /* cabecera */
     var ch = document.createElement("div");
-    ch.className = "cal-col-head";
-    ch.innerHTML = '<span class="col-name">'+esc(s.nombre)+'</span><span class="col-badge '+bc+'">'+bt+'</span>';
+    ch.className = "col-head";
+    ch.innerHTML = '<span class="col-head-name">'+esc(s.nombre)+'</span>'
+                 + '<span class="col-badge '+bc+'">'+bt+'</span>';
     head.appendChild(ch);
 
-    /* Columna */
+    /* columna */
     var col = document.createElement("div");
     col.className = "cal-col";
-    buildHourLines(col);
+    buildLines(col);
 
-    /* Evento actual */
-    if(s.actual){ buildEvent(col, s.actual, "ocupada"); }
-
-    /* Próximas */
+    if(s.actual)   buildEvent(col, s.actual, "ocupada");
     if(s.proximas){
       for(var j=0;j<s.proximas.length;j++){
         var ev = s.proximas[j];
-        var evEstado = (new Date(ev.inicio)-Date.now() < 30*60*1000) ? "pronto" : "libre";
-        buildEvent(col, ev, evEstado);
+        var cls = (new Date(ev.inicio)-Date.now()<30*60*1000)?"pronto":"proxima";
+        buildEvent(col, ev, cls);
       }
     }
-
-    buildNowLine(col);
+    buildNow(col);
     cols.appendChild(col);
   }
 
@@ -396,7 +382,7 @@ function renderGrid(salas){
 }
 
 function ocultarOverlay(){
-  var ov = document.getElementById("overlay");
+  var ov=document.getElementById("overlay");
   if(ov) ov.style.display="none";
 }
 
@@ -409,26 +395,24 @@ function cargarDatos(){
     renderGrid(data.salas||data);
     try{
       var el=document.getElementById("jsonp-script");
-      if(el)el.parentNode.removeChild(el);
+      if(el) el.parentNode.removeChild(el);
       delete window[cbName];
     }catch(e){}
   };
-  var s=document.createElement("script");
-  s.id="jsonp-script";
-  s.src=SCRIPT_URL+"?callback="+cbName+"&t="+Date.now();
-  document.head.appendChild(s);
+  var sc=document.createElement("script");
+  sc.id="jsonp-script";
+  sc.src=SCRIPT_URL+"?callback="+cbName+"&t="+Date.now();
+  document.head.appendChild(sc);
 }
 
 cargarDatos();
-setInterval(cargarDatos, 60000);
+setInterval(cargarDatos,60000);
 
-/* Actualizar línea de "ahora" cada minuto */
+/* Refrescar línea de ahora cada minuto */
 setInterval(function(){
-  var lines = document.querySelectorAll(".now-line");
-  for(var i=0;i<lines.length;i++) lines[i].parentNode.removeChild(lines[i]);
-  var cols = document.querySelectorAll(".cal-col");
-  for(var i=0;i<cols.length;i++) buildNowLine(cols[i]);
-}, 60000);
+  document.querySelectorAll(".now-line").forEach(function(l){l.parentNode.removeChild(l);});
+  document.querySelectorAll(".cal-col").forEach(buildNow);
+},60000);
 </script>
 </body>
 </html>
