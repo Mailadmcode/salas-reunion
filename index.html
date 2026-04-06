@@ -376,6 +376,8 @@ tickClock();
 
 function fmtH(iso){
   if(!iso) return "--:--";
+  var m = iso.match(/T(\d{2}):(\d{2})/);
+  if(m) return m[1]+":"+m[2];
   var d = new Date(iso);
   return pad(d.getHours())+":"+pad(d.getMinutes());
 }
@@ -385,6 +387,7 @@ function diasSemana(){
   var hoy = new Date(), dias = [];
   var lun = new Date(hoy);
   lun.setDate(hoy.getDate() - (hoy.getDay()===0 ? 6 : hoy.getDay()-1));
+  lun.setHours(12, 0, 0, 0);
   for(var i=0; i<5; i++){
     var d = new Date(lun);
     d.setDate(lun.getDate()+i);
@@ -393,11 +396,20 @@ function diasSemana(){
   return dias;
 }
 
-function mismodia(iso, fecha){
+/* Extrae la fecha local directamente del string ISO sin conversión UTC.
+   "2026-04-07T09:30:00-04:00" → "2026-04-07"  (toma la parte antes de T)
+   "2026-04-07T13:30:00Z"      → convierte a hora local del browser        */
+function fechaStrDeISO(iso){
+  if(!iso) return "";
+  if(/T[\d:]+[+-]\d{2}:\d{2}$/.test(iso)) return iso.substring(0,10);
   var d = new Date(iso);
-  return d.getDate()===fecha.getDate()
-      && d.getMonth()===fecha.getMonth()
-      && d.getFullYear()===fecha.getFullYear();
+  return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+}
+
+function mismodia(iso, fecha){
+  var evStr  = fechaStrDeISO(iso);
+  var diaStr = fecha.getFullYear()+"-"+pad(fecha.getMonth()+1)+"-"+pad(fecha.getDate());
+  return evStr === diaStr;
 }
 
 /* ── RENDER PRINCIPAL ── */
