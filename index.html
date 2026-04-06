@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <!-- Viewport fijo 1280px — el Magic Box escala esto a la pantalla -->
-  <meta name="viewport" content="width=1280, initial-scale=1.0, maximum-scale=1.0"/>
+  <meta name="viewport" content="width=1920, initial-scale=1.0, maximum-scale=1.0"/>
   <title>Salas – Prodalam</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Barlow:wght@400;600;700;800&display=swap');
@@ -12,90 +11,90 @@
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
     html, body {
-      width:1280px;
-      height:720px;
+      width:1920px;
+      height:1080px;
       overflow:hidden;
       background:#EEF2FB;
       font-family:'Barlow', Arial, sans-serif;
     }
 
     .app {
-      width:1280px;
-      height:720px;
+      width:1920px;
+      height:1080px;
       display:flex;
       flex-direction:column;
     }
 
     /* ══════════════════════════════════════
-       HEADER — altura fija 80px
+       HEADER — altura fija 110px
     ══════════════════════════════════════ */
     .header {
       width:100%;
-      height:80px;
+      height:110px;
       flex-shrink:0;
       background:#ffffff;
-      border-bottom:6px solid #FF7D10;
-      box-shadow:0 2px 8px rgba(0,0,0,0.12);
+      border-bottom:7px solid #FF7D10;
+      box-shadow:0 2px 10px rgba(0,0,0,0.12);
       display:flex;
       align-items:center;
-      padding:0 20px;
+      padding:0 32px;
     }
     .h-left {
-      width:260px;
+      width:340px;
       flex-shrink:0;
-      display:flex; align-items:center; gap:10px;
-      border-right:2px solid #E0E8F8; padding-right:16px;
+      display:flex; align-items:center; gap:14px;
+      border-right:2px solid #E0E8F8; padding-right:22px;
     }
-    .h-logo { height:44px; }
-    .h-divider { width:3px; height:34px; background:#FF7D10; border-radius:2px; }
+    .h-logo { height:58px; }
+    .h-divider { width:4px; height:44px; background:#FF7D10; border-radius:2px; }
     .h-sub {
-      font-size:11px; letter-spacing:2px; text-transform:uppercase;
+      font-size:15px; letter-spacing:2px; text-transform:uppercase;
       color:#0047CC; font-weight:800; white-space:nowrap;
       font-family:'Barlow Condensed',sans-serif;
     }
     .h-center {
       flex:1;
-      display:flex; align-items:center; justify-content:center; gap:40px;
+      display:flex; align-items:center; justify-content:center; gap:56px;
     }
-    .leg { display:flex; align-items:center; gap:10px; }
+    .leg { display:flex; align-items:center; gap:12px; }
     .leg-dot {
-      width:22px; height:22px; border-radius:50%; flex-shrink:0;
+      width:30px; height:30px; border-radius:50%; flex-shrink:0;
       border:3px solid rgba(0,0,0,0.10);
     }
     .leg-txt {
-      font-size:17px; font-weight:800;
+      font-size:23px; font-weight:800;
       color:#1A2E6E; white-space:nowrap;
       font-family:'Barlow Condensed',sans-serif;
     }
     .h-right {
-      width:240px;
+      width:320px;
       flex-shrink:0;
       display:flex; flex-direction:column; align-items:flex-end;
-      border-left:2px solid #E0E8F8; padding-left:16px;
+      border-left:2px solid #E0E8F8; padding-left:22px;
     }
     .clk-semana {
-      font-size:10px; letter-spacing:1px; text-transform:uppercase;
+      font-size:13px; letter-spacing:1px; text-transform:uppercase;
       color:#5572A0; white-space:nowrap;
       font-family:'Barlow Condensed',sans-serif; font-weight:700;
     }
     .clk-time {
-      font-size:46px; font-weight:900; letter-spacing:2px;
+      font-size:66px; font-weight:900; letter-spacing:2px;
       color:#0047CC; line-height:1;
       font-family:'Barlow Condensed',sans-serif;
     }
     .clk-fecha {
-      font-size:11px; letter-spacing:1px; text-transform:uppercase;
+      font-size:15px; letter-spacing:1px; text-transform:uppercase;
       color:#5572A0; white-space:nowrap;
       font-family:'Barlow Condensed',sans-serif; font-weight:700;
     }
 
     /* ══════════════════════════════════════
-       MAIN — altura = 720 - 80 - 12pad*2 = 616px
+       MAIN
     ══════════════════════════════════════ */
     .main {
       width:100%;
       flex:1;
-      padding:8px 10px;
+      padding:10px 14px;
       display:flex;
       min-height:0;
     }
@@ -105,24 +104,24 @@
       flex:1;
       display:flex; flex-direction:column;
       background:#fff;
-      border-radius:10px;
+      border-radius:12px;
       border:2px solid #D0DCEE;
       overflow:hidden;
     }
 
-    /* Cabecera días — altura fija */
+    /* Cabecera días */
     .tb-head {
       flex-shrink:0;
       display:flex;
       background:#0047CC;
-      border-bottom:4px solid #FF7D10;
-      height:60px;
+      border-bottom:5px solid #FF7D10;
+      height:80px;
     }
     .th-sala {
-      width:160px;
+      width:220px;
       flex-shrink:0;
       display:flex; align-items:center; justify-content:center;
-      font-size:15px; font-weight:900; letter-spacing:3px;
+      font-size:22px; font-weight:900; letter-spacing:3px;
       text-transform:uppercase; color:#fff;
       font-family:'Barlow Condensed',sans-serif;
       border-right:2px solid rgba(255,255,255,0.15);
@@ -137,21 +136,21 @@
     .th-dia:last-child { border-right:none; }
     .th-dia.hoy { background:rgba(255,125,16,0.28); }
     .th-dia-nombre {
-      font-size:20px; font-weight:900;
+      font-size:28px; font-weight:900;
       text-transform:uppercase; letter-spacing:2px;
       color:#fff; line-height:1;
       font-family:'Barlow Condensed',sans-serif;
     }
     .th-dia-fecha {
-      font-size:14px; color:rgba(255,255,255,0.80);
+      font-size:19px; color:rgba(255,255,255,0.80);
       font-family:'Barlow Condensed',sans-serif; font-weight:600;
       line-height:1; margin-top:2px;
     }
     .th-dia.hoy .th-dia-fecha { color:#FFD080; }
     .hoy-badge {
       display:inline-block; background:#FF7D10; color:#fff;
-      font-size:9px; font-weight:900; letter-spacing:1px;
-      padding:1px 6px; border-radius:3px; margin-top:2px;
+      font-size:12px; font-weight:900; letter-spacing:1px;
+      padding:2px 8px; border-radius:4px; margin-top:3px;
       font-family:'Barlow Condensed',sans-serif;
     }
 
@@ -168,22 +167,22 @@
 
     /* Celda sala */
     .tc-sala {
-      width:160px; flex-shrink:0;
+      width:220px; flex-shrink:0;
       background:#F4F7FF;
       border-right:3px solid #D8E4F4;
-      display:flex; align-items:center; padding:0 10px; gap:8px;
+      display:flex; align-items:center; padding:0 14px; gap:10px;
     }
     .sala-colorbar {
-      width:7px; height:55%; border-radius:4px; flex-shrink:0;
+      width:9px; height:55%; border-radius:5px; flex-shrink:0;
     }
-    .sala-info { display:flex; flex-direction:column; gap:2px; }
+    .sala-info { display:flex; flex-direction:column; gap:4px; }
     .sala-nombre {
-      font-size:20px; font-weight:800; color:#0A1F5C;
+      font-size:28px; font-weight:800; color:#0A1F5C;
       white-space:nowrap; font-family:'Barlow Condensed',sans-serif;
       line-height:1;
     }
     .sala-status {
-      font-size:12px; white-space:nowrap;
+      font-size:16px; white-space:nowrap;
       font-family:'Barlow',sans-serif; font-weight:700;
       line-height:1;
     }
@@ -198,28 +197,28 @@
     .tc-dia.hoy { background:#F4F8FF; }
     .tc-dia.hoy::before {
       content:''; position:absolute; left:0; top:0; bottom:0;
-      width:3px; background:#FF7D10;
+      width:4px; background:#FF7D10;
     }
     .tc-libre-txt {
       position:absolute; top:50%; left:50%;
       transform:translate(-50%,-50%);
-      font-size:13px; color:#C8D4E8; font-style:italic;
+      font-size:17px; color:#C8D4E8; font-style:italic;
       white-space:nowrap; font-family:'Barlow',sans-serif;
     }
 
     /* Eventos */
     .ev-block {
-      position:absolute; left:5px; right:5px;
-      border-radius:6px; padding:4px 8px; overflow:hidden;
-      border-left:5px solid transparent;
-      display:flex; flex-direction:column; justify-content:center; gap:0px;
+      position:absolute; left:6px; right:6px;
+      border-radius:8px; padding:6px 12px; overflow:hidden;
+      border-left:7px solid transparent;
+      display:flex; flex-direction:column; justify-content:center; gap:1px;
     }
     .ev-block.ocupada { background:#FFF3EA; border-color:#FF7D10; }
     .ev-block.pronto  { background:#EBF0FF; border-color:#0047CC; }
     .ev-block.proxima { background:#EAF7EE; border-color:#1CB85B; }
 
     .ev-hora {
-      font-size:13px; font-weight:800; display:block;
+      font-size:18px; font-weight:800; display:block;
       white-space:nowrap; font-family:'Barlow Condensed',sans-serif;
       line-height:1.2;
     }
@@ -228,7 +227,7 @@
     .ev-block.proxima .ev-hora { color:#0A6B30; }
 
     .ev-quien {
-      font-size:13px; font-weight:700; display:block;
+      font-size:17px; font-weight:700; display:block;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
       font-family:'Barlow',sans-serif; line-height:1.2;
     }
@@ -237,7 +236,7 @@
     .ev-block.proxima .ev-quien { color:#0A4A20; }
 
     .ev-titulo {
-      font-size:11px; display:block;
+      font-size:15px; display:block;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
       font-family:'Barlow',sans-serif; font-weight:500; line-height:1.2;
     }
@@ -249,15 +248,15 @@
     #overlay {
       position:fixed; inset:0; background:#EEF2FB; z-index:999;
       display:flex; align-items:center; justify-content:center;
-      flex-direction:column; gap:16px;
+      flex-direction:column; gap:22px;
     }
     .spinner {
-      width:52px; height:52px; border:5px solid #C8D8F0;
+      width:70px; height:70px; border:7px solid #C8D8F0;
       border-top-color:#0047CC; border-radius:50%;
       animation:spin .85s linear infinite;
     }
     .ov-txt {
-      font-size:16px; color:#0047CC; letter-spacing:3px;
+      font-size:22px; color:#0047CC; letter-spacing:3px;
       text-transform:uppercase; font-weight:800;
       font-family:'Barlow Condensed',sans-serif;
     }
@@ -342,7 +341,7 @@ function tickClock(){
 }
 setInterval(tickClock,1000); tickClock();
 
-/* ── HELPERS FECHA/HORA — sin conversión UTC ── */
+/* ── HELPERS FECHA/HORA ── */
 function fechaDeISO(iso){
   if(!iso) return "";
   if(/T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/.test(iso)) return iso.substring(0,10);
@@ -434,8 +433,13 @@ function renderGrid(salas){
       for(var p=0;p<fuente.length;p++){
         var evp = fuente[p];
         if(!mismodia(evp.inicio, dia)) continue;
-        var iniMs = new Date(evp.inicio).getTime();
+
         var finMs = new Date(evp.fin).getTime();
+
+        /* ── NUEVO: omitir eventos ya terminados en la columna de HOY ── */
+        if(esHoy2 && finMs <= ahoraMs) continue;
+
+        var iniMs = new Date(evp.inicio).getTime();
         var cls;
         if(iniMs<=ahoraMs && finMs>ahoraMs)                  cls="ocupada";
         else if(iniMs>ahoraMs&&(iniMs-ahoraMs)<30*60*1000)   cls="pronto";
