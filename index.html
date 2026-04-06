@@ -4,135 +4,204 @@
   <meta charset="UTF-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <title>Salas de Reunion</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@500&display=swap" rel="stylesheet"/>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    html, body { width:1920px; height:1080px; overflow:hidden; background:#0A0E2E; color:#fff; font-family:Arial, Helvetica, sans-serif; }
+    html, body {
+      width:1920px; height:1080px; overflow:hidden;
+      background:#F0F2F7;
+      color:#1A1D2E;
+      font-family:'DM Sans', Arial, sans-serif;
+    }
 
     /* ══ HEADER ══ */
-    #header { position:absolute; left:0; top:0; width:1920px; height:64px; background:#003399; border-bottom:4px solid #FF7D10; }
-    #logo-img { position:absolute; left:20px; top:10px; height:42px; }
-    #logo-sub { position:absolute; left:150px; top:24px; font-size:11px; letter-spacing:4px; text-transform:uppercase; color:#AECDFF; font-weight:700; border-left:2px solid #FF7D10; padding-left:12px; }
-    #act-txt  { position:absolute; right:20px; top:5px;  font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#AECDFF; }
-    #clk-time { position:absolute; right:20px; top:14px; font-size:40px; font-weight:800; letter-spacing:3px; color:#fff; }
-    #clk-date { position:absolute; right:20px; top:58px; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#AECDFF; }
+    #header {
+      position:absolute; left:0; top:0; width:1920px; height:72px;
+      background:#ffffff;
+      border-bottom:3px solid #FF7D10;
+      display:flex; align-items:center;
+      padding:0 32px;
+      gap:0;
+    }
+
+    /* Logo */
+    #logo-wrap { display:flex; align-items:center; gap:12px; flex-shrink:0; }
+    #logo-img  { height:38px; }
+    #logo-sub  {
+      font-size:11px; letter-spacing:3px; text-transform:uppercase;
+      color:#7A829A; font-weight:600;
+      border-left:2px solid #FF7D10; padding-left:14px;
+    }
+
+    /* Leyenda central */
+    #leyenda {
+      flex:1; display:flex; align-items:center; justify-content:center; gap:28px;
+    }
+    .leg-item { display:flex; align-items:center; gap:8px; font-size:13px; color:#5A6278; font-weight:500; }
+    .leg-dot  { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
+    .leg-dot.libre   { background:#22C78B; }
+    .leg-dot.pronto  { background:#4A8AFA; }
+    .leg-dot.ocupada { background:#F05830; }
+
+    /* Semana badge */
+    #semana-wrap { flex-shrink:0; display:flex; align-items:center; gap:20px; }
+    #semana-badge {
+      font-size:12px; color:#7A829A; background:#F0F2F8;
+      border-radius:8px; padding:5px 14px; font-weight:500; white-space:nowrap;
+    }
+
+    /* Reloj — zona fija a la derecha */
+    #clk-wrap  { flex-shrink:0; text-align:right; }
+    #clk-time  { font-family:'DM Mono', monospace; font-size:36px; font-weight:500; color:#1A1D2E; letter-spacing:2px; display:block; line-height:1; }
+    #clk-date  { font-size:10px; color:#9AA0B4; letter-spacing:1px; text-transform:uppercase; margin-top:2px; display:block; }
 
     /* ══ TABLA ══ */
-    /* top:68 (header 64 + 4 gap), height=1080-68-8=1004 */
-    #tabla { position:absolute; left:8px; top:68px; width:1904px; height:1004px; }
+    /* header 72 + border 3 = 75, margen 8px */
+    #tabla { position:absolute; left:8px; top:83px; width:1904px; height:989px; }
 
-    /* Fila de cabecera de días */
-    #fila-header { position:absolute; left:0; top:0; width:1904px; height:52px; }
+    #fila-header { position:absolute; left:0; top:0; width:1904px; height:56px; }
 
-    /* Celda de la esquina (label "Sala") */
+    /* Esquina */
     #corner {
-      position:absolute; left:0; top:0; width:148px; height:52px;
-      background:#001F70; border:1px solid rgba(255,255,255,0.2); border-radius:8px 0 0 0;
-      font-size:13px; font-weight:900; letter-spacing:3px; text-transform:uppercase;
-      color:#AECDFF; text-align:center; line-height:52px;
+      position:absolute; left:0; top:0; width:152px; height:56px;
+      background:#E8EAF2; border:1px solid #D8DCE8; border-radius:10px 0 0 0;
+      font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase;
+      color:#9AA0B4; text-align:center; line-height:56px;
     }
 
-    /* Cabeceras de días — 5 columnas, left calculado por JS */
+    /* Cabeceras días */
     .day-head {
-      position:absolute; top:0; height:52px;
-      border:1px solid rgba(255,255,255,0.2);
-      text-align:center; line-height:52px;
-      font-size:15px; font-weight:900; letter-spacing:2px; text-transform:uppercase; color:#fff;
-      background:#001F70;
+      position:absolute; top:0; height:56px;
+      border:1px solid #D8DCE8;
+      background:#FFFFFF;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
     }
-    .day-head.hoy { background:#CC3300; color:#fff; }
-    .day-head span { font-size:11px; font-weight:400; color:#AECDFF; margin-left:6px; }
-    .day-head.hoy span { color:#FFD0C0; }
+    .day-head .dh-nombre { font-size:13px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:#5A6278; }
+    .day-head .dh-fecha  { font-size:12px; font-weight:500; color:#9AA0B4; }
+    .day-head.hoy { background:#FFF4EE; border-color:#FFCAAA; }
+    .day-head.hoy .dh-nombre { color:#C04A0C; }
+    .day-head.hoy .dh-fecha  { color:#E07040; }
+    .dh-hoy-badge {
+      font-size:9px; background:#F05830; color:#fff;
+      border-radius:4px; padding:1px 6px; font-weight:700;
+      letter-spacing:0.5px; margin-top:1px;
+    }
 
     /* Filas de salas */
     .sala-row { position:absolute; left:0; width:1904px; }
 
-    /* Etiqueta de sala (columna izquierda) */
+    /* Etiqueta sala */
     .sala-lbl {
-      position:absolute; left:0; width:148px;
-      background:#001F70; border:1px solid rgba(255,255,255,0.15);
-      font-size:13px; font-weight:900; letter-spacing:1px; text-transform:uppercase;
-      color:#fff; text-align:center;
-      display:table; /* para centrado vertical sin flex */
+      position:absolute; left:0; width:152px;
+      background:#FFFFFF; border:1px solid #D8DCE8;
+      display:flex; align-items:center; gap:10px;
+      padding:0 14px;
     }
-    .sala-lbl-inner { display:table-cell; vertical-align:middle; }
-    .sala-dot { width:10px; height:10px; border-radius:5px; display:inline-block; margin-right:6px; vertical-align:middle; }
+    .sala-dot { width:11px; height:11px; border-radius:50%; flex-shrink:0; }
+    .sala-info { display:flex; flex-direction:column; }
+    .sala-nombre { font-size:13px; font-weight:700; color:#2C3149; line-height:1.3; }
+    .sala-estado { font-size:10px; font-weight:500; color:#9AA0B4; margin-top:1px; }
 
-    /* Celdas de días dentro de cada sala-row */
+    /* Celdas de días */
     .day-cell {
       position:absolute;
-      border:1px solid rgba(255,255,255,0.1);
-      background:#0D1545;
+      border:1px solid #D8DCE8;
+      background:#FAFBFD;
       overflow:hidden;
     }
-    .day-cell.hoy { background:#1A0A00; border-color:rgba(255,80,0,0.3); }
-    .day-cell.libre-cell { }
+    .day-cell.hoy { background:#FFFAF7; border-color:#FFCAAA; }
 
-    /* Texto "Libre" */
+    /* Libre */
     .libre-txt {
       position:absolute; left:0; top:0; width:100%; height:100%;
-      font-size:11px; color:rgba(255,255,255,0.2); font-style:italic;
-      text-align:center;
-      display:table;
+      display:flex; align-items:center; justify-content:center;
+      font-size:12px; color:#C8CCDA; font-style:italic; font-weight:400;
     }
-    .libre-txt span { display:table-cell; vertical-align:middle; }
 
-    /* Eventos dentro de celda */
+    /* Eventos */
     .ev-bloque {
-      position:absolute; left:4px; right:4px;
-      border-radius:5px; padding:3px 6px;
+      position:absolute; left:6px; right:6px;
+      border-radius:6px; padding:4px 8px;
       border-left:3px solid transparent; overflow:hidden;
     }
-    .ev-ocup    { background:#C85200; border-color:#fff; }
-    .ev-pronto  { background:#1A55CC; border-color:#fff; }
-    .ev-proxima { background:rgba(100,140,255,0.18); border-color:rgba(100,140,255,0.5); }
-    .ev-pasada  { background:rgba(255,255,255,0.07); border-color:rgba(255,255,255,0.2); }
-    .ev-hora  { font-size:11px; font-weight:700; color:#fff; display:block; white-space:nowrap; }
-    .ev-user  { font-size:10px; color:rgba(255,255,255,0.85); display:block; white-space:nowrap; overflow:hidden; }
-    .ev-pasada .ev-hora { color:#AECDFF; }
-    .ev-pasada .ev-user { color:#7AA8FF; }
-    .ev-proxima .ev-hora { color:#C8DFFF; }
-    .ev-proxima .ev-user { color:#A0C0FF; }
+    .ev-ocup    { background:#FEF0EB; border-left-color:#F05830; }
+    .ev-pronto  { background:#EEF4FF; border-left-color:#4A8AFA; }
+    .ev-proxima { background:#F5F6FA; border-left-color:#C2C8D8; }
+    .ev-pasada  { background:#F8F8F8; border-left-color:#E0E3EA; }
+
+    .ev-hora { font-size:11px; font-weight:700; display:block; white-space:nowrap; }
+    .ev-user { font-size:10px; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:1px; }
+
+    .ev-ocup .ev-hora    { color:#C04A0C; }
+    .ev-ocup .ev-user    { color:#E0660E; }
+    .ev-pronto .ev-hora  { color:#2255CC; }
+    .ev-pronto .ev-user  { color:#4A8AFA; }
+    .ev-proxima .ev-hora { color:#5A6278; }
+    .ev-proxima .ev-user { color:#9AA0B4; }
+    .ev-pasada .ev-hora  { color:#B0B8CC; }
+    .ev-pasada .ev-user  { color:#C2C8D8; }
 
     /* ══ OVERLAY ══ */
-    #overlay { position:fixed; left:0; top:0; width:1920px; height:1080px; background:#0A0E2E; z-index:999; }
-    .spinner { position:absolute; left:944px; top:490px; width:48px; height:48px; border:5px solid #002080; border-top-color:#FF7D10; border-radius:24px; -webkit-animation:spin .9s linear infinite; animation:spin .9s linear infinite; }
-    .ov-txt  { position:absolute; left:0; top:556px; width:1920px; font-size:12px; color:#AECDFF; letter-spacing:4px; text-transform:uppercase; font-weight:700; text-align:center; }
-    @-webkit-keyframes spin { to { -webkit-transform:rotate(360deg); } }
+    #overlay {
+      position:fixed; left:0; top:0; width:1920px; height:1080px;
+      background:#F0F2F7; z-index:999;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
+    }
+    .spinner {
+      width:44px; height:44px;
+      border:4px solid #D8DCE8; border-top-color:#FF7D10;
+      border-radius:50%;
+      animation:spin .8s linear infinite;
+    }
+    .ov-txt { font-size:12px; color:#9AA0B4; letter-spacing:3px; text-transform:uppercase; font-weight:600; }
     @keyframes spin { to { transform:rotate(360deg); } }
   </style>
 </head>
 <body>
 
-<div id="overlay"><div class="spinner"></div><span class="ov-txt">Cargando...</span></div>
+<div id="overlay">
+  <div class="spinner"></div>
+  <span class="ov-txt">Cargando salas...</span>
+</div>
 
 <div id="header">
-  <img id="logo-img" src="https://i.imgur.com/fXLdGez.png" alt="Prodalam"/>
-  <span id="logo-sub">Estado en tiempo real</span>
-  <span id="act-txt">Actualizando...</span>
-  <span id="clk-time">--:--</span>
-  <span id="clk-date">---</span>
+  <div id="logo-wrap">
+    <img id="logo-img" src="https://i.imgur.com/fXLdGez.png" alt="Prodalam"/>
+    <span id="logo-sub">Estado en tiempo real</span>
+  </div>
+
+  <div id="leyenda">
+    <span class="leg-item"><span class="leg-dot libre"></span>Disponible</span>
+    <span class="leg-item"><span class="leg-dot pronto"></span>Próxima en 30 min</span>
+    <span class="leg-item"><span class="leg-dot ocupada"></span>Ocupada ahora</span>
+  </div>
+
+  <div id="semana-wrap">
+    <span id="semana-badge">Semana --/-- – --/--</span>
+    <div id="clk-wrap">
+      <span id="clk-time">--:--</span>
+      <span id="clk-date">---</span>
+    </div>
+  </div>
 </div>
 
 <div id="tabla">
   <div id="fila-header">
     <div id="corner">Sala</div>
   </div>
-  <!-- filas generadas por JS -->
 </div>
 
 <script>
 var SCRIPT_URL="https://script.google.com/macros/s/AKfycbyn7VSKT-IFULCC2bPx2SlK2W2GlaXQNoKZ44WLQq5Ev94ESTC45vlJgcpmPgaN_IYQ/exec";
 
-var DIAS_SHORT=["Dom","Lun","Mar","Mie","Jue","Vie","Sab"];
-var DIAS_FULL =["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"];
-var MESES     =["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
-var DIAS_SEM  =["Lunes","Martes","Miercoles","Jueves","Viernes"];
+var DIAS_FULL=["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+var MESES=["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+var DIAS_SEM=["Lunes","Martes","Miércoles","Jueves","Viernes"];
 
 function pad(n){ return n<10?"0"+n:""+n; }
 function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 function fmtH(iso){ var d=new Date(iso); return pad(d.getHours())+":"+pad(d.getMinutes()); }
 function soloFecha(iso){ var d=new Date(iso); d.setHours(0,0,0,0); return d.getTime(); }
-
 function getLunes(fecha){
   var d=new Date(fecha); var dow=d.getDay();
   var diff=(dow===0)?-6:1-dow;
@@ -142,96 +211,105 @@ function getLunes(fecha){
 /* Reloj */
 function tickClock(){
   var n=new Date();
-  document.getElementById("clk-time").innerHTML=pad(n.getHours())+":"+pad(n.getMinutes());
-  document.getElementById("clk-date").innerHTML=DIAS_FULL[n.getDay()]+" "+pad(n.getDate())+" "+MESES[n.getMonth()]+" "+n.getFullYear();
+  document.getElementById("clk-time").textContent=pad(n.getHours())+":"+pad(n.getMinutes());
+  document.getElementById("clk-date").textContent=DIAS_FULL[n.getDay()]+" "+pad(n.getDate())+" "+MESES[n.getMonth()]+" "+n.getFullYear();
 }
 setInterval(tickClock,1000); tickClock();
 
 /* Layout dims */
-// tabla: 1904 x 1004
-// corner + 5 day cols: left=148, width=(1904-148)/5 = 351px cada una
-var CORNER_W = 148;
+var CORNER_W = 152;
 var TABLE_W  = 1904;
-var TABLE_H  = 1004;
-var HEAD_H   = 52;
+var TABLE_H  = 989;
+var HEAD_H   = 56;
 var N_DAYS   = 5;
-var COL_W    = Math.floor((TABLE_W - CORNER_W) / N_DAYS); // 351
+var COL_W    = Math.floor((TABLE_W - CORNER_W) / N_DAYS);
 var SALAS_NAMES = ["Sala 1","Sala 2","Sala 3","Sala 4","Sala 5","Sala 6","Sala Villarica"];
-var N_SALAS  = SALAS_NAMES.length; // 7
-var ROW_H    = Math.floor((TABLE_H - HEAD_H) / N_SALAS); // ~136
+var N_SALAS  = SALAS_NAMES.length;
+var ROW_H    = Math.floor((TABLE_H - HEAD_H) / N_SALAS);
 
-var EST_COLORS = { libre:"#3ED68A", ocupada:"#FF7D10", pronto:"#5599FF", error:"#888" };
+var EST_COLORS  = { libre:"#22C78B", ocupada:"#F05830", pronto:"#4A8AFA", error:"#C2C8D8" };
+var EST_LABELS  = { libre:"Disponible", ocupada:"Ocupada ahora", pronto:"Pronto ocupada", error:"Sin datos" };
 
 function renderGrid(data){
   var salas = data.salas || data;
   if(!salas||!salas.length){ ocultarOverlay(); return; }
 
-  var ahora  = new Date();
-  var lunes  = getLunes(ahora);
-  var hoyTs  = soloFecha(ahora);
+  var ahora = new Date();
+  var lunes = getLunes(ahora);
+  var hoyTs = soloFecha(ahora);
 
-  // Construir mapa: nombre -> sala
   var salaMap = {};
   for(var i=0;i<salas.length;i++) salaMap[salas[i].nombre]=salas[i];
 
-  // Limpiar tabla excepto corner
+  /* Limpiar filas y cabeceras anteriores */
   var tabla = document.getElementById("tabla");
   var viejos = tabla.querySelectorAll(".sala-row,.day-head");
   for(var i=0;i<viejos.length;i++) viejos[i].parentNode.removeChild(viejos[i]);
 
-  // ── Cabeceras de días ──
+  /* Semana badge */
+  var viernes = new Date(lunes); viernes.setDate(lunes.getDate()+4);
+  document.getElementById("semana-badge").textContent =
+    "Semana "+pad(lunes.getDate())+"/"+pad(lunes.getMonth()+1)+" – "+pad(viernes.getDate())+"/"+pad(viernes.getMonth()+1);
+
+  /* Cabeceras de días */
   var filaHead = document.getElementById("fila-header");
   for(var d=0;d<N_DAYS;d++){
     var fecha = new Date(lunes); fecha.setDate(lunes.getDate()+d);
     var esHoy = (soloFecha(fecha)===hoyTs);
     var dh = document.createElement("div");
-    dh.className = "day-head" + (esHoy?" hoy":"");
+    dh.className = "day-head"+(esHoy?" hoy":"");
     dh.style.left  = (CORNER_W + d*COL_W)+"px";
-    dh.style.width  = COL_W+"px";
-    dh.style.borderRadius = (d===0?"0":"0")+" "+(d===N_DAYS-1?"8px":"0")+" 0 0";
-    var nombreDia = DIAS_SEM[d];
-    var numDia = pad(fecha.getDate())+"/"+pad(fecha.getMonth()+1);
-    dh.innerHTML = nombreDia+"<span>"+numDia+"</span>";
+    dh.style.width = COL_W+"px";
+    dh.style.borderRadius = (d===N_DAYS-1?"0 10px 0 0":"0");
+    var badge = esHoy?'<span class="dh-hoy-badge">HOY</span>':"";
+    dh.innerHTML = '<span class="dh-nombre">'+DIAS_SEM[d]+'</span>'
+                 + '<span class="dh-fecha">'+pad(fecha.getDate())+"/"+pad(fecha.getMonth()+1)+'</span>'
+                 + badge;
     filaHead.appendChild(dh);
   }
 
-  // ── Filas de salas ──
+  /* Filas de salas */
   for(var si=0;si<SALAS_NAMES.length;si++){
     var nombreSala = SALAS_NAMES[si];
     var s = salaMap[nombreSala];
     var topRow = HEAD_H + si*ROW_H;
+    var isLast = (si===SALAS_NAMES.length-1);
 
     var row = document.createElement("div");
     row.className = "sala-row";
     row.style.top    = topRow+"px";
     row.style.height = ROW_H+"px";
 
-    // Label sala
-    var color = s ? (EST_COLORS[s.estado]||"#888") : "#888";
+    /* Etiqueta sala */
+    var color      = s ? (EST_COLORS[s.estado]||"#C2C8D8") : "#C2C8D8";
+    var estadoTxt  = s ? (EST_LABELS[s.estado]||"—") : "—";
+    var shortName  = nombreSala==="Sala Villarica"?"Villarica":nombreSala;
     var lbl = document.createElement("div");
     lbl.className = "sala-lbl";
-    lbl.style.height = ROW_H+"px";
-    lbl.style.borderRadius = (si===SALAS_NAMES.length-1?"0 0 0 8px":"0");
-    var shortName = nombreSala==="Sala Villarica"?"S. Villarica":nombreSala;
-    lbl.innerHTML = '<div class="sala-lbl-inner"><div class="sala-dot" style="background:'+color+'"></div>'+esc(shortName)+'</div>';
+    lbl.style.height       = ROW_H+"px";
+    lbl.style.borderRadius = isLast?"0 0 0 10px":"0";
+    lbl.innerHTML = '<div class="sala-dot" style="background:'+color+'"></div>'
+                  + '<div class="sala-info">'
+                  +   '<span class="sala-nombre">'+esc(shortName)+'</span>'
+                  +   '<span class="sala-estado">'+estadoTxt+'</span>'
+                  + '</div>';
     row.appendChild(lbl);
 
-    // Celdas de días
+    /* Celdas de días */
     for(var d=0;d<N_DAYS;d++){
-      var fecha = new Date(lunes); fecha.setDate(lunes.getDate()+d);
+      var fecha   = new Date(lunes); fecha.setDate(lunes.getDate()+d);
       var fechaTs = soloFecha(fecha);
       var esHoy   = (fechaTs===hoyTs);
-      var isLast  = (si===SALAS_NAMES.length-1);
       var isLastD = (d===N_DAYS-1);
 
       var cell = document.createElement("div");
       cell.className = "day-cell"+(esHoy?" hoy":"");
-      cell.style.left   = (CORNER_W + d*COL_W)+"px";
-      cell.style.width  = COL_W+"px";
-      cell.style.height = ROW_H+"px";
-      cell.style.borderRadius = (isLast&&isLastD?"0 0 8px 0":isLast&&d===0?"0 0 0 0":"0");
+      cell.style.left         = (CORNER_W + d*COL_W)+"px";
+      cell.style.width        = COL_W+"px";
+      cell.style.height       = ROW_H+"px";
+      cell.style.borderRadius = (isLast&&isLastD?"0 0 10px 0":"0");
 
-      // Filtrar eventos de este día para esta sala
+      /* Eventos del día */
       var evsDia = [];
       if(s && s.eventosSemana){
         for(var ei=0;ei<s.eventosSemana.length;ei++){
@@ -241,34 +319,31 @@ function renderGrid(data){
       }
 
       if(evsDia.length===0){
-        // Libre
-        var lt = document.createElement("div"); lt.className="libre-txt";
-        lt.innerHTML='<span style="font-size:12px;color:rgba(255,255,255,0.2);font-style:italic;">Libre</span>';
+        var lt = document.createElement("div");
+        lt.className = "libre-txt";
+        lt.textContent = "Sin reservas";
         cell.appendChild(lt);
       } else {
-        // Ordenar eventos por hora
         evsDia.sort(function(a,b){ return new Date(a.inicio)-new Date(b.inicio); });
-
-        var EVH = Math.floor((ROW_H-8)/evsDia.length); // altura por evento
-        EVH = Math.min(EVH, 50); // máximo 50px
+        var EVH = Math.min(Math.floor((ROW_H-10)/evsDia.length), 52);
         var now = Date.now();
 
         for(var ei=0;ei<evsDia.length;ei++){
-          var ev = evsDia[ei];
+          var ev    = evsDia[ei];
           var iniMs = new Date(ev.inicio).getTime();
           var finMs = new Date(ev.fin).getTime();
           var cls;
-          if(iniMs<=now && finMs>now)                    cls="ev-ocup";
-          else if(iniMs>now && iniMs<=now+30*60*1000)    cls="ev-pronto";
-          else if(finMs<=now)                             cls="ev-pasada";
-          else                                            cls="ev-proxima";
+          if(iniMs<=now && finMs>now)                  cls="ev-ocup";
+          else if(iniMs>now && iniMs<=now+30*60*1000)  cls="ev-pronto";
+          else if(finMs<=now)                           cls="ev-pasada";
+          else                                          cls="ev-proxima";
 
           var bloque = document.createElement("div");
-          bloque.className = "ev-bloque "+cls;
-          bloque.style.top    = (4 + ei*(EVH+3))+"px";
-          bloque.style.height = EVH+"px";
-          bloque.innerHTML = '<span class="ev-hora">'+fmtH(ev.inicio)+" - "+fmtH(ev.fin)+'</span>'
-                           + (ev.creador?'<span class="ev-user">'+esc(ev.creador)+'</span>':"");
+          bloque.className   = "ev-bloque "+cls;
+          bloque.style.top   = (5 + ei*(EVH+4))+"px";
+          bloque.style.height= EVH+"px";
+          bloque.innerHTML   = '<span class="ev-hora">'+fmtH(ev.inicio)+" – "+fmtH(ev.fin)+'</span>'
+                             + (ev.creador?'<span class="ev-user">'+esc(ev.creador)+'</span>':"");
           cell.appendChild(bloque);
         }
       }
@@ -278,12 +353,6 @@ function renderGrid(data){
 
     tabla.appendChild(row);
   }
-
-  // Actualizar header semana
-  var viernes = new Date(lunes); viernes.setDate(lunes.getDate()+4);
-  document.getElementById("act-txt").innerHTML =
-    "Semana "+pad(lunes.getDate())+"/"+pad(lunes.getMonth()+1)+" - "+pad(viernes.getDate())+"/"+pad(viernes.getMonth()+1)
-    +"   |   Act. "+pad(ahora.getHours())+":"+pad(ahora.getMinutes())+":"+pad(ahora.getSeconds());
 
   ocultarOverlay();
 }
