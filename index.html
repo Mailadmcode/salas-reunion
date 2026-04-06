@@ -6,49 +6,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Salas de Reunion – Prodalam</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600;700&display=swap');
+
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     html, body {
       width:100%; height:100%; overflow:hidden;
       background:#0A1628;
-      font-family:Arial, Helvetica, sans-serif;
+      font-family:'Barlow', Arial, sans-serif;
     }
     .app { display:flex; flex-direction:column; width:100vw; height:100vh; }
 
     /* ══════════════════════════════════════
-       HEADER — una sola fila, bien separada
+       HEADER
     ══════════════════════════════════════ */
     .header {
-      flex-shrink:0; height:72px;
+      flex-shrink:0; height:68px;
       background:#00267C;
       border-bottom:4px solid #FF7D10;
       display:flex; align-items:center;
       padding:0 20px; gap:0;
     }
-    /* Zona logo — 22% */
     .h-left {
-      flex:0 0 22%; display:flex; align-items:center; gap:10px;
+      flex:0 0 20%; display:flex; align-items:center; gap:10px;
       border-right:1px solid rgba(255,255,255,0.15); padding-right:16px;
     }
-    .h-logo { height:40px; }
-    .h-sub  { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#AECDFF; font-weight:600; white-space:nowrap; }
+    .h-logo { height:38px; }
+    .h-sub  { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#AECDFF; font-weight:600; white-space:nowrap; font-family:'Barlow Condensed',sans-serif; }
 
-    /* Zona leyenda — 56% */
     .h-center {
-      flex:0 0 56%; display:flex; align-items:center; justify-content:center; gap:32px;
+      flex:0 0 60%; display:flex; align-items:center; justify-content:center; gap:28px;
       padding:0 16px;
     }
     .leg { display:flex; align-items:center; gap:8px; }
-    .leg-dot { width:14px; height:14px; border-radius:50%; flex-shrink:0; }
-    .leg-txt { font-size:13px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:#fff; white-space:nowrap; }
+    .leg-dot { width:13px; height:13px; border-radius:50%; flex-shrink:0; }
+    .leg-txt { font-size:12px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:#fff; white-space:nowrap; font-family:'Barlow Condensed',sans-serif; }
 
-    /* Zona reloj — 22% */
     .h-right {
-      flex:0 0 22%; display:flex; flex-direction:column; align-items:flex-end;
+      flex:0 0 20%; display:flex; flex-direction:column; align-items:flex-end;
       border-left:1px solid rgba(255,255,255,0.15); padding-left:16px;
     }
-    .clk-semana { font-size:9px; letter-spacing:1px; text-transform:uppercase; color:#AECDFF; white-space:nowrap; }
-    .clk-time   { font-size:42px; font-weight:900; letter-spacing:4px; color:#fff; line-height:1; }
-    .clk-fecha  { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#AECDFF; white-space:nowrap; }
+    .clk-semana { font-size:8px; letter-spacing:1px; text-transform:uppercase; color:#AECDFF; white-space:nowrap; font-family:'Barlow Condensed',sans-serif; }
+    .clk-time   { font-size:38px; font-weight:900; letter-spacing:3px; color:#fff; line-height:1; font-family:'Barlow Condensed',sans-serif; }
+    .clk-fecha  { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:#AECDFF; white-space:nowrap; font-family:'Barlow Condensed',sans-serif; }
 
     /* ══════════════════════════════════════
        MAIN
@@ -57,7 +56,7 @@
 
     /* ══ PLANO ══ */
     .plano {
-      flex-shrink:0; width:180px;
+      flex-shrink:0; width:200px;
       background:#071340;
       border:2px solid #1a3a7a;
       border-radius:12px;
@@ -67,102 +66,212 @@
       background:#0A52C6; padding:9px 6px;
       font-size:11px; letter-spacing:3px; text-transform:uppercase;
       color:#fff; text-align:center; font-weight:900; flex-shrink:0;
+      font-family:'Barlow Condensed',sans-serif;
     }
     .plano-body {
-      flex:1; display:flex; flex-direction:column;
-      padding:8px; gap:7px; min-height:0;
+      flex:1; padding:10px;
+      display:flex; flex-direction:column; gap:6px; min-height:0;
+      overflow:hidden;
     }
-    /* Villarica — fila única ancha */
-    .pr-vll {
-      flex-shrink:0; height:58px; border-radius:9px;
-      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
-      border:2px solid #1a3a7a; background:#0d2050;
-      transition:background .3s, border-color .3s;
-    }
-    /* Grid 2×3 para S.6→S.1 */
-    .pr-grid {
-      flex:1; display:grid;
-      grid-template-columns:1fr 1fr;
-      grid-template-rows:repeat(3,1fr);
-      gap:7px; min-height:0;
-    }
-    .pr-room {
-      border-radius:9px; border:2px solid #1a3a7a; background:#0d2050;
-      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
-      transition:background .3s, border-color .3s;
-    }
-    /* Estados */
-    .st-libre   { background:#1a6b3a !important; border-color:#2ecc71 !important; }
-    .st-ocupada { background:#8B2500 !important; border-color:#FF7D10 !important; }
-    .st-pronto  { background:#1a3a7a !important; border-color:#AECDFF !important; }
 
-    .pr-num { font-size:clamp(16px,1.6vw,26px); font-weight:900; color:#fff; line-height:1; text-shadow:0 1px 3px rgba(0,0,0,.4); }
-    .pr-lbl { font-size:clamp(6px,0.55vw,9px); font-weight:700; letter-spacing:1px; text-transform:uppercase; color:rgba(255,255,255,.85); }
+    /* Contenedor plano real */
+    .floor-plan {
+      flex:1; position:relative;
+      display:flex; flex-direction:column; gap:0;
+      min-height:0;
+    }
+
+    /* Fila superior: Sala 6 + Villarica */
+    .fp-top-row {
+      display:flex; gap:4px; flex-shrink:0;
+      height:54px;
+    }
+
+    /* Salas del medio/abajo en columna izquierda */
+    .fp-rooms {
+      display:flex; flex-direction:column; gap:4px; flex:1; min-height:0;
+    }
+
+    .fp-room {
+      border-radius:8px;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      border:2px solid transparent;
+      transition:all .4s ease;
+      cursor:default;
+      position:relative;
+      overflow:hidden;
+    }
+    .fp-room::before {
+      content:''; position:absolute; inset:0;
+      background:rgba(255,255,255,0.04);
+      transition:opacity .3s;
+    }
+
+    /* Sala pequeña en columna */
+    .fp-small { flex:1; min-height:0; }
+    /* Villarica — ancha */
+    .fp-villarica { flex:1; min-width:0; }
+    /* Sala 6 — cuadrada */
+    .fp-s6 { width:54px; flex-shrink:0; }
+
+    /* Colores base de cada sala (del plano real) */
+    .fp-room.sala-6     { --room-base:#00BCD4; }  /* cyan */
+    .fp-room.sala-5     { --room-base:#CDDC39; }  /* lime */
+    .fp-room.sala-4     { --room-base:#26A69A; }  /* teal */
+    .fp-room.sala-3     { --room-base:#FF5722; }  /* deep orange */
+    .fp-room.sala-2     { --room-base:#29B6F6; }  /* light blue */
+    .fp-room.sala-1     { --room-base:#AB47BC; }  /* purple */
+    .fp-room.sala-vll   { --room-base:#42A5F5; }  /* blue */
+
+    /* Estado libre: usa el color de sala con baja opacidad */
+    .fp-room.st-libre {
+      background: color-mix(in srgb, var(--room-base) 25%, #071340);
+      border-color: color-mix(in srgb, var(--room-base) 60%, transparent);
+    }
+    /* Estado ocupada */
+    .fp-room.st-ocupada {
+      background: #6B1A00;
+      border-color: #FF7D10;
+      animation: pulse-occ 2s infinite;
+    }
+    @keyframes pulse-occ {
+      0%,100% { border-color:#FF7D10; }
+      50% { border-color:#ffaa55; }
+    }
+    /* Estado próximo */
+    .fp-room.st-pronto {
+      background: #1a3a7a;
+      border-color: #AECDFF;
+    }
+
+    .fp-num {
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:clamp(13px,1.4vw,20px);
+      font-weight:900; color:#fff;
+      line-height:1; text-shadow:0 1px 4px rgba(0,0,0,.5);
+    }
+    .fp-lbl {
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:clamp(6px,0.5vw,8px);
+      font-weight:700; letter-spacing:1px; text-transform:uppercase;
+      color:rgba(255,255,255,.8);
+      margin-top:2px;
+    }
+
+    /* Indicador de color de sala (franja) */
+    .fp-color-bar {
+      position:absolute; bottom:0; left:0; right:0;
+      height:4px;
+      background: var(--room-base);
+      opacity:0.8;
+    }
 
     /* ══ TABLA SEMANAL ══ */
     .tabla { flex:1; display:flex; flex-direction:column; min-width:0; overflow:hidden; }
 
-    /* Cabecera días */
     .tb-head {
       flex-shrink:0; display:flex; gap:3px; margin-bottom:3px;
     }
     .th-sala {
-      flex:0 0 100px; background:#071340; border:1px solid #1a3a7a;
+      flex:0 0 115px; background:#071340; border:1px solid #1a3a7a;
       border-radius:8px 8px 0 0; display:flex; align-items:center; justify-content:center;
-      font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#AECDFF;
+      font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#AECDFF;
+      font-family:'Barlow Condensed',sans-serif;
     }
     .th-dia {
       flex:1; background:#071340; border:1px solid #1a3a7a;
-      border-radius:8px 8px 0 0; padding:6px 4px; text-align:center;
+      border-radius:8px 8px 0 0; padding:5px 4px; text-align:center;
     }
     .th-dia.hoy { background:#0A52C6; border-color:#FF7D10; }
     .th-dia-nombre {
-      font-size:clamp(11px,1vw,15px); font-weight:900;
+      font-size:clamp(11px,0.9vw,14px); font-weight:900;
       text-transform:uppercase; letter-spacing:2px; color:#fff; display:block;
+      font-family:'Barlow Condensed',sans-serif;
     }
     .th-dia-fecha {
-      font-size:clamp(9px,0.7vw,11px); color:#AECDFF;
-      letter-spacing:1px; display:block; margin-top:2px;
+      font-size:clamp(9px,0.65vw,11px); color:#AECDFF;
+      letter-spacing:1px; display:block; margin-top:1px;
+      font-family:'Barlow Condensed',sans-serif;
     }
     .th-dia.hoy .th-dia-fecha { color:#FFD080; }
+    .hoy-badge {
+      display:inline-block; background:#FF7D10; color:#fff;
+      font-size:8px; font-weight:900; letter-spacing:1px;
+      padding:1px 5px; border-radius:3px; margin-top:2px;
+      font-family:'Barlow Condensed',sans-serif;
+    }
 
-    /* Cuerpo tabla */
     .tb-body { flex:1; display:flex; flex-direction:column; gap:3px; min-height:0; overflow:hidden; }
     .tb-row  { flex:1; display:flex; gap:3px; min-height:0; }
 
-    /* Celda sala (primera columna) */
+    /* Celda sala */
     .tc-sala {
-      flex:0 0 100px; background:#071340; border:1px solid #1a3a7a;
-      border-radius:0; display:flex; align-items:center; padding:0 10px; gap:8px;
+      flex:0 0 115px; background:#071340; border:1px solid #1a3a7a;
+      display:flex; align-items:center; padding:0 8px; gap:7px;
     }
-    .sala-dot { width:11px; height:11px; border-radius:50%; flex-shrink:0; background:#2ecc71; }
-    .sala-dot.ocupada { background:#FF7D10; }
-    .sala-dot.pronto  { background:#AECDFF; }
-    .sala-nombre { font-size:clamp(11px,1vw,15px); font-weight:700; color:#fff; white-space:nowrap; }
+    /* Color bar lateral de sala */
+    .sala-colorbar {
+      width:4px; height:70%; border-radius:2px; flex-shrink:0;
+    }
+    .sala-nombre {
+      font-size:clamp(11px,0.9vw,14px); font-weight:700; color:#fff;
+      white-space:nowrap; font-family:'Barlow Condensed',sans-serif;
+    }
+    .sala-status {
+      font-size:clamp(8px,0.6vw,10px); color:rgba(255,255,255,0.55);
+      white-space:nowrap; display:block; margin-top:1px;
+      font-family:'Barlow Condensed',sans-serif;
+      letter-spacing:0.5px;
+    }
+    .sala-info { display:flex; flex-direction:column; }
 
     /* Celda día */
     .tc-dia {
       flex:1; background:#0d1e40; border:1px solid #1a3a7a;
       position:relative; overflow:hidden; min-width:0;
     }
-    .tc-dia.hoy { background:#0d224a; border-color:#0A52C6; }
+    .tc-dia.hoy { background:#0d224a; border-color:#2a4a8a; }
+
     .tc-libre-txt {
       position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-      font-size:clamp(10px,0.8vw,13px); color:#2a4a7a; font-style:italic; white-space:nowrap;
+      font-size:clamp(9px,0.65vw,11px); color:#1e3458;
+      font-style:italic; white-space:nowrap;
+      font-family:'Barlow',sans-serif;
     }
 
-    /* Evento dentro de celda */
+    /* Evento */
     .ev-block {
-      position:absolute; left:4px; right:4px;
-      border-radius:5px; padding:4px 6px; overflow:hidden;
+      position:absolute; left:3px; right:3px;
+      border-radius:6px; padding:4px 7px; overflow:hidden;
       border-left:4px solid transparent;
+      display:flex; flex-direction:column; justify-content:center;
     }
-    .ev-block.ocupada { background:#8B2500; border-color:#FF7D10; }
-    .ev-block.pronto  { background:#1a3a7a; border-color:#AECDFF; }
-    .ev-block.proxima { background:#1a5030; border-color:#2ecc71; }
-    .ev-hora  { font-size:clamp(9px,0.75vw,11px); font-weight:700; display:block; white-space:nowrap; color:#fff; }
-    .ev-quien { font-size:clamp(10px,0.8vw,13px); font-weight:600; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#fff; }
-    .ev-block.pronto .ev-hora { color:#AECDFF; }
+    .ev-block.ocupada { background:rgba(139,37,0,0.9); border-color:#FF7D10; }
+    .ev-block.pronto  { background:rgba(26,58,122,0.95); border-color:#AECDFF; }
+    .ev-block.proxima { background:rgba(20,70,40,0.9); border-color:#2ecc71; }
+
+    .ev-hora {
+      font-size:clamp(9px,0.7vw,11px); font-weight:700;
+      display:block; white-space:nowrap; color:#fff;
+      font-family:'Barlow Condensed',sans-serif;
+      letter-spacing:0.5px;
+    }
+    .ev-quien {
+      font-size:clamp(10px,0.75vw,12px); font-weight:600;
+      display:block; white-space:nowrap; overflow:hidden;
+      text-overflow:ellipsis; color:#fff;
+      font-family:'Barlow',sans-serif;
+    }
+    .ev-titulo {
+      font-size:clamp(8px,0.6vw,10px);
+      display:block; white-space:nowrap; overflow:hidden;
+      text-overflow:ellipsis;
+      color:rgba(255,255,255,0.7);
+      font-family:'Barlow',sans-serif;
+    }
+    .ev-block.pronto .ev-hora  { color:#AECDFF; }
+    .ev-block.pronto .ev-quien { color:#DDEEFF; }
 
     /* Overlay */
     #overlay {
@@ -170,7 +279,7 @@
       display:flex; align-items:center; justify-content:center; flex-direction:column; gap:16px;
     }
     .spinner { width:44px; height:44px; border:4px solid #1a3a7a; border-top-color:#FF7D10; border-radius:50%; animation:spin .9s linear infinite; }
-    .ov-txt { font-size:12px; color:#AECDFF; letter-spacing:3px; text-transform:uppercase; font-weight:700; }
+    .ov-txt { font-size:12px; color:#AECDFF; letter-spacing:3px; text-transform:uppercase; font-weight:700; font-family:'Barlow Condensed',sans-serif; }
     @keyframes spin { to { transform:rotate(360deg); } }
   </style>
 </head>
@@ -192,7 +301,7 @@
     <div class="h-center">
       <div class="leg"><div class="leg-dot" style="background:#2ecc71"></div><span class="leg-txt">Disponible</span></div>
       <div class="leg"><div class="leg-dot" style="background:#AECDFF"></div><span class="leg-txt">Próxima &lt;30 min</span></div>
-      <div class="leg"><div class="leg-dot" style="background:#FF7D10"></div><span class="leg-txt">Ocupada</span></div>
+      <div class="leg"><div class="leg-dot" style="background:#FF7D10"></div><span class="leg-txt">Ocupada ahora</span></div>
     </div>
     <div class="h-right">
       <span class="clk-semana" id="clkSemana">---</span>
@@ -206,19 +315,53 @@
 
     <!-- PLANO -->
     <div class="plano">
-      <div class="plano-hdr">Plano de Salas</div>
+      <div class="plano-hdr">📍 Plano de Salas</div>
       <div class="plano-body">
-        <div class="pr-vll st-libre" id="pr-villarica">
-          <div class="pr-num">VLL</div>
-          <div class="pr-lbl">Villarica</div>
-        </div>
-        <div class="pr-grid">
-          <div class="pr-room st-libre" id="pr-6"><div class="pr-num">S.6</div><div class="pr-lbl">Disponible</div></div>
-          <div class="pr-room st-libre" id="pr-5"><div class="pr-num">S.5</div><div class="pr-lbl">Disponible</div></div>
-          <div class="pr-room st-libre" id="pr-4"><div class="pr-num">S.4</div><div class="pr-lbl">Disponible</div></div>
-          <div class="pr-room st-libre" id="pr-3"><div class="pr-num">S.3</div><div class="pr-lbl">Disponible</div></div>
-          <div class="pr-room st-libre" id="pr-2"><div class="pr-num">S.2</div><div class="pr-lbl">Disponible</div></div>
-          <div class="pr-room st-libre" id="pr-1"><div class="pr-num">S.1</div><div class="pr-lbl">Disponible</div></div>
+        <div class="floor-plan">
+
+          <!-- Fila superior: Sala 6 (izq, cuadrada) + Villarica (der, ancha) -->
+          <div class="fp-top-row">
+            <div class="fp-room sala-6 st-libre fp-s6" id="pr-6">
+              <div class="fp-num">6</div>
+              <div class="fp-lbl" id="pr-6-lbl">Libre</div>
+              <div class="fp-color-bar"></div>
+            </div>
+            <div class="fp-room sala-vll st-libre fp-villarica" id="pr-villarica">
+              <div class="fp-num">VILLARICA</div>
+              <div class="fp-lbl" id="pr-villarica-lbl">Libre</div>
+              <div class="fp-color-bar"></div>
+            </div>
+          </div>
+
+          <!-- Salas 5 → 1 en columna izquierda (como el plano real) -->
+          <div class="fp-rooms" style="margin-top:4px;">
+            <div class="fp-room sala-5 st-libre fp-small" id="pr-5" style="width:54px;">
+              <div class="fp-num">5</div>
+              <div class="fp-lbl" id="pr-5-lbl">Libre</div>
+              <div class="fp-color-bar"></div>
+            </div>
+            <div class="fp-room sala-4 st-libre fp-small" id="pr-4" style="width:54px;">
+              <div class="fp-num">4</div>
+              <div class="fp-lbl" id="pr-4-lbl">Libre</div>
+              <div class="fp-color-bar"></div>
+            </div>
+            <div class="fp-room sala-3 st-libre fp-small" id="pr-3" style="width:54px;">
+              <div class="fp-num">3</div>
+              <div class="fp-lbl" id="pr-3-lbl">Libre</div>
+              <div class="fp-color-bar"></div>
+            </div>
+            <div class="fp-room sala-2 st-libre fp-small" id="pr-2" style="width:54px;">
+              <div class="fp-num">2</div>
+              <div class="fp-lbl" id="pr-2-lbl">Libre</div>
+              <div class="fp-color-bar"></div>
+            </div>
+            <div class="fp-room sala-1 st-libre fp-small" id="pr-1" style="width:54px;">
+              <div class="fp-num">1</div>
+              <div class="fp-lbl" id="pr-1-lbl">Libre</div>
+              <div class="fp-color-bar"></div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -239,6 +382,17 @@ var DIAS_FULL  = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","S�
 var DIAS_CORTO = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
 var MESES      = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 
+// Colores de sala para las barras laterales
+var SALA_COLORS = {
+  "Sala 1": "#AB47BC",
+  "Sala 2": "#29B6F6",
+  "Sala 3": "#FF5722",
+  "Sala 4": "#26A69A",
+  "Sala 5": "#CDDC39",
+  "Sala 6": "#00BCD4",
+  "Sala Villarica": "#42A5F5"
+};
+
 function pad(n){ return n<10?"0"+n:""+n; }
 
 /* ── RELOJ ── */
@@ -246,10 +400,8 @@ function tickClock(){
   var n=new Date();
   document.getElementById("clkTime").textContent = pad(n.getHours())+":"+pad(n.getMinutes());
   document.getElementById("clkFecha").textContent = DIAS_FULL[n.getDay()]+" "+pad(n.getDate())+" "+MESES[n.getMonth()]+" "+n.getFullYear();
-
-  // Semana lun–vie
-  var lun = new Date(n); lun.setDate(n.getDate()-(n.getDay()===0?6:n.getDay()-1));
-  var vie = new Date(lun); vie.setDate(lun.getDate()+4);
+  var lun=new Date(n); lun.setDate(n.getDate()-(n.getDay()===0?6:n.getDay()-1));
+  var vie=new Date(lun); vie.setDate(lun.getDate()+4);
   document.getElementById("clkSemana").textContent =
     "Semana "+pad(lun.getDate())+"/"+pad(lun.getMonth()+1)+" – "+pad(vie.getDate())+"/"+pad(vie.getMonth()+1)
     +" | Act. "+pad(n.getHours())+":"+pad(n.getMinutes())+":"+pad(n.getSeconds());
@@ -259,7 +411,6 @@ setInterval(tickClock,1000); tickClock();
 function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 function fmtH(iso){ if(!iso)return"--:--"; var d=new Date(iso); return pad(d.getHours())+":"+pad(d.getMinutes()); }
 
-/* Días de la semana actual lun→vie */
 function diasSemana(){
   var hoy=new Date(), dias=[];
   var lun=new Date(hoy); lun.setDate(hoy.getDate()-(hoy.getDay()===0?6:hoy.getDay()-1));
@@ -276,24 +427,48 @@ function mismodia(iso,fecha){
 }
 
 /* ── PLANO ── */
-var PLANO_MAP={"Sala 1":"pr-1","Sala 2":"pr-2","Sala 3":"pr-3","Sala 4":"pr-4","Sala 5":"pr-5","Sala 6":"pr-6","Sala Villarica":"pr-villarica"};
+var PLANO_MAP={
+  "Sala 1":"pr-1",
+  "Sala 2":"pr-2",
+  "Sala 3":"pr-3",
+  "Sala 4":"pr-4",
+  "Sala 5":"pr-5",
+  "Sala 6":"pr-6",
+  "Sala Villarica":"pr-villarica"
+};
+
 function updatePlano(salas){
   for(var i=0;i<salas.length;i++){
-    var s=salas[i], id=PLANO_MAP[s.nombre]; if(!id)continue;
-    var el=document.getElementById(id); if(!el)continue;
-    el.className=el.className.replace(/\s*st-(libre|ocupada|pronto|error)/g,"");
-    el.className+=" st-"+(s.estado==="ocupada"?"ocupada":s.estado==="pronto"?"pronto":"libre");
-    var lbl=el.querySelector(".pr-lbl");
-    if(lbl) lbl.textContent=s.estado==="ocupada"?"Ocupada":s.estado==="pronto"?"Próxima":"Disponible";
-    // dot en tabla
-    var dot=document.querySelector(".dot-"+id);
-    if(dot){ dot.className="sala-dot"+(s.estado==="ocupada"?" ocupada":s.estado==="pronto"?" pronto":""); }
+    var s=salas[i], id=PLANO_MAP[s.nombre]; if(!id) continue;
+    var el=document.getElementById(id); if(!el) continue;
+
+    // Quitar clases de estado
+    el.classList.remove("st-libre","st-ocupada","st-pronto");
+
+    var estado = s.estado;
+    if(estado==="ocupada") el.classList.add("st-ocupada");
+    else if(estado==="pronto") el.classList.add("st-pronto");
+    else el.classList.add("st-libre");
+
+    var lbl=document.getElementById(id+"-lbl");
+    if(lbl){
+      if(estado==="ocupada"){
+        lbl.textContent="Ocupada";
+        lbl.style.color="#FF9966";
+      } else if(estado==="pronto"){
+        lbl.textContent="Próxima";
+        lbl.style.color="#AECDFF";
+      } else {
+        lbl.textContent="Libre";
+        lbl.style.color="rgba(255,255,255,0.8)";
+      }
+    }
   }
 }
 
 /* ── RENDER ── */
 var ORDEN=["Sala 1","Sala 2","Sala 3","Sala 4","Sala 5","Sala 6","Sala Villarica"];
-var SHORT={"Sala 1":"S.1","Sala 2":"S.2","Sala 3":"S.3","Sala 4":"S.4","Sala 5":"S.5","Sala 6":"S.6","Sala Villarica":"VLL"};
+var SHORT={"Sala 1":"Sala 1","Sala 2":"Sala 2","Sala 3":"Sala 3","Sala 4":"Sala 4","Sala 5":"Sala 5","Sala 6":"Sala 6","Sala Villarica":"Villarica"};
 
 function renderGrid(salas){
   if(!salas||!salas.length){ ocultarOverlay(); return; }
@@ -302,7 +477,6 @@ function renderGrid(salas){
   var dias=diasSemana();
   var hoy=new Date();
 
-  /* Índice por nombre */
   var idx={};
   for(var i=0;i<salas.length;i++) idx[salas[i].nombre]=salas[i];
 
@@ -315,7 +489,8 @@ function renderGrid(salas){
     var th=document.createElement("div");
     th.className="th-dia"+(esHoy?" hoy":"");
     th.innerHTML='<span class="th-dia-nombre">'+DIAS_CORTO[dia.getDay()]+'</span>'
-                +'<span class="th-dia-fecha">'+pad(dia.getDate())+"/"+pad(dia.getMonth()+1)+'</span>';
+                +'<span class="th-dia-fecha">'+pad(dia.getDate())+"/"+pad(dia.getMonth()+1)+'</span>'
+                +(esHoy?'<span class="hoy-badge">HOY</span>':"");
     head.appendChild(th);
   }
 
@@ -331,45 +506,87 @@ function renderGrid(salas){
     var fila=document.createElement("div");
     fila.className="tb-row";
 
-    /* Celda nombre */
+    /* Celda nombre sala con color bar */
     var cSala=document.createElement("div");
     cSala.className="tc-sala";
-    var dotClass="sala-dot"+(sala.estado==="ocupada"?" ocupada":sala.estado==="pronto"?" pronto":"");
-    cSala.innerHTML='<div class="'+dotClass+' dot-'+PLANO_MAP[nombre]+'"></div>'
-                   +'<span class="sala-nombre">'+esc(SHORT[nombre]||nombre)+'</span>';
+
+    var colorBar=document.createElement("div");
+    colorBar.className="sala-colorbar";
+    colorBar.style.background = SALA_COLORS[nombre] || "#2ecc71";
+
+    var salaInfo=document.createElement("div");
+    salaInfo.className="sala-info";
+
+    var sNombre=document.createElement("span");
+    sNombre.className="sala-nombre";
+    sNombre.textContent = SHORT[nombre]||nombre;
+
+    var sStatus=document.createElement("span");
+    sStatus.className="sala-status";
+    if(sala.estado==="ocupada") { sStatus.textContent="Ocupada ahora"; sStatus.style.color="#FF7D10"; }
+    else if(sala.estado==="pronto") { sStatus.textContent="Próxima reserva"; sStatus.style.color="#AECDFF"; }
+    else { sStatus.textContent="Disponible"; sStatus.style.color="#2ecc71"; }
+
+    salaInfo.appendChild(sNombre);
+    salaInfo.appendChild(sStatus);
+    cSala.appendChild(colorBar);
+    cSala.appendChild(salaInfo);
     fila.appendChild(cSala);
 
     /* Celdas por día */
     for(var d=0;d<dias.length;d++){
       var dia=dias[d];
-      var esHoy=(dia.getDate()===hoy.getDate()&&dia.getMonth()===hoy.getMonth());
+      var esHoy2=(dia.getDate()===hoy.getDate()&&dia.getMonth()===hoy.getMonth());
       var cDia=document.createElement("div");
-      cDia.className="tc-dia"+(esHoy?" hoy":"");
+      cDia.className="tc-dia"+(esHoy2?" hoy":"");
 
-      /* Buscar eventos de ese día */
       var evs=[];
-      if(sala.actual && mismodia(sala.actual.inicio, dia)) evs.push({ev:sala.actual,cls:"ocupada"});
+      if(sala.actual && mismodia(sala.actual.inicio, dia)){
+        evs.push({ev:sala.actual, cls:"ocupada"});
+      }
       if(sala.proximas){
         for(var p=0;p<sala.proximas.length;p++){
           if(mismodia(sala.proximas[p].inicio,dia)){
-            var cls2=(new Date(sala.proximas[p].inicio)-Date.now()<30*60*1000)?"pronto":"proxima";
-            evs.push({ev:sala.proximas[p],cls:cls2});
+            var diffMs = new Date(sala.proximas[p].inicio)-Date.now();
+            var cls2 = (diffMs>0 && diffMs<30*60*1000) ? "pronto" : "proxima";
+            evs.push({ev:sala.proximas[p], cls:cls2});
           }
         }
       }
 
       if(evs.length===0){
-        cDia.innerHTML='<span class="tc-libre-txt">Libre</span>';
+        cDia.innerHTML='<span class="tc-libre-txt">Sin reservas</span>';
       } else {
-        /* Distribuir eventos verticalmente */
         var pct=100/evs.length;
         for(var e=0;e<evs.length;e++){
+          var ev=evs[e].ev;
           var blk=document.createElement("div");
           blk.className="ev-block "+evs[e].cls;
-          blk.style.top=(e*pct+1)+"%";
-          blk.style.height=(pct-2)+"%";
-          blk.innerHTML='<span class="ev-hora">'+fmtH(evs[e].ev.inicio)+" – "+fmtH(evs[e].ev.fin)+'</span>'
-                       +(evs[e].ev.creador?'<span class="ev-quien">'+esc(evs[e].ev.creador)+'</span>':"");
+          blk.style.top=(e*pct+0.5)+"%";
+          blk.style.height=(pct-1.5)+"%";
+
+          // Hora
+          var horaSpan=document.createElement("span");
+          horaSpan.className="ev-hora";
+          horaSpan.textContent = "🕐 "+fmtH(ev.inicio)+" – "+fmtH(ev.fin);
+          blk.appendChild(horaSpan);
+
+          // Creador / quien reservó
+          if(ev.creador){
+            var quienSpan=document.createElement("span");
+            quienSpan.className="ev-quien";
+            quienSpan.textContent = "👤 "+ev.creador;
+            blk.appendChild(quienSpan);
+          }
+
+          // Título del evento (si existe)
+          if(ev.titulo){
+            var titSpan=document.createElement("span");
+            titSpan.className="ev-titulo";
+            titSpan.textContent = ev.titulo;
+            blk.appendChild(titSpan);
+          }
+
           cDia.appendChild(blk);
         }
       }
@@ -388,10 +605,15 @@ function cargarDatos(){
   cbCount++; var cn="cb"+cbCount;
   window[cn]=function(data){
     renderGrid(data.salas||data);
-    try{ var el=document.getElementById("jsonp-script"); if(el)el.parentNode.removeChild(el); delete window[cn]; }catch(e){}
+    try{
+      var el=document.getElementById("jsonp-script");
+      if(el) el.parentNode.removeChild(el);
+      delete window[cn];
+    }catch(e){}
   };
   var sc=document.createElement("script"); sc.id="jsonp-script";
-  sc.src=SCRIPT_URL+"?callback="+cn+"&t="+Date.now(); document.head.appendChild(sc);
+  sc.src=SCRIPT_URL+"?callback="+cn+"&t="+Date.now();
+  document.head.appendChild(sc);
 }
 cargarDatos();
 setInterval(cargarDatos,60000);
