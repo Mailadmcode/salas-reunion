@@ -6,235 +6,62 @@
   <title>Salas Prodalam</title>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Barlow:wght@400;600;700;800&display=swap" rel="stylesheet"/>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background: #eef2fb;
-      font-family: 'Barlow', sans-serif;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    /* App container */
-    .app {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
-
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#eef2fb; font-family:'Barlow', sans-serif; height:100vh; overflow:hidden; }
+    .app { display:flex; flex-direction:column; height:100vh; }
     /* Header */
-    .header {
-      background: white;
-      border-bottom: 5px solid #ff7d10;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 20px;
-      height: 80px;
-      flex-shrink: 0;
-    }
-
-    .logo-area {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .logo-img {
-      height: 44px;
-    }
-    .logo-text {
-      font-size: 14px;
-      font-weight: 800;
-      color: #0047cc;
-      text-transform: uppercase;
-      border-left: 3px solid #ff7d10;
-      padding-left: 12px;
-      letter-spacing: 2px;
-    }
-    .legend {
-      display: flex;
-      gap: 30px;
-    }
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 20px;
-      font-weight: 700;
-      color: #1a2e6e;
-    }
-    .dot {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-    }
-    .dot.green { background: #1cb85b; }
-    .dot.blue { background: #0047cc; }
-    .dot.orange { background: #ff7d10; }
-    .clock {
-      text-align: right;
-    }
-    .clock-meta {
-      font-size: 11px;
-      color: #5572a0;
-      text-transform: uppercase;
-    }
-    .clock-time {
-      font-size: 56px;
-      font-weight: 900;
-      color: #0047cc;
-      line-height: 1;
-    }
-    .clock-date {
-      font-size: 14px;
-      font-weight: 700;
-      color: #1a2e6e;
-    }
-
+    .header { background:white; border-bottom:5px solid #ff7d10; display:flex; align-items:center; justify-content:space-between; padding:0 20px; height:80px; flex-shrink:0; }
+    .logo-area { display:flex; align-items:center; gap:12px; }
+    .logo-img { height:44px; }
+    .logo-text { font-size:14px; font-weight:800; color:#0047cc; text-transform:uppercase; border-left:3px solid #ff7d10; padding-left:12px; letter-spacing:2px; }
+    .legend { display:flex; gap:30px; }
+    .legend-item { display:flex; align-items:center; gap:8px; font-size:20px; font-weight:700; color:#1a2e6e; }
+    .dot { width:20px; height:20px; border-radius:50%; }
+    .dot.green { background:#1cb85b; }
+    .dot.blue { background:#0047cc; }
+    .dot.orange { background:#ff7d10; }
+    .clock { text-align:right; }
+    .clock-meta { font-size:11px; color:#5572a0; text-transform:uppercase; }
+    .clock-time { font-size:56px; font-weight:900; color:#0047cc; line-height:1; }
+    .clock-date { font-size:14px; font-weight:700; color:#1a2e6e; }
     /* Tabla container con scroll vertical */
-    .table-container {
-      flex: 1;
-      overflow-y: auto;
-      margin: 8px;
-      border: 1px solid #cddae9;
-      background: white;
-      border-radius: 4px;
-    }
-
-    .schedule {
-      width: 100%;
-      border-collapse: collapse;
-      font-family: 'Barlow', sans-serif;
-    }
-
+    .table-container { flex:1; overflow-y:auto; margin:8px; border:1px solid #cddae9; background:white; border-radius:4px; }
+    .schedule { width:100%; border-collapse:collapse; }
     /* Cabecera */
-    .schedule thead tr {
-      background: #0047cc;
-      color: white;
-    }
-    .schedule th {
-      padding: 14px 8px;
-      text-align: center;
-      border-right: 1px solid rgba(255,255,255,0.2);
-      border-bottom: 4px solid #ff7d10;
-      font-weight: 700;
-    }
-    .corner-cell {
-      background: #003399;
-      width: 150px;
-      font-size: 22px;
-      letter-spacing: 2px;
-    }
-    .day-header {
-      font-size: 28px;
-      font-weight: 900;
-      text-transform: uppercase;
-    }
-    .day-date {
-      font-size: 16px;
-      font-weight: 500;
-      margin-top: 4px;
-    }
-    .today-badge {
-      background: #ff7d10;
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 20px;
-      font-size: 12px;
-      margin-top: 5px;
-    }
-    th.highlight {
-      background: rgba(255,125,16,0.4);
-    }
-
-    /* Filas */
-    .schedule tbody tr {
-      border-bottom: 1px solid #e2e8f2;
-    }
-    .sala-cell {
-      background: #f4f7ff;
-      border-right: 2px solid #dce5f2;
-      padding: 10px 12px;
-      vertical-align: middle;
-      width: 150px;
-    }
-    .sala-name {
-      font-size: 28px;
-      font-weight: 800;
-      color: #0a1f5c;
-      line-height: 1.1;
-    }
-    .sala-state {
-      font-size: 15px;
-      font-weight: 700;
-      margin-top: 5px;
-    }
-
-    /* Celdas de días */
-    .day-cell {
-      background: white;
-      vertical-align: top;
-      padding: 6px;
-      border-right: 1px solid #ecf0f5;
-    }
-    .day-cell.today {
-      background: #f0f6ff;
-      border-left: 4px solid #ff7d10;
-    }
-
+    .schedule thead tr { background:#0047cc; color:white; }
+    .schedule th { padding:14px 8px; text-align:center; border-right:1px solid rgba(255,255,255,0.2); border-bottom:4px solid #ff7d10; font-weight:700; }
+    .corner-cell { background:#003399; width:150px; font-size:22px; letter-spacing:2px; }
+    .day-header { font-size:28px; font-weight:900; text-transform:uppercase; }
+    .day-date { font-size:16px; font-weight:500; margin-top:4px; }
+    .today-badge { background:#ff7d10; display:inline-block; padding:2px 8px; border-radius:20px; font-size:12px; margin-top:5px; }
+    th.highlight { background:rgba(255,125,16,0.4); }
+    /* Filas con altura fija */
+    .schedule tbody tr { height: 320px; max-height: 320px; border-bottom:1px solid #e2e8f2; }
+    .sala-cell { background:#f4f7ff; border-right:2px solid #dce5f2; padding:10px 12px; vertical-align:middle; width:150px; height:100%; }
+    .sala-name { font-size:28px; font-weight:800; color:#0a1f5c; line-height:1.1; }
+    .sala-state { font-size:15px; font-weight:700; margin-top:5px; }
+    /* Celdas de días: altura fija y scroll */
+    .day-cell { background:white; vertical-align:top; padding:6px; border-right:1px solid #ecf0f5; height: 100%; overflow-y: auto; }
+    .day-cell.today { background:#f0f6ff; border-left:4px solid #ff7d10; }
     /* Contenedor de eventos */
-    .events-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .event-card {
-      border-radius: 8px;
-      padding: 12px 12px;
-      border-left: 6px solid;
-      background: #fafafc;
-    }
-    .event-card.occupied {
-      background: #fff3ea;
-      border-color: #ff7d10;
-    }
-    .event-card.upcoming {
-      background: #ebf0ff;
-      border-color: #0047cc;
-    }
-    .event-card.future {
-      background: #eaf7ee;
-      border-color: #1cb85b;
-    }
-    .event-time {
-      font-size: 22px;
-      font-weight: 900;
-      font-family: 'Barlow Condensed', sans-serif;
-      white-space: nowrap;
-    }
-    .event-user {
-      font-size: 18px;
-      font-weight: 600;
-      margin-top: 5px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .occupied .event-time, .occupied .event-user { color: #cc5000; }
-    .upcoming .event-time, .upcoming .event-user { color: #0047cc; }
-    .future .event-time, .future .event-user { color: #0a6b30; }
-
-    /* Ajustes para pantallas grandes (TV) */
+    .events-list { display:flex; flex-direction:column; gap:8px; }
+    .event-card { border-radius:8px; padding:10px 12px; border-left:6px solid; background:#fafafc; }
+    .event-card.occupied { background:#fff3ea; border-color:#ff7d10; }
+    .event-card.upcoming { background:#ebf0ff; border-color:#0047cc; }
+    .event-card.future { background:#eaf7ee; border-color:#1cb85b; }
+    .event-time { font-size:20px; font-weight:900; font-family:'Barlow Condensed', sans-serif; white-space:nowrap; }
+    .event-user { font-size:16px; font-weight:600; margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .occupied .event-time, .occupied .event-user { color:#cc5000; }
+    .upcoming .event-time, .upcoming .event-user { color:#0047cc; }
+    .future .event-time, .future .event-user { color:#0a6b30; }
+    /* Ajustes TV */
     @media (min-width: 1200px) {
-      .event-time { font-size: 26px; }
-      .event-user { font-size: 22px; }
-      .sala-name { font-size: 32px; }
-      .day-header { font-size: 34px; }
-      .clock-time { font-size: 70px; }
+      .schedule tbody tr { height: 380px; max-height: 380px; }
+      .event-time { font-size:24px; }
+      .event-user { font-size:20px; }
+      .sala-name { font-size:32px; }
+      .day-header { font-size:34px; }
+      .clock-time { font-size:70px; }
     }
   </style>
 </head>
@@ -268,33 +95,34 @@
 </div>
 
 <script>
-// Configuración
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyn7VSKT-IFULCC2bPx2SlK2W2GlaXQNoKZ44WLQq5Ev94ESTC45vlJgcpmPgaN_IYQ/exec";
 const SALAS = ["Sala Villarica","Sala 6","Sala 5","Sala 4","Sala 3","Sala 2","Sala 1"];
 const SHORT = {"Sala 1":"Sala 1","Sala 2":"Sala 2","Sala 3":"Sala 3","Sala 4":"Sala 4","Sala 5":"Sala 5","Sala 6":"Sala 6","Sala Villarica":"Villarica"};
 const COLORES = {"Sala 1":"#AB47BC","Sala 2":"#29B6F6","Sala 3":"#FF5722","Sala 4":"#26C6A6","Sala 5":"#C6D000","Sala 6":"#00BCD4","Sala Villarica":"#2196F3"};
 const DIAS_CORT = ["DOM","LUN","MAR","MIÉ","JUE","VIE","SÁB"];
-const MESES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 
 let lastData = null;
 
-// Helper
 function pad(n) { return n < 10 ? '0' + n : n; }
 function esc(s) { return String(s || '').replace(/[&<>]/g, function(m){ if(m === '&') return '&amp;'; if(m === '<') return '&lt;'; if(m === '>') return '&gt;'; return m;}); }
 function formatTime(iso) { let d = new Date(iso); return pad(d.getHours()) + ":" + pad(d.getMinutes()); }
 function onlyDate(d) { let x = new Date(d); x.setHours(0,0,0,0); return x.getTime(); }
-function getMonday(now) { let d = new Date(now); let day = d.getDay(); d.setDate(d.getDate() - (day === 0 ? 6 : day-1)); d.setHours(0,0,0,0); return d; }
 
-// Obtener días desde hoy hasta viernes (máximo 5)
+// Obtener días desde hoy hasta viernes (excluyendo días anteriores a hoy)
 function getDaysFromTodayToFriday(now) {
   let today = new Date(now); today.setHours(0,0,0,0);
   let dayOfWeek = today.getDay();
   let start = new Date(today);
   let end = new Date(today);
-  // Si es domingo, empezar lunes; si sábado, empezar lunes también
-  if (dayOfWeek === 0) { start.setDate(today.getDate() + 1); end.setDate(today.getDate() + 5); }
-  else if (dayOfWeek === 6) { start.setDate(today.getDate() + 2); end.setDate(today.getDate() + 6); }
-  else { end.setDate(today.getDate() + (5 - dayOfWeek)); }
+  if (dayOfWeek === 0) { // domingo -> empezar lunes
+    start.setDate(today.getDate() + 1);
+    end.setDate(today.getDate() + 5);
+  } else if (dayOfWeek === 6) { // sábado -> empezar lunes siguiente
+    start.setDate(today.getDate() + 2);
+    end.setDate(today.getDate() + 6);
+  } else {
+    end.setDate(today.getDate() + (5 - dayOfWeek));
+  }
   let days = [];
   let current = new Date(start);
   while (current <= end && days.length < 5) {
@@ -304,12 +132,11 @@ function getDaysFromTodayToFriday(now) {
   return days;
 }
 
-// Reloj
 function updateClock() {
   let n = new Date();
   document.getElementById("clockTime").innerText = pad(n.getHours()) + ":" + pad(n.getMinutes());
-  document.getElementById("clockDate").innerText = n.toLocaleDateString('es-ES', { weekday:'long', day:'numeric', month:'short', year:'numeric' }).toUpperCase();
-  let monday = getMonday(n);
+  document.getElementById("clockDate").innerHTML = n.toLocaleDateString('es-ES', { weekday:'long', day:'numeric', month:'short', year:'numeric' }).toUpperCase();
+  let monday = (() => { let d = new Date(n); let day = d.getDay(); d.setDate(d.getDate() - (day === 0 ? 6 : day-1)); d.setHours(0,0,0,0); return d; })();
   let friday = new Date(monday); friday.setDate(monday.getDate() + 4);
   document.getElementById("clockMeta").innerHTML = `Semana ${pad(monday.getDate())}/${pad(monday.getMonth()+1)} – ${pad(friday.getDate())}/${pad(friday.getMonth()+1)} · Act. ${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
   if (n.getSeconds() === 0 && lastData) render(lastData);
@@ -317,7 +144,6 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
-// Render principal
 function render(data) {
   lastData = data;
   let salasData = data.salas || data;
@@ -327,6 +153,8 @@ function render(data) {
   let ahoraMs = ahora.getTime();
   let hoyTs = onlyDate(ahora);
   let dias = getDaysFromTodayToFriday(ahora);
+  if (dias.length === 0) dias = [new Date(ahora)];
+
   let map = {};
   for (let s of salasData) map[s.nombre] = s;
 
@@ -400,7 +228,7 @@ function render(data) {
           }
         }
       }
-      // Eliminar duplicados por inicio
+      // Eliminar duplicados
       let unique = [];
       let seen = {};
       for (let ev of eventos) {
@@ -432,7 +260,7 @@ function render(data) {
   }
 }
 
-// Cargar datos vía JSONP
+// JSONP
 let callbackId = 0;
 function fetchData() {
   callbackId++;
@@ -450,7 +278,7 @@ function fetchData() {
 }
 
 fetchData();
-setInterval(fetchData, 300000); // cada 5 minutos
+setInterval(fetchData, 300000);
 </script>
 </body>
 </html>
