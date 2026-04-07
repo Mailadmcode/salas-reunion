@@ -25,7 +25,7 @@
       height:100vh;
     }
  
-    /* HEADER - compacto */
+    /* HEADER - compacto pero legible */
     #header {
       flex:0 0 auto;
       width:100%;
@@ -33,21 +33,21 @@
       border-bottom:6px solid #FF7D10;
       display:table;
       table-layout:fixed;
-      height:72px;
+      height:80px;
     }
     .h-logo-zone {
       display:table-cell;
       width:18%;
       vertical-align:middle;
-      padding:0 12px;
+      padding:0 15px;
       border-right:2px solid #E0E8F4;
     }
     .h-logo-inner { display:table; }
-    .h-logo-inner td { vertical-align:middle; padding-right:8px; }
-    #logo-img { height:38px; display:block; }
+    .h-logo-inner td { vertical-align:middle; padding-right:10px; }
+    #logo-img { height:44px; display:block; }
     .h-sub {
-      font-size:10px; letter-spacing:2px; text-transform:uppercase;
-      color:#0047CC; font-weight:800; white-space:nowrap;
+      font-size:11px; letter-spacing:2px; text-transform:uppercase;
+      color:#0047CC; font-weight:800;
       font-family:'Barlow Condensed', sans-serif;
       border-left:3px solid #FF7D10; padding-left:8px;
     }
@@ -58,10 +58,10 @@
       text-align:center;
     }
     .h-legend-inner { display:inline-table; }
-    .h-legend-inner td { padding:0 12px; white-space:nowrap; }
-    .leg-dot { width:18px; height:18px; border-radius:50%; display:inline-block; vertical-align:middle; margin-right:6px; }
+    .h-legend-inner td { padding:0 15px; white-space:nowrap; }
+    .leg-dot { width:20px; height:20px; border-radius:50%; display:inline-block; vertical-align:middle; margin-right:8px; }
     .leg-txt {
-      font-size:18px; font-weight:800; color:#1A2E6E;
+      font-size:20px; font-weight:800; color:#1A2E6E;
       font-family:'Barlow Condensed', sans-serif;
       vertical-align:middle;
     }
@@ -70,89 +70,108 @@
       display:table-cell;
       width:34%;
       vertical-align:middle;
-      padding:0 15px;
+      padding:0 20px;
       border-left:2px solid #E0E8F4;
     }
-    #clk-meta { font-size:10px; display:block; white-space:nowrap; margin-bottom:1px; }
-    #clk-time { font-size:56px; font-weight:900; letter-spacing:3px; color:#0047CC; line-height:1; display:block; }
-    #clk-date { font-size:13px; display:block; white-space:nowrap; margin-top:1px; }
+    #clk-meta { font-size:11px; display:block; white-space:nowrap; margin-bottom:2px; }
+    #clk-time { font-size:62px; font-weight:900; letter-spacing:3px; color:#0047CC; line-height:1; display:block; }
+    #clk-date { font-size:14px; display:block; white-space:nowrap; margin-top:2px; }
  
-    /* TABLA WRAP - con scroll vertical */
+    /* TABLA WRAP - sin scroll, ocupa todo el espacio restante */
     #tabla-wrap {
       flex:1 1 0;
       min-height:0;
-      overflow:auto;  /* scroll vertical si el contenido es alto */
       background:#fff;
-      border:1px solid #D0DCEE;
-      margin:4px;
+      border:2px solid #D0DCEE;
+      margin:5px 8px 8px 8px;
       display:flex;
       flex-direction:column;
+      overflow:hidden;
     }
  
     #grid {
       width:100%;
+      height:100%;
       border-collapse:collapse;
+      table-layout:fixed;
+      display:flex;
+      flex-direction:column;
+    }
+ 
+    #grid thead {
+      display:table;
+      width:100%;
       table-layout:fixed;
     }
  
-    /* Cabecera fija */
-    #grid thead tr { height:56px; background:#0047CC; }
+    #grid tbody {
+      display:block;
+      overflow-y:auto;
+      flex:1 1 0;
+    }
+ 
+    #grid thead tr, #grid tbody tr {
+      display:table;
+      width:100%;
+      table-layout:fixed;
+    }
+ 
+    /* Cabecera */
+    #grid thead tr { height:60px; background:#0047CC; }
     #grid thead td {
       background:#0047CC;
       border-right:1px solid rgba(255,255,255,0.2);
       border-bottom:4px solid #FF7D10;
       text-align:center;
       vertical-align:middle;
-      padding:4px 0;
+      padding:5px 0;
     }
     #grid thead td.corner {
       background:#003399;
-      font-size:20px; font-weight:900; letter-spacing:3px;
-      color:#fff; width:140px;
+      font-size:22px; font-weight:900; letter-spacing:4px;
+      color:#fff; width:150px;
     }
-    .dh-nom { font-size:28px; font-weight:900; color:#fff; display:block; }
-    .dh-fec { font-size:15px; color:rgba(255,255,255,0.9); display:block; margin-top:2px; }
-    .hoy-badge { background:#FF7D10; font-size:12px; padding:2px 6px; border-radius:4px; display:inline-block; margin-top:2px; }
+    .dh-nom { font-size:30px; font-weight:900; color:#fff; display:block; line-height:1.1; }
+    .dh-fec { font-size:16px; color:rgba(255,255,255,0.9); display:block; margin-top:2px; }
+    .hoy-badge { background:#FF7D10; font-size:12px; padding:2px 8px; border-radius:5px; display:inline-block; margin-top:3px; }
  
     /* Celda etiqueta sala */
     td.sala-lbl {
       background:#F4F7FF;
       border-right:3px solid #D8E4F4;
       vertical-align:middle;
-      padding:6px 8px;
-      width:140px;
+      padding:8px 10px;
+      width:150px;
     }
-    .sala-nombre { font-size:26px; font-weight:800; color:#0A1F5C; display:block; line-height:1.1; }
-    .sala-estado { font-size:14px; font-weight:700; display:block; margin-top:3px; }
+    .sala-nombre { font-size:28px; font-weight:800; color:#0A1F5C; display:block; line-height:1.1; }
+    .sala-estado { font-size:15px; font-weight:700; display:block; margin-top:4px; }
  
-    /* Celdas de días - ahora con altura variable por celda */
+    /* Celdas de días */
     td.day-cell {
       background:#fff;
       border-right:1px solid #E8EEF8;
       vertical-align:top;
-      padding:4px 5px;
-      overflow-y:auto;
-      transition: height 0.1s ease;
+      padding:5px;
     }
     td.day-cell.hoy { background:#F0F6FF; border-left:4px solid #FF7D10; }
  
-    /* Contenedor de eventos - usa flex column */
+    /* Contenedor de eventos */
     .ev-container {
       display:flex;
       flex-direction:column;
-      gap:4px;
-      width:100%;
-      min-height:100%;
+      gap:5px;
+      height:100%;
     }
  
     .ev-bloque {
-      border-radius:6px;
-      padding:6px 8px;
+      flex:1 1 0;
+      min-height:0;
+      border-radius:8px;
+      padding:8px 10px;
       border-left:5px solid transparent;
       display:flex;
       flex-direction:column;
       justify-content:center;
-      /* No usamos flex:1 aquí porque la altura de la celda ya está fijada */
     }
     .ev-ocup    { background:#FFF3EA; border-color:#FF7D10; }
     .ev-pronto  { background:#EBF0FF; border-color:#0047CC; }
@@ -171,8 +190,8 @@
       text-align:center;
     }
     .ov-inner { display:inline-block; margin-top:40%; }
-    .spinner { width:50px; height:50px; border:6px solid #C8D8F0; border-top:6px solid #0047CC; border-radius:50%; display:inline-block; }
-    .ov-txt { display:block; margin-top:12px; font-size:20px; color:#0047CC; font-weight:800; }
+    .spinner { width:55px; height:55px; border:6px solid #C8D8F0; border-top:6px solid #0047CC; border-radius:50%; display:inline-block; }
+    .ov-txt { display:block; margin-top:15px; font-size:22px; color:#0047CC; font-weight:800; }
   </style>
 </head>
 <body>
@@ -181,7 +200,7 @@
   <div id="header">
     <div class="h-logo-zone">
       <table class="h-logo-inner"><tr>
-        <td><img id="logo-img" src="https://i.imgur.com/fXLdGez.png" onerror="this.style.display='none';document.getElementById('logo-txt').style.display='inline';" alt="Prodalam"/><span id="logo-txt" style="display:none;font-size:24px;font-weight:900;color:#0047CC;">Prodalam</span></td>
+        <td><img id="logo-img" src="https://i.imgur.com/fXLdGez.png" onerror="this.style.display='none';document.getElementById('logo-txt').style.display='inline';" alt="Prodalam"/><span id="logo-txt" style="display:none;font-size:26px;font-weight:900;color:#0047CC;">Prodalam</span></td>
         <td><span class="h-sub">Tiempo real</span></td>
       </tr></table>
     </div>
@@ -225,7 +244,7 @@ function startSpinner(){
   var el=document.getElementById("spinner");
   spinTimer=setInterval(function(){
     spinAngle=(spinAngle+15)%360;
-    if(el) el.style.cssText="width:50px;height:50px;border:6px solid #C8D8F0;border-top:6px solid #0047CC;border-radius:50%;display:inline-block;transform:rotate("+spinAngle+"deg);";
+    if(el) el.style.cssText="width:55px;height:55px;border:6px solid #C8D8F0;border-top:6px solid #0047CC;border-radius:50%;display:inline-block;transform:rotate("+spinAngle+"deg);";
   },50);
 }
 function stopSpinner(){ if(spinTimer){ clearInterval(spinTimer); spinTimer=null; } var ov=document.getElementById("overlay"); if(ov) ov.style.display="none"; }
@@ -253,95 +272,114 @@ function obtenerDiasMostrar(ahora){
   return dias;
 }
 
-/* ========== NUEVA LÓGICA: ALTURA POR CELDA, NO POR FILA ========== */
-// Parámetros: celdas vacías = altura mínima 12px; celdas con eventos = altura proporcional a número de eventos.
-// Además, las alturas se asignan independientemente por cada celda.
-var EMPTY_CELL_HEIGHT = 12;        // celdas sin eventos (muy pequeñas)
-var BASE_HEIGHT_PER_EVENT = 68;    // altura base por evento (se escalará dinámicamente)
+/* ========== NUEVA DISTRIBUCIÓN INTELIGENTE ==========
+   - Filas con más eventos ocupan más altura (pero toda la fila tiene la misma altura)
+   - Filas vacías: altura mínima (20px)
+   - Scroll vertical solo dentro de tbody (cabecera fija)
+   - Se asigna un mínimo por evento (70px) para que las tarjetas sean grandes
+*/
+var EMPTY_ROW_HEIGHT = 24;
+var BASE_HEIGHT_PER_EVENT = 72;  // altura base por evento (para que las tarjetas sean grandes)
 
-function ajustarCeldas() {
-  var wrap = document.getElementById("tabla-wrap");
+function ajustarFilas() {
+  var tbody = document.getElementById("grid-body");
   var thead = document.querySelector("#grid thead tr");
-  if(!wrap || !thead) return;
-  var wrapH = wrap.clientHeight;
-  var headH = thead.offsetHeight || 56;
-  var bodyH = wrapH - headH - 2;
+  if(!tbody || !thead) return;
   
-  var rows = document.querySelectorAll("#grid-body tr");
+  var wrap = document.getElementById("tabla-wrap");
+  var wrapH = wrap.clientHeight;
+  var headH = thead.offsetHeight || 60;
+  var bodyH = wrapH - headH - 2;
+  if(bodyH < 100) bodyH = 500;
+  
+  var rows = tbody.querySelectorAll("tr");
   if(!rows.length) return;
   
-  // Para cada celda, contar eventos
-  var celdasEventos = [];
-  var celdasDom = [];
+  // Contar máximo de eventos por fila (en cualquier celda)
+  var eventosPorFila = [];
   for(var i=0; i<rows.length; i++){
     var celdas = rows[i].querySelectorAll("td.day-cell");
+    var maxEventos = 0;
     for(var c=0; c<celdas.length; c++){
       var evCount = celdas[c].querySelectorAll(".ev-bloque").length;
-      celdasEventos.push(evCount);
-      celdasDom.push(celdas[c]);
+      if(evCount > maxEventos) maxEventos = evCount;
+    }
+    eventosPorFila.push(maxEventos);
+  }
+  
+  // Separar filas vacías y con eventos
+  var espacioVacias = 0;
+  var indicesConEventos = [];
+  for(var i=0; i<eventosPorFila.length; i++){
+    if(eventosPorFila[i] === 0){
+      espacioVacias += EMPTY_ROW_HEIGHT;
+    } else {
+      indicesConEventos.push(i);
     }
   }
   
-  // Separar celdas vacías y con eventos
-  var indicesConEventos = [];
-  for(var i=0; i<celdasEventos.length; i++){
-    if(celdasEventos[i] > 0) indicesConEventos.push(i);
-  }
-  var totalConEventos = indicesConEventos.length;
-  
-  // Espacio total para celdas con eventos = bodyH - (celdas vacías * EMPTY_CELL_HEIGHT)
-  var celdasVacias = celdasEventos.length - totalConEventos;
-  var espacioVacias = celdasVacias * EMPTY_CELL_HEIGHT;
+  // Espacio disponible para filas con eventos
   var espacioEventos = bodyH - espacioVacias;
-  if(espacioEventos < totalConEventos * BASE_HEIGHT_PER_EVENT) {
-    espacioEventos = totalConEventos * BASE_HEIGHT_PER_EVENT;
+  var minNecesario = indicesConEventos.length * BASE_HEIGHT_PER_EVENT;
+  if(espacioEventos < minNecesario){
+    espacioEventos = minNecesario;
   }
   
-  // Sumar pesos (número de eventos) solo de celdas con eventos
+  // Sumar pesos (cantidad de eventos) solo de filas con eventos
   var pesoTotal = 0;
   for(var i=0; i<indicesConEventos.length; i++){
-    pesoTotal += celdasEventos[indicesConEventos[i]];
+    pesoTotal += eventosPorFila[indicesConEventos[i]];
   }
   
-  // Calcular altura para cada celda
-  var alturas = new Array(celdasEventos.length);
-  for(var i=0; i<celdasEventos.length; i++){
-    if(celdasEventos[i] === 0){
-      alturas[i] = EMPTY_CELL_HEIGHT;
+  // Calcular alturas
+  var alturas = [];
+  for(var i=0; i<rows.length; i++){
+    if(eventosPorFila[i] === 0){
+      alturas.push(EMPTY_ROW_HEIGHT);
     } else {
-      var proporcion = celdasEventos[i] / pesoTotal;
+      var proporcion = eventosPorFila[i] / pesoTotal;
       var altura = Math.floor(espacioEventos * proporcion);
-      var alturaMin = celdasEventos[i] * BASE_HEIGHT_PER_EVENT;
+      var alturaMin = eventosPorFila[i] * BASE_HEIGHT_PER_EVENT;
       if(altura < alturaMin) altura = alturaMin;
-      alturas[i] = altura;
+      alturas.push(altura);
     }
   }
   
-  // Aplicar alturas a cada celda y escalar fuentes internas
-  for(var i=0; i<celdasDom.length; i++){
-    var cell = celdasDom[i];
-    var evCount = celdasEventos[i];
-    var h = alturas[i];
-    cell.style.height = h + "px";
-    cell.style.maxHeight = h + "px";
+  // Aplicar alturas y escalar fuentes dentro de las celdas
+  for(var i=0; i<rows.length; i++){
+    var row = rows[i];
+    var rowH = alturas[i];
+    row.style.height = rowH + "px";
+    row.style.maxHeight = rowH + "px";
     
-    if(evCount > 0){
-      var alturaPorEvento = h / evCount;
-      var horaSize = Math.min(38, Math.max(20, Math.floor(alturaPorEvento * 0.36)));
-      var userSize = Math.min(30, Math.max(15, Math.floor(alturaPorEvento * 0.30)));
-      var paddingV = Math.min(14, Math.max(6, Math.floor(alturaPorEvento * 0.1)));
-      var bloques = cell.querySelectorAll(".ev-bloque");
-      var horas = cell.querySelectorAll(".ev-hora");
-      var users = cell.querySelectorAll(".ev-user");
-      for(var b=0; b<bloques.length; b++) bloques[b].style.padding = paddingV + "px 8px";
-      for(var hh=0; hh<horas.length; hh++) horas[hh].style.fontSize = horaSize + "px";
-      for(var u=0; u<users.length; u++) users[u].style.fontSize = userSize + "px";
+    if(eventosPorFila[i] > 0){
+      var alturaPorEvento = rowH / eventosPorFila[i];
+      var horaSize = Math.min(40, Math.max(22, Math.floor(alturaPorEvento * 0.38)));
+      var userSize = Math.min(32, Math.max(16, Math.floor(alturaPorEvento * 0.32)));
+      var paddingV = Math.min(16, Math.max(7, Math.floor(alturaPorEvento * 0.1)));
+      
+      var celdas = row.querySelectorAll("td.day-cell");
+      for(var c=0; c<celdas.length; c++){
+        var bloques = celdas[c].querySelectorAll(".ev-bloque");
+        var horas = celdas[c].querySelectorAll(".ev-hora");
+        var users = celdas[c].querySelectorAll(".ev-user");
+        for(var b=0; b<bloques.length; b++){
+          bloques[b].style.padding = paddingV + "px 10px";
+        }
+        for(var h=0; h<horas.length; h++){
+          horas[h].style.fontSize = horaSize + "px";
+        }
+        for(var u=0; u<users.length; u++){
+          users[u].style.fontSize = userSize + "px";
+        }
+      }
     }
   }
 }
 
-setInterval(ajustarCeldas, 200);
-window.addEventListener("resize", function(){ setTimeout(ajustarCeldas, 50); });
+// Ejecutar después de cada render y en resize
+setInterval(ajustarFilas, 200);
+window.addEventListener("resize", function(){ setTimeout(ajustarFilas, 50); });
 
 function renderGrid(data){
   lastData = data;
@@ -351,6 +389,7 @@ function renderGrid(data){
   var diasMostrar = obtenerDiasMostrar(ahora);
   var map={}; for(var i=0;i<salas.length;i++) map[salas[i].nombre]=salas[i];
   
+  // Cabeceras
   var theadTr = document.querySelector("#grid thead tr");
   var viejosHd = theadTr.querySelectorAll(".day-hd");
   for(var i=0;i<viejosHd.length;i++) if(viejosHd[i]) viejosHd[i].parentNode.removeChild(viejosHd[i]);
@@ -361,6 +400,7 @@ function renderGrid(data){
     theadTr.appendChild(td);
   }
   
+  // Cuerpo
   var tbody = document.getElementById("grid-body");
   tbody.innerHTML = "";
   for(var si=0; si<SALAS.length; si++){
@@ -370,7 +410,7 @@ function renderGrid(data){
     var estadoTxt = s?(s.estado==="ocupada"?"● Ocupada ahora":s.estado==="pronto"?"● Próxima reserva":"● Disponible"):"";
     var colorBar = COLORES[nombre]||"#0047CC";
     var tdLbl = document.createElement("td"); tdLbl.className="sala-lbl";
-    tdLbl.innerHTML = '<div style="display:table;width:100%"><div style="display:table-cell;vertical-align:middle;width:12px;padding-right:8px;"><div style="background:'+colorBar+';height:40px;width:6px;border-radius:5px;"></div></div><div style="display:table-cell;vertical-align:middle;"><span class="sala-nombre">'+esc(SHORT[nombre]||nombre)+'</span><span class="sala-estado" style="color:'+estadoColor+'">'+estadoTxt+'</span></div></div>';
+    tdLbl.innerHTML = '<div style="display:flex;align-items:center;gap:10px;"><div style="background:'+colorBar+';width:8px;height:48px;border-radius:6px;"></div><div><span class="sala-nombre">'+esc(SHORT[nombre]||nombre)+'</span><span class="sala-estado" style="color:'+estadoColor+'">'+estadoTxt+'</span></div></div>';
     tr.appendChild(tdLbl);
     
     for(var d=0; d<diasMostrar.length; d++){
@@ -418,7 +458,7 @@ function renderGrid(data){
     tbody.appendChild(tr);
   }
   stopSpinner();
-  setTimeout(ajustarCeldas, 50);
+  setTimeout(ajustarFilas, 50);
 }
 
 var cbCount=0;
