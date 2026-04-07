@@ -3,26 +3,27 @@
 <head>
   <meta charset="UTF-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Barlow:wght@400;600;700;800&display=swap" rel="stylesheet"/>
   <title>Salas – Prodalam</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-
+ 
     html, body {
       width:100%; height:100%; overflow:hidden;
       background:#EEF2FB;
       font-family:'Barlow', Arial, sans-serif;
     }
-
+ 
     #page-wrap {
       display:flex;
       flex-direction:column;
       width:100%;
       height:100vh;
     }
-
-    /* ══ HEADER ══ */
+ 
+    /* HEADER */
     #header {
       flex:0 0 auto;
       width:100%;
@@ -62,8 +63,8 @@
       font-family:'Barlow Condensed', sans-serif; letter-spacing:1px;
       vertical-align:middle;
     }
-
-    /* ══ RELOJ ══ */
+ 
+    /* RELOJ */
     .h-clock-zone {
       display:table-cell;
       width:34%;
@@ -88,8 +89,8 @@
       font-family:'Barlow Condensed', sans-serif; font-weight:700;
       margin-top:1px;
     }
-
-    /* ══ TABLA WRAP ══ */
+ 
+    /* TABLA WRAP */
     #tabla-wrap {
       flex:1 1 0;
       min-height:0;
@@ -100,14 +101,14 @@
       display:flex;
       flex-direction:column;
     }
-
+ 
     #grid {
       width:100%;
       height:100%;
       border-collapse:collapse;
       table-layout:fixed;
     }
-
+ 
     /* Cabecera fija */
     #grid thead tr { height:56px; }
     #grid thead td {
@@ -142,13 +143,14 @@
       padding:2px 7px; border-radius:4px; margin-top:2px;
       font-family:'Barlow Condensed', sans-serif;
     }
-
-    /* ══ FILAS: altura automática, distribuida por JS ══ */
+ 
+    /* FILAS */
     #grid tbody tr {
       border-bottom:2px solid #E0E8F4;
+      transition: height 0.15s ease;
     }
     #grid tbody tr:last-child { border-bottom:none; }
-
+ 
     /* Celda etiqueta sala */
     td.sala-lbl {
       background:#F4F7FF;
@@ -167,7 +169,7 @@
       font-size:13px; font-weight:700; line-height:1;
       display:block; margin-top:4px;
     }
-
+ 
     /* Celdas de días */
     td.day-cell {
       background:#fff;
@@ -176,55 +178,61 @@
       padding:4px 5px;
       overflow:hidden;
       position:relative;
+      height:100%;
     }
     td.day-cell.hoy {
       background:#F0F6FF;
       border-left:4px solid #FF7D10;
     }
-
-    /* ══ BLOQUES DE EVENTOS ══ */
+ 
+    /* BLOQUES DE EVENTOS - ahora ocupan TODO el espacio vertical */
     .ev-container {
       display:flex;
       flex-direction:column;
-      gap:3px;
-      position:absolute;
-      top:4px; left:5px; right:5px; bottom:4px;
+      gap:4px;
+      height:100%;
+      width:100%;
     }
-
+ 
     .ev-bloque {
       flex:1 1 0;
       min-height:0;
       border-radius:6px;
-      padding:5px 10px;
+      padding:6px 10px;
       border-left:5px solid transparent;
       overflow:hidden;
       display:flex;
       flex-direction:column;
       justify-content:center;
     }
-
+ 
+    /* Cuando hay un solo evento, ocupa toda la altura */
+    .ev-container:has(.ev-bloque:only-child) .ev-bloque {
+      justify-content:center;
+    }
+ 
     .ev-ocup    { background:#FFF3EA; border-color:#FF7D10; }
     .ev-pronto  { background:#EBF0FF; border-color:#0047CC; }
     .ev-proxima { background:#EAF7EE; border-color:#1CB85B; }
-
+ 
     .ev-hora {
-      font-size:20px; font-weight:900; display:block; white-space:nowrap;
+      font-weight:900; display:block; white-space:nowrap;
       font-family:'Barlow Condensed', sans-serif;
       line-height:1.15;
     }
     .ev-ocup .ev-hora    { color:#CC5000; }
     .ev-pronto .ev-hora  { color:#0047CC; }
     .ev-proxima .ev-hora { color:#0A6B30; }
-
+ 
     .ev-user {
-      font-size:16px; font-weight:700; display:block;
+      font-weight:700; display:block;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
       line-height:1.2;
     }
     .ev-ocup .ev-user    { color:#7A3000; }
     .ev-pronto .ev-user  { color:#003099; }
     .ev-proxima .ev-user { color:#0A4A20; }
-
+ 
     /* Overlay carga */
     #overlay {
       position:fixed; top:0; left:0; width:100%; height:100%;
@@ -247,17 +255,16 @@
   </style>
 </head>
 <body>
-
+ 
 <div id="overlay">
   <div class="ov-inner">
     <div class="spinner" id="spinner"></div>
     <span class="ov-txt">Cargando...</span>
   </div>
 </div>
-
+ 
 <div id="page-wrap">
-
-  <!-- HEADER -->
+ 
   <div id="header">
     <div class="h-logo-zone">
       <table class="h-logo-inner"><tr>
@@ -272,7 +279,7 @@
         <td><span class="leg-dot" style="background:#1CB85B"></span><span class="leg-txt">Disponible</span></td>
         <td><span class="leg-dot" style="background:#0047CC"></span><span class="leg-txt">Próxima &lt;30 min</span></td>
         <td><span class="leg-dot" style="background:#FF7D10"></span><span class="leg-txt">Ocupada ahora</span></td>
-      </tr></table>
+      </table></table>
     </div>
     <div class="h-clock-zone">
       <span id="clk-meta">---</span>
@@ -280,8 +287,7 @@
       <span id="clk-date">---</span>
     </div>
   </div>
-
-  <!-- TABLA -->
+ 
   <div id="tabla-wrap">
     <table id="grid">
       <thead>
@@ -293,22 +299,22 @@
       </tbody>
     </table>
   </div>
-
+ 
 </div>
-
+ 
 <script>
 var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyn7VSKT-IFULCC2bPx2SlK2W2GlaXQNoKZ44WLQq5Ev94ESTC45vlJgcpmPgaN_IYQ/exec";
-
+ 
 var DIAS_FULL = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
 var DIAS_CORT = ["LUN","MAR","MIÉ","JUE","VIE"];
 var MESES     = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
-
+ 
 var SALAS  = ["Sala Villarica","Sala 6","Sala 5","Sala 4","Sala 3","Sala 2","Sala 1"];
 var SHORT  = {"Sala 1":"Sala 1","Sala 2":"Sala 2","Sala 3":"Sala 3","Sala 4":"Sala 4","Sala 5":"Sala 5","Sala 6":"Sala 6","Sala Villarica":"Villarica"};
 var COLORES= {"Sala 1":"#AB47BC","Sala 2":"#29B6F6","Sala 3":"#FF5722","Sala 4":"#26C6A6","Sala 5":"#C6D000","Sala 6":"#00BCD4","Sala Villarica":"#2196F3"};
-
+ 
 var lastData = null;
-
+ 
 function pad(n){ return n<10?"0"+n:""+n; }
 function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 function fmtH(iso){ var d=new Date(iso); return pad(d.getHours())+":"+pad(d.getMinutes()); }
@@ -318,8 +324,7 @@ function getLunes(f){
   d.setDate(d.getDate()+(dow===0?-6:1-dow));
   d.setHours(0,0,0,0); return d;
 }
-
-/* ── Spinner ── */
+ 
 var spinAngle=0, spinTimer=null;
 function startSpinner(){
   var el=document.getElementById("spinner");
@@ -334,8 +339,7 @@ function stopSpinner(){
   if(ov) ov.style.display="none";
 }
 startSpinner();
-
-/* ── Reloj ── */
+ 
 function tickClock(){
   var n=new Date();
   document.getElementById("clk-time").innerHTML=pad(n.getHours())+":"+pad(n.getMinutes());
@@ -348,117 +352,125 @@ function tickClock(){
 }
 setInterval(tickClock,1000); tickClock();
 
-/* ══ DISTRIBUCIÓN DE FILAS por "peso" (cantidad de eventos) ══
-   Las salas con más eventos reciben más altura proporcional.
-   Las salas sin eventos reciben altura mínima fija. */
-var MIN_ROW_EMPTY = 38;   /* px filas sin eventos */
-var PX_POR_EVENTO = 68;   /* px base por cada evento en la fila más cargada */
+/* ========== NUEVA DISTRIBUCIÓN DE FILAS ==========
+   Filas vacías → 32px fijos
+   Filas con eventos → reparten TODO el espacio restante proporcional a cantidad de eventos
+   Las tarjetas usan flex:1 para llenar verticalmente */
+   
+var EMPTY_ROW_HEIGHT = 32;  // Filas sin eventos - muy compactas
+var MIN_EVENT_ROW = 65;     // Altura mínima por fila con eventos
 
-function maxEventosPorFila(){
-  var rows = document.querySelectorAll("#grid-body tr");
-  var max  = 0;
-  for(var i=0;i<rows.length;i++){
-    /* contar el máximo de bloques en cualquier celda de esa fila */
-    var celdas = rows[i].querySelectorAll("td.day-cell");
-    var maxCelda = 0;
-    for(var c=0;c<celdas.length;c++){
-      var n = celdas[c].querySelectorAll(".ev-bloque").length;
-      if(n>maxCelda) maxCelda=n;
-    }
-    if(maxCelda>max) max=maxCelda;
-  }
-  return max;
-}
-
-function ajustarFilas(){
-  var wrap  = document.getElementById("tabla-wrap");
+function ajustarFilas() {
+  var wrap = document.getElementById("tabla-wrap");
   var thead = document.querySelector("#grid thead tr");
   if(!wrap || !thead) return;
-
-  var wrapH  = wrap.clientHeight;
-  var headH  = thead.offsetHeight || 56;
-  var bodyH  = wrapH - headH;
-  var rows   = document.querySelectorAll("#grid-body tr");
+  
+  var wrapH = wrap.clientHeight;
+  var headH = thead.offsetHeight || 56;
+  var bodyH = wrapH - headH - 2; // pequeño margen
+  
+  var rows = document.querySelectorAll("#grid-body tr");
   if(!rows.length) return;
-
-  /* Para cada fila: cuántos eventos tiene la celda más cargada */
-  var pesosFila = [];
-  for(var i=0;i<rows.length;i++){
+  
+  // Calcular cuántos eventos tiene cada fila (máximo en sus celdas)
+  var eventosPorFila = [];
+  for(var i = 0; i < rows.length; i++) {
     var celdas = rows[i].querySelectorAll("td.day-cell");
-    var maxCelda = 0;
-    for(var c=0;c<celdas.length;c++){
-      var n = celdas[c].querySelectorAll(".ev-bloque").length;
-      if(n>maxCelda) maxCelda=n;
+    var maxEventos = 0;
+    for(var c = 0; c < celdas.length; c++) {
+      var evCount = celdas[c].querySelectorAll(".ev-bloque").length;
+      if(evCount > maxEventos) maxEventos = evCount;
     }
-    pesosFila.push(maxCelda);
+    eventosPorFila.push(maxEventos);
   }
-
-  /* Espacio fijo para filas vacías */
+  
+  // Separar filas vacías y con eventos
   var espacioVacias = 0;
-  var filasConEvento = 0;
-  for(var i=0;i<pesosFila.length;i++){
-    if(pesosFila[i]===0) espacioVacias += MIN_ROW_EMPTY;
-    else filasConEvento++;
-  }
-
-  /* Espacio disponible para filas con eventos */
-  var espacioEventos = bodyH - espacioVacias;
-  var totalPeso = 0;
-  for(var i=0;i<pesosFila.length;i++) if(pesosFila[i]>0) totalPeso += pesosFila[i];
-
-  /* Altura proporcional: más eventos = más altura */
-  var alturas = [];
-  for(var i=0;i<rows.length;i++){
-    if(pesosFila[i]===0){
-      alturas.push(MIN_ROW_EMPTY);
+  var indicesConEventos = [];
+  for(var i = 0; i < eventosPorFila.length; i++) {
+    if(eventosPorFila[i] === 0) {
+      espacioVacias += EMPTY_ROW_HEIGHT;
     } else {
-      var h = Math.floor(espacioEventos * pesosFila[i] / totalPeso);
-      alturas.push(Math.max(h, pesosFila[i] * 52)); /* mínimo 52px por evento */
+      indicesConEventos.push(i);
     }
   }
-
-  /* Aplicar alturas y ajustar fuentes de tarjetas */
-  for(var i=0;i<rows.length;i++){
-    rows[i].style.height    = alturas[i]+"px";
-    rows[i].style.maxHeight = alturas[i]+"px";
-    rows[i].style.overflow  = "hidden";
-
-    /* Escalar fuente según espacio real por evento */
-    if(pesosFila[i]>0){
-      var pxPorEv = Math.floor(alturas[i] / pesosFila[i]);
-      var horaSize = Math.min(28, Math.max(14, Math.floor(pxPorEv * 0.28)));
-      var userSize = Math.min(22, Math.max(12, Math.floor(pxPorEv * 0.22)));
-      var bloques  = rows[i].querySelectorAll(".ev-bloque");
-      var horas    = rows[i].querySelectorAll(".ev-hora");
-      var users    = rows[i].querySelectorAll(".ev-user");
-      var padV     = Math.min(10, Math.max(3, Math.floor(pxPorEv * 0.08)));
-      for(var b=0;b<bloques.length;b++) bloques[b].style.padding = padV+"px 10px";
-      for(var h=0;h<horas.length;h++)  horas[h].style.fontSize  = horaSize+"px";
-      for(var u=0;u<users.length;u++)  users[u].style.fontSize  = userSize+"px";
+  
+  // Espacio disponible para filas con eventos
+  var espacioEventos = bodyH - espacioVacias;
+  if(espacioEventos < MIN_EVENT_ROW * indicesConEventos.length) {
+    espacioEventos = MIN_EVENT_ROW * indicesConEventos.length;
+  }
+  
+  // Sumar pesos (cantidad de eventos) solo de filas con eventos
+  var pesoTotal = 0;
+  for(var i = 0; i < indicesConEventos.length; i++) {
+    pesoTotal += eventosPorFila[indicesConEventos[i]];
+  }
+  
+  // Calcular alturas
+  var alturas = [];
+  for(var i = 0; i < rows.length; i++) {
+    if(eventosPorFila[i] === 0) {
+      alturas.push(EMPTY_ROW_HEIGHT);
+    } else {
+      var proporcion = eventosPorFila[i] / pesoTotal;
+      var altura = Math.floor(espacioEventos * proporcion);
+      altura = Math.max(altura, eventosPorFila[i] * 38);
+      alturas.push(altura);
+    }
+  }
+  
+  // Aplicar alturas y escalar fuentes
+  for(var i = 0; i < rows.length; i++) {
+    rows[i].style.height = alturas[i] + "px";
+    rows[i].style.maxHeight = alturas[i] + "px";
+    
+    if(eventosPorFila[i] > 0) {
+      // Escalar fuentes según altura disponible POR EVENTO
+      var alturaPorEvento = alturas[i] / eventosPorFila[i];
+      
+      // Tamaños de fuente más grandes cuando hay espacio
+      var horaSize = Math.min(32, Math.max(16, Math.floor(alturaPorEvento * 0.32)));
+      var userSize = Math.min(26, Math.max(13, Math.floor(alturaPorEvento * 0.26)));
+      var paddingV = Math.min(12, Math.max(5, Math.floor(alturaPorEvento * 0.1)));
+      
+      var bloques = rows[i].querySelectorAll(".ev-bloque");
+      var horas = rows[i].querySelectorAll(".ev-hora");
+      var users = rows[i].querySelectorAll(".ev-user");
+      
+      for(var b = 0; b < bloques.length; b++) {
+        bloques[b].style.padding = paddingV + "px 10px";
+      }
+      for(var h = 0; h < horas.length; h++) {
+        horas[h].style.fontSize = horaSize + "px";
+      }
+      for(var u = 0; u < users.length; u++) {
+        users[u].style.fontSize = userSize + "px";
+      }
     }
   }
 }
 
-setInterval(ajustarFilas, 300);
-window.addEventListener("resize", ajustarFilas);
+setInterval(ajustarFilas, 200);
+window.addEventListener("resize", function() { setTimeout(ajustarFilas, 50); });
 
-/* ── RENDER ── */
+/* RENDER */
 function renderGrid(data){
   lastData = data;
   var salas = data.salas || data;
   if(!salas || !salas.length){ stopSpinner(); return; }
-
+ 
   var ahora=new Date(), ahoraMs=ahora.getTime();
   var lunes=getLunes(ahora), hoyTs=soloFecha(ahora);
-
+ 
   var map={};
   for(var i=0;i<salas.length;i++) map[salas[i].nombre]=salas[i];
-
+ 
   /* Cabeceras días */
   var theadTr=document.querySelector("#grid thead tr");
   var viejosHd=theadTr.querySelectorAll(".day-hd");
   for(var i=0;i<viejosHd.length;i++) viejosHd[i].parentNode.removeChild(viejosHd[i]);
-
+ 
   for(var d=0;d<5;d++){
     var fecha=new Date(lunes); fecha.setDate(lunes.getDate()+d);
     var esHoy=(soloFecha(fecha)===hoyTs);
@@ -469,19 +481,19 @@ function renderGrid(data){
                 +(esHoy?'<span class="hoy-badge">HOY</span>':"");
     theadTr.appendChild(td);
   }
-
+ 
   /* Filas salas */
   var tbody=document.getElementById("grid-body");
   tbody.innerHTML="";
-
+ 
   for(var si=0;si<SALAS.length;si++){
     var nombre=SALAS[si], s=map[nombre];
     var tr=document.createElement("tr");
-
+ 
     var estadoColor=s?(s.estado==="ocupada"?"#FF7D10":s.estado==="pronto"?"#0047CC":"#1CB85B"):"#888";
     var estadoTxt =s?(s.estado==="ocupada"?"● Ocupada ahora":s.estado==="pronto"?"● Próxima reserva":"● Disponible"):"";
     var colorBar  =COLORES[nombre]||"#0047CC";
-
+ 
     var tdLbl=document.createElement("td");
     tdLbl.className="sala-lbl";
     tdLbl.innerHTML='<div style="display:table;width:100%">'
@@ -492,15 +504,15 @@ function renderGrid(data){
       +'<span class="sala-estado" style="color:'+estadoColor+'">'+estadoTxt+'</span>'
       +'</div></div>';
     tr.appendChild(tdLbl);
-
+ 
     for(var d=0;d<5;d++){
       var fecha=new Date(lunes); fecha.setDate(lunes.getDate()+d);
       var fechaTs=soloFecha(fecha), esHoy2=(fechaTs===hoyTs);
-
+ 
       var tdCell=document.createElement("td");
       tdCell.className="day-cell"+(esHoy2?" hoy":"");
       tdCell.style.position="relative";
-
+ 
       var evsDia=[];
       if(s&&s.eventosSemana){
         for(var ei=0;ei<s.eventosSemana.length;ei++){
@@ -527,9 +539,8 @@ function renderGrid(data){
         }
         evsDia=uniq;
       }
-
+ 
       if(evsDia.length===0){
-        /* Celda vacía — sin texto "Sin reservas", solo espacio */
         tdCell.innerHTML='';
       } else {
         evsDia.sort(function(a,b){return new Date(a.inicio)-new Date(b.inicio);});
@@ -551,12 +562,12 @@ function renderGrid(data){
     }
     tbody.appendChild(tr);
   }
-
+ 
   stopSpinner();
-  ajustarFilas();
+  setTimeout(ajustarFilas, 50);
 }
-
-/* ── JSONP ── */
+ 
+/* JSONP */
 var cbCount=0;
 function cargarDatos(){
   cbCount++; var cn="cb"+cbCount;
@@ -573,7 +584,7 @@ function cargarDatos(){
   sc.src=SCRIPT_URL+"?callback="+cn+"&t="+Date.now();
   document.getElementsByTagName("head")[0].appendChild(sc);
 }
-
+ 
 cargarDatos();
 setInterval(cargarDatos, 300000);
 </script>
