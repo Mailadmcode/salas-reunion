@@ -15,7 +15,6 @@
       font-family:'Barlow', Arial, sans-serif;
     }
 
-    /* ══ LAYOUT PRINCIPAL: flex vertical ══ */
     #page-wrap {
       display:flex;
       flex-direction:column;
@@ -102,7 +101,6 @@
       flex-direction:column;
     }
 
-    /* La tabla ocupa 100% del wrap */
     #grid {
       width:100%;
       height:100%;
@@ -110,8 +108,8 @@
       table-layout:fixed;
     }
 
-    /* Cabecera de días — altura fija */
-    #grid thead tr { height:60px; }
+    /* Cabecera fija */
+    #grid thead tr { height:56px; }
     #grid thead td {
       background:#0047CC;
       border-right:1px solid rgba(255,255,255,0.15);
@@ -126,7 +124,7 @@
       font-size:18px; font-weight:900; letter-spacing:3px;
       text-transform:uppercase; color:#fff;
       font-family:'Barlow Condensed', sans-serif;
-      width:150px;
+      width:145px;
     }
     #grid thead td.day-hd.hoy { background:rgba(255,125,16,0.35); }
     .dh-nom {
@@ -145,10 +143,9 @@
       font-family:'Barlow Condensed', sans-serif;
     }
 
-    /* ══ FILAS DE SALAS ══ */
+    /* ══ FILAS: altura automática, distribuida por JS ══ */
     #grid tbody tr {
       border-bottom:2px solid #E0E8F4;
-      /* altura se fuerza por JS para que quepan exactamente las 7 salas */
     }
     #grid tbody tr:last-child { border-bottom:none; }
 
@@ -157,18 +154,18 @@
       background:#F4F7FF;
       border-right:3px solid #D8E4F4;
       vertical-align:middle;
-      padding:0 8px;
+      padding:6px 8px;
       white-space:nowrap;
-      width:150px;
+      width:145px;
       overflow:hidden;
     }
     .sala-nombre {
-      font-size:24px; font-weight:800; color:#0A1F5C;
+      font-size:26px; font-weight:800; color:#0A1F5C;
       font-family:'Barlow Condensed', sans-serif; line-height:1; display:block;
     }
     .sala-estado {
-      font-size:12px; font-weight:700; line-height:1;
-      display:block; margin-top:3px;
+      font-size:13px; font-weight:700; line-height:1;
+      display:block; margin-top:4px;
     }
 
     /* Celdas de días */
@@ -176,7 +173,7 @@
       background:#fff;
       border-right:1px solid #E8EEF8;
       vertical-align:top;
-      padding:3px 4px;
+      padding:4px 5px;
       overflow:hidden;
       position:relative;
     }
@@ -185,55 +182,40 @@
       border-left:4px solid #FF7D10;
     }
 
-    .libre-txt {
-      font-size:13px; color:#C8D4E8; font-style:italic;
-      display:block; text-align:center;
-      padding-top:8px;
-    }
-
-    /* ══ BLOQUES DE EVENTOS ══
-       La clave: el contenedor usa height:100% y flex para distribuir
-       proporcionalemnte sin salirse de la celda */
+    /* ══ BLOQUES DE EVENTOS ══ */
     .ev-container {
-      position:absolute;
-      top:3px; left:4px; right:4px; bottom:3px;
       display:flex;
       flex-direction:column;
-      gap:2px;
-      overflow:hidden;
+      gap:3px;
+      height:100%;
     }
 
     .ev-bloque {
-      /* flex:1 hace que cada bloque tome fracción igual del espacio disponible */
-      flex:1 1 0;
-      min-height:0;          /* CLAVE: permite shrink por debajo del contenido */
-      border-radius:5px;
-      padding:3px 8px;
+      /* NO flex:1 — cada bloque toma solo lo que necesita */
+      flex:0 0 auto;
+      border-radius:6px;
+      padding:5px 10px;
       border-left:5px solid transparent;
       overflow:hidden;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
     }
 
     .ev-ocup    { background:#FFF3EA; border-color:#FF7D10; }
     .ev-pronto  { background:#EBF0FF; border-color:#0047CC; }
     .ev-proxima { background:#EAF7EE; border-color:#1CB85B; }
 
-    /* Textos de tarjeta — tamaño base más grande */
     .ev-hora {
-      font-size:17px; font-weight:900; display:block; white-space:nowrap;
+      font-size:20px; font-weight:900; display:block; white-space:nowrap;
       font-family:'Barlow Condensed', sans-serif;
-      line-height:1.1;
+      line-height:1.15;
     }
     .ev-ocup .ev-hora    { color:#CC5000; }
     .ev-pronto .ev-hora  { color:#0047CC; }
     .ev-proxima .ev-hora { color:#0A6B30; }
 
     .ev-user {
-      font-size:15px; font-weight:700; display:block;
+      font-size:16px; font-weight:700; display:block;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-      line-height:1.1;
+      line-height:1.2;
     }
     .ev-ocup .ev-user    { color:#7A3000; }
     .ev-pronto .ev-user  { color:#003099; }
@@ -269,7 +251,6 @@
   </div>
 </div>
 
-<!-- LAYOUT PRINCIPAL -->
 <div id="page-wrap">
 
   <!-- HEADER -->
@@ -309,7 +290,7 @@
     </table>
   </div>
 
-</div><!-- /page-wrap -->
+</div>
 
 <script>
 var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyn7VSKT-IFULCC2bPx2SlK2W2GlaXQNoKZ44WLQq5Ev94ESTC45vlJgcpmPgaN_IYQ/exec";
@@ -363,44 +344,55 @@ function tickClock(){
 }
 setInterval(tickClock,1000); tickClock();
 
-/* ── Ajuste de filas: exactamente 7 salas siempre visibles ── */
+/* ══ DISTRIBUCIÓN DE FILAS por "peso" (cantidad de eventos) ══
+   Las salas con más eventos reciben más altura proporcional.
+   Las salas sin eventos reciben altura mínima fija. */
+var MIN_ROW_EMPTY = 36;  /* px para filas vacías */
+var MIN_ROW_EVNT  = 70;  /* px mínimo por fila con eventos */
+
 function ajustarFilas(){
   var wrap  = document.getElementById("tabla-wrap");
   var thead = document.querySelector("#grid thead tr");
   if(!wrap || !thead) return;
 
-  var wrapH = wrap.clientHeight;
-  var headH = thead.offsetHeight || 60;
-  var bodyH = wrapH - headH;
-  var rows  = document.querySelectorAll("#grid-body tr");
+  var wrapH  = wrap.clientHeight;
+  var headH  = thead.offsetHeight || 56;
+  var bodyH  = wrapH - headH;
+  var rows   = document.querySelectorAll("#grid-body tr");
   if(!rows.length) return;
 
-  /* altura exacta por fila, sin decimales que acumulen error */
-  var rowH = Math.floor(bodyH / rows.length);
-  for(var i=0; i<rows.length; i++){
-    rows[i].style.height = rowH + "px";
-    rows[i].style.maxHeight = rowH + "px";
-    rows[i].style.overflow = "hidden";
+  /* Contar "peso" de cada fila: número de bloques de eventos en esa fila */
+  var pesos = [];
+  for(var i=0;i<rows.length;i++){
+    var bloques = rows[i].querySelectorAll(".ev-bloque").length;
+    pesos.push(bloques);
   }
 
-  /* Ajustar font-size de tarjetas según espacio disponible */
-  ajustarFuentesTarjetas(rowH);
-}
+  /* Asignar altura mínima primero */
+  var alturas = [];
+  var usados  = 0;
+  for(var i=0;i<rows.length;i++){
+    var min = pesos[i]===0 ? MIN_ROW_EMPTY : MIN_ROW_EVNT;
+    alturas.push(min);
+    usados += min;
+  }
 
-/* Escala las fuentes de las tarjetas proporcionalmente a la altura de fila */
-function ajustarFuentesTarjetas(rowH){
-  /* referencia: con rowH=100px usamos tamaños base */
-  var ratio = Math.max(0.6, Math.min(1.4, rowH / 100));
-  var horaSize  = Math.round(17 * ratio);
-  var userSize  = Math.round(15 * ratio);
-  var horaMin   = 11, userMin = 10;
-  horaSize = Math.max(horaSize, horaMin);
-  userSize = Math.max(userSize, userMin);
+  /* Distribuir el espacio sobrante proporcionalmente a los pesos */
+  var sobrante = bodyH - usados;
+  if(sobrante > 0){
+    var totalPeso = 0;
+    for(var i=0;i<pesos.length;i++) totalPeso += Math.max(pesos[i],1);
+    for(var i=0;i<rows.length;i++){
+      var extra = Math.floor(sobrante * (Math.max(pesos[i],1) / totalPeso));
+      alturas[i] += extra;
+    }
+  }
 
-  var horas = document.querySelectorAll(".ev-hora");
-  var users = document.querySelectorAll(".ev-user");
-  for(var i=0;i<horas.length;i++) horas[i].style.fontSize = horaSize+"px";
-  for(var i=0;i<users.length;i++) users[i].style.fontSize = userSize+"px";
+  for(var i=0;i<rows.length;i++){
+    rows[i].style.height    = alturas[i]+"px";
+    rows[i].style.maxHeight = alturas[i]+"px";
+    rows[i].style.overflow  = "hidden";
+  }
 }
 
 setInterval(ajustarFilas, 300);
@@ -463,7 +455,6 @@ function renderGrid(data){
 
       var tdCell=document.createElement("td");
       tdCell.className="day-cell"+(esHoy2?" hoy":"");
-      /* posición relativa necesaria para ev-container absoluto */
       tdCell.style.position="relative";
 
       var evsDia=[];
@@ -494,7 +485,8 @@ function renderGrid(data){
       }
 
       if(evsDia.length===0){
-        tdCell.innerHTML='<span class="libre-txt">Sin reservas</span>';
+        /* Celda vacía — sin texto "Sin reservas", solo espacio */
+        tdCell.innerHTML='';
       } else {
         evsDia.sort(function(a,b){return new Date(a.inicio)-new Date(b.inicio);});
         var now=Date.now();
@@ -517,7 +509,7 @@ function renderGrid(data){
   }
 
   stopSpinner();
-  ajustarFilas(); // ajustar inmediatamente tras renderizar
+  ajustarFilas();
 }
 
 /* ── JSONP ── */
@@ -539,7 +531,6 @@ function cargarDatos(){
 }
 
 cargarDatos();
-/* Actualización cada 5 minutos (300 000 ms) */
 setInterval(cargarDatos, 300000);
 </script>
 </body>
