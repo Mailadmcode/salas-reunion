@@ -199,7 +199,7 @@
       line-height:28px;
     }
 
-    /* ══ BLOQUES DE EVENTOS — más compactos ══ */
+    /* ══ BLOQUES DE EVENTOS ══ */
     .ev-container {
       width:100%;
       height:auto;
@@ -210,19 +210,28 @@
       display:block;
       width:100%;
       border-radius:6px;
-      padding:6px 10px;
+      padding:8px 12px;
       border-left:6px solid transparent;
       margin-bottom:4px;
       overflow:hidden;
-      min-height:48px;
+      min-height:44px;
     }
 
     .ev-ocup    { background:#FFF3EA; border-color:#FF7D10; }
     .ev-pronto  { background:#EBF0FF; border-color:#0047CC; }
     .ev-proxima { background:#EAF7EE; border-color:#1CB85B; }
 
+    /* Hora y usuario en la misma línea */
+    .ev-inline {
+      display:flex;
+      align-items:baseline;
+      gap:8px;
+      white-space:nowrap;
+      overflow:hidden;
+    }
+
     .ev-hora {
-      font-size:20px; font-weight:900; display:block; white-space:nowrap;
+      font-size:22px; font-weight:900; flex-shrink:0;
       font-family:'Barlow Condensed', sans-serif;
       line-height:1.2;
     }
@@ -230,9 +239,19 @@
     .ev-pronto .ev-hora  { color:#0047CC; }
     .ev-proxima .ev-hora { color:#0A6B30; }
 
+    .ev-sep {
+      font-size:18px; font-weight:700; flex-shrink:0;
+      font-family:'Barlow Condensed', sans-serif;
+      opacity:0.4;
+    }
+    .ev-ocup .ev-sep    { color:#CC5000; }
+    .ev-pronto .ev-sep  { color:#0047CC; }
+    .ev-proxima .ev-sep { color:#0A6B30; }
+
     .ev-user {
-      font-size:16px; font-weight:700; display:block;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      font-size:18px; font-weight:700;
+      overflow:hidden; text-overflow:ellipsis;
+      font-family:'Barlow Condensed', sans-serif;
       line-height:1.2;
     }
     .ev-ocup .ev-user    { color:#7A3000; }
@@ -240,9 +259,10 @@
     .ev-proxima .ev-user { color:#0A4A20; }
 
     /* Cuando hay MUCHOS eventos */
-    .ev-container.muchos .ev-hora { font-size:15px; }
-    .ev-container.muchos .ev-user { font-size:13px; }
-    .ev-container.muchos .ev-bloque { padding:4px 8px; min-height:36px; margin-bottom:3px; }
+    .ev-container.muchos .ev-hora { font-size:17px; }
+    .ev-container.muchos .ev-sep  { font-size:15px; }
+    .ev-container.muchos .ev-user { font-size:15px; }
+    .ev-container.muchos .ev-bloque { padding:5px 10px; min-height:34px; margin-bottom:3px; }
 
     /* Overlay carga */
     #overlay {
@@ -459,8 +479,10 @@ function renderGrid(data){
           var iniMs=new Date(ev.inicio).getTime(), finMs=new Date(ev.fin).getTime();
           var cls=iniMs<=now&&finMs>now?"ev-ocup":iniMs>now&&iniMs<=now+1800000?"ev-pronto":"ev-proxima";
           html+='<div class="ev-bloque '+cls+'">'
+               +'<div class="ev-inline">'
                +'<span class="ev-hora">'+fmtH(ev.inicio)+" \u2013 "+fmtH(ev.fin)+'</span>'
-               +(ev.creador?'<span class="ev-user">'+esc(ev.creador)+'</span>':"")
+               +(ev.creador?'<span class="ev-sep">|</span><span class="ev-user">'+esc(ev.creador)+'</span>':"")
+               +'</div>'
                +'</div>';
         }
         html+='</div>';
