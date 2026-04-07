@@ -187,16 +187,20 @@
       display:flex;
       flex-direction:column;
       gap:3px;
-      height:100%;
+      position:absolute;
+      top:4px; left:5px; right:5px; bottom:4px;
     }
 
     .ev-bloque {
-      /* NO flex:1 — cada bloque toma solo lo que necesita */
-      flex:0 0 auto;
+      flex:1 1 0;
+      min-height:0;
       border-radius:6px;
       padding:5px 10px;
       border-left:5px solid transparent;
       overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
     }
 
     .ev-ocup    { background:#FFF3EA; border-color:#FF7D10; }
@@ -347,8 +351,24 @@ setInterval(tickClock,1000); tickClock();
 /* ══ DISTRIBUCIÓN DE FILAS por "peso" (cantidad de eventos) ══
    Las salas con más eventos reciben más altura proporcional.
    Las salas sin eventos reciben altura mínima fija. */
-var MIN_ROW_EMPTY = 36;  /* px para filas vacías */
-var MIN_ROW_EVNT  = 70;  /* px mínimo por fila con eventos */
+var MIN_ROW_EMPTY = 38;   /* px filas sin eventos */
+var PX_POR_EVENTO = 68;   /* px base por cada evento en la fila más cargada */
+
+function maxEventosPorFila(){
+  var rows = document.querySelectorAll("#grid-body tr");
+  var max  = 0;
+  for(var i=0;i<rows.length;i++){
+    /* contar el máximo de bloques en cualquier celda de esa fila */
+    var celdas = rows[i].querySelectorAll("td.day-cell");
+    var maxCelda = 0;
+    for(var c=0;c<celdas.length;c++){
+      var n = celdas[c].querySelectorAll(".ev-bloque").length;
+      if(n>maxCelda) maxCelda=n;
+    }
+    if(maxCelda>max) max=maxCelda;
+  }
+  return max;
+}
 
 function ajustarFilas(){
   var wrap  = document.getElementById("tabla-wrap");
@@ -361,37 +381,61 @@ function ajustarFilas(){
   var rows   = document.querySelectorAll("#grid-body tr");
   if(!rows.length) return;
 
-  /* Contar "peso" de cada fila: número de bloques de eventos en esa fila */
-  var pesos = [];
+  /* Para cada fila: cuántos eventos tiene la celda más cargada */
+  var pesosFila = [];
   for(var i=0;i<rows.length;i++){
-    var bloques = rows[i].querySelectorAll(".ev-bloque").length;
-    pesos.push(bloques);
+    var celdas = rows[i].querySelectorAll("td.day-cell");
+    var maxCelda = 0;
+    for(var c=0;c<celdas.length;c++){
+      var n = celdas[c].querySelectorAll(".ev-bloque").length;
+      if(n>maxCelda) maxCelda=n;
+    }
+    pesosFila.push(maxCelda);
   }
 
-  /* Asignar altura mínima primero */
+  /* Espacio fijo para filas vacías */
+  var espacioVacias = 0;
+  var filasConEvento = 0;
+  for(var i=0;i<pesosFila.length;i++){
+    if(pesosFila[i]===0) espacioVacias += MIN_ROW_EMPTY;
+    else filasConEvento++;
+  }
+
+  /* Espacio disponible para filas con eventos */
+  var espacioEventos = bodyH - espacioVacias;
+  var totalPeso = 0;
+  for(var i=0;i<pesosFila.length;i++) if(pesosFila[i]>0) totalPeso += pesosFila[i];
+
+  /* Altura proporcional: más eventos = más altura */
   var alturas = [];
-  var usados  = 0;
   for(var i=0;i<rows.length;i++){
-    var min = pesos[i]===0 ? MIN_ROW_EMPTY : MIN_ROW_EVNT;
-    alturas.push(min);
-    usados += min;
-  }
-
-  /* Distribuir el espacio sobrante proporcionalmente a los pesos */
-  var sobrante = bodyH - usados;
-  if(sobrante > 0){
-    var totalPeso = 0;
-    for(var i=0;i<pesos.length;i++) totalPeso += Math.max(pesos[i],1);
-    for(var i=0;i<rows.length;i++){
-      var extra = Math.floor(sobrante * (Math.max(pesos[i],1) / totalPeso));
-      alturas[i] += extra;
+    if(pesosFila[i]===0){
+      alturas.push(MIN_ROW_EMPTY);
+    } else {
+      var h = Math.floor(espacioEventos * pesosFila[i] / totalPeso);
+      alturas.push(Math.max(h, pesosFila[i] * 52)); /* mínimo 52px por evento */
     }
   }
 
+  /* Aplicar alturas y ajustar fuentes de tarjetas */
   for(var i=0;i<rows.length;i++){
     rows[i].style.height    = alturas[i]+"px";
     rows[i].style.maxHeight = alturas[i]+"px";
     rows[i].style.overflow  = "hidden";
+
+    /* Escalar fuente según espacio real por evento */
+    if(pesosFila[i]>0){
+      var pxPorEv = Math.floor(alturas[i] / pesosFila[i]);
+      var horaSize = Math.min(28, Math.max(14, Math.floor(pxPorEv * 0.28)));
+      var userSize = Math.min(22, Math.max(12, Math.floor(pxPorEv * 0.22)));
+      var bloques  = rows[i].querySelectorAll(".ev-bloque");
+      var horas    = rows[i].querySelectorAll(".ev-hora");
+      var users    = rows[i].querySelectorAll(".ev-user");
+      var padV     = Math.min(10, Math.max(3, Math.floor(pxPorEv * 0.08)));
+      for(var b=0;b<bloques.length;b++) bloques[b].style.padding = padV+"px 10px";
+      for(var h=0;h<horas.length;h++)  horas[h].style.fontSize  = horaSize+"px";
+      for(var u=0;u<users.length;u++)  users[u].style.fontSize  = userSize+"px";
+    }
   }
 }
 
