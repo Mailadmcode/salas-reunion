@@ -271,7 +271,7 @@
                  onerror="this.style.display='none';document.getElementById('logo-txt').style.display='inline';"
                  alt="Prodalam"/><span id="logo-txt" style="display:none;font-size:28px;font-weight:900;color:#0047CC;font-family:'Barlow Condensed',sans-serif;letter-spacing:2px;">Prodalam</span></td>
         <td><span class="h-sub">Tiempo real</span></td>
-      </table></table>
+      </tr></table>
     </div>
     <div class="h-legend-zone">
       <table class="h-legend-inner"><tr>
@@ -305,7 +305,7 @@
 var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyn7VSKT-IFULCC2bPx2SlK2W2GlaXQNoKZ44WLQq5Ev94ESTC45vlJgcpmPgaN_IYQ/exec";
  
 var DIAS_FULL = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
-var DIAS_CORT = ["LUN","MAR","MIÉ","JUE","VIE"];
+var DIAS_CORT = ["DOM","LUN","MAR","MIÉ","JUE","VIE","SÁB"];
 var MESES     = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
  
 var SALAS  = ["Sala Villarica","Sala 6","Sala 5","Sala 4","Sala 3","Sala 2","Sala 1"];
@@ -318,11 +318,6 @@ function pad(n){ return n<10?"0"+n:""+n; }
 function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 function fmtH(iso){ var d=new Date(iso); return pad(d.getHours())+":"+pad(d.getMinutes()); }
 function soloFecha(d){ var x=new Date(d); x.setHours(0,0,0,0); return x.getTime(); }
-function getLunes(f){
-  var d=new Date(f), dow=d.getDay();
-  d.setDate(d.getDate()+(dow===0?-6:1-dow));
-  d.setHours(0,0,0,0); return d;
-}
  
 var spinAngle=0, spinTimer=null;
 function startSpinner(){
@@ -343,7 +338,8 @@ function tickClock(){
   var n=new Date();
   document.getElementById("clk-time").innerHTML=pad(n.getHours())+":"+pad(n.getMinutes());
   document.getElementById("clk-date").innerHTML=DIAS_FULL[n.getDay()]+" "+pad(n.getDate())+" "+MESES[n.getMonth()]+" "+n.getFullYear();
-  var lun=getLunes(n), vie=new Date(lun); vie.setDate(lun.getDate()+4);
+  var lun = obtenerLunes(n);
+  var vie = new Date(lun); vie.setDate(lun.getDate()+4);
   document.getElementById("clk-meta").innerHTML=
     "Semana "+pad(lun.getDate())+"/"+pad(lun.getMonth()+1)+" – "+pad(vie.getDate())+"/"+pad(vie.getMonth()+1)
     +"  ·  Act. "+pad(n.getHours())+":"+pad(n.getMinutes())+":"+pad(n.getSeconds());
@@ -354,6 +350,38 @@ function tickClock(){
   }
 }
 setInterval(tickClock,1000); tickClock();
+
+function obtenerLunes(f){
+  var d=new Date(f), dow=d.getDay();
+  d.setDate(d.getDate()+(dow===0?-6:1-dow));
+  d.setHours(0,0,0,0); return d;
+}
+
+// Obtener lista de días a mostrar: desde hoy hasta viernes (máximo 5 días)
+function obtenerDiasMostrar(ahora){
+  var hoy = new Date(ahora);
+  hoy.setHours(0,0,0,0);
+  var diaSemana = hoy.getDay(); // 0 domingo, 1 lunes...
+  // Si hoy es sábado (6) o domingo (0), mostrar desde el lunes siguiente? Mejor mostrar solo días hábiles desde hoy.
+  // Pero por simplicidad, mostraremos desde hoy hasta el viernes, máximo 5 días.
+  var dias = [];
+  var fecha = new Date(hoy);
+  var viernes = new Date(hoy);
+  viernes.setDate(hoy.getDate() + (5 - diaSemana)); // próximo viernes (si hoy es viernes, queda igual)
+  // Si hoy es sábado o domingo, empezar desde el lunes siguiente
+  if(diaSemana === 0) { // domingo
+    fecha.setDate(hoy.getDate() + 1);
+    viernes.setDate(hoy.getDate() + 5);
+  } else if(diaSemana === 6) { // sábado
+    fecha.setDate(hoy.getDate() + 2);
+    viernes.setDate(hoy.getDate() + 6);
+  }
+  while(fecha <= viernes && dias.length < 5) {
+    dias.push(new Date(fecha));
+    fecha.setDate(fecha.getDate() + 1);
+  }
+  return dias;
+}
 
 var EMPTY_ROW_HEIGHT = 32;
 var MIN_EVENT_ROW = 65;
@@ -443,17 +471,6 @@ function ajustarFilas() {
 setInterval(ajustarFilas, 200);
 window.addEventListener("resize", function() { setTimeout(ajustarFilas, 50); });
 
-/* FILTRAR REUNIONES - ELIMINA LAS QUE YA TERMINARON */
-function filtrarEventosActivos(eventos, ahoraMs) {
-  if(!eventos || !eventos.length) return [];
-  
-  return eventos.filter(function(ev) {
-    var finMs = new Date(ev.fin).getTime();
-    // Solo mostrar reuniones que NO han terminado (fin > ahora)
-    return finMs > ahoraMs;
-  });
-}
-
 function renderGrid(data){
   lastData = data;
   var salas = data.salas || data;
@@ -461,9 +478,11 @@ function renderGrid(data){
  
   var ahora = new Date();
   var ahoraMs = ahora.getTime();
-  var lunes = getLunes(ahora);
   var hoyTs = soloFecha(ahora);
- 
+  
+  // Días a mostrar (desde hoy hasta viernes, máximo 5)
+  var diasMostrar = obtenerDiasMostrar(ahora);
+  
   var map = {};
   for(var i = 0; i < salas.length; i++) {
     map[salas[i].nombre] = salas[i];
@@ -476,13 +495,13 @@ function renderGrid(data){
     if(viejosHd[i]) viejosHd[i].parentNode.removeChild(viejosHd[i]);
   }
  
-  for(var d = 0; d < 5; d++){
-    var fecha = new Date(lunes);
-    fecha.setDate(lunes.getDate() + d);
+  for(var d = 0; d < diasMostrar.length; d++){
+    var fecha = diasMostrar[d];
     var esHoy = (soloFecha(fecha) === hoyTs);
     var td = document.createElement("td");
     td.className = "day-hd" + (esHoy ? " hoy" : "");
-    td.innerHTML = '<span class="dh-nom">' + DIAS_CORT[d] + '</span>'
+    var nombreDia = DIAS_CORT[fecha.getDay()];
+    td.innerHTML = '<span class="dh-nom">' + nombreDia + '</span>'
                 + '<span class="dh-fec">' + pad(fecha.getDate()) + "/" + pad(fecha.getMonth()+1) + '</span>'
                 + (esHoy ? '<span class="hoy-badge">HOY</span>' : "");
     theadTr.appendChild(td);
@@ -512,9 +531,8 @@ function renderGrid(data){
       + '</div></div>';
     tr.appendChild(tdLbl);
  
-    for(var d = 0; d < 5; d++){
-      var fecha = new Date(lunes);
-      fecha.setDate(lunes.getDate() + d);
+    for(var d = 0; d < diasMostrar.length; d++){
+      var fecha = diasMostrar[d];
       var fechaTs = soloFecha(fecha);
       var esHoy2 = (fechaTs === hoyTs);
  
@@ -531,19 +549,17 @@ function renderGrid(data){
           var evInicio = new Date(ev.inicio);
           var evFin = new Date(ev.fin);
           
-          // Solo si es el día correcto
           if(soloFecha(evInicio) !== fechaTs) continue;
           
-          // Para días pasados (no hoy), mostrar todo
-          // Para hoy, filtrar las que ya terminaron
+          // Si es hoy, filtrar las que ya terminaron
           if(esHoy2 && evFin.getTime() <= ahoraMs) continue;
           
-          // Para días futuros, mostrar todo
+          // Si es día futuro (mañana o después), mostrar todas
           evsDia.push(ev);
         }
       }
       
-      // Reunión actual (si existe y no ha terminado)
+      // Reunión actual (solo para hoy)
       if(esHoy2 && s && s.actual) {
         var actualFin = new Date(s.actual.fin);
         if(soloFecha(new Date(s.actual.inicio)) === fechaTs && actualFin.getTime() > ahoraMs) {
@@ -551,7 +567,7 @@ function renderGrid(data){
         }
       }
       
-      // Próximas reuniones
+      // Próximas reuniones (solo para hoy)
       if(esHoy2 && s && s.proximas) {
         for(var pi = 0; pi < s.proximas.length; pi++) {
           var prox = s.proximas[pi];
@@ -562,7 +578,7 @@ function renderGrid(data){
         }
       }
       
-      // Eliminar duplicados por inicio
+      // Eliminar duplicados
       var seen = {};
       var uniq = [];
       for(var ei = 0; ei < evsDia.length; ei++) {
@@ -573,7 +589,7 @@ function renderGrid(data){
       }
       evsDia = uniq;
       
-      // Ordenar por hora de inicio
+      // Ordenar por hora
       evsDia.sort(function(a, b) {
         return new Date(a.inicio) - new Date(b.inicio);
       });
