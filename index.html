@@ -15,8 +15,6 @@
       font-family:'Barlow', Arial, sans-serif;
     }
 
-    /* ══ LAYOUT PRINCIPAL ══ */
-    /* Usamos una tabla de layout para maxima compatibilidad con MagicInfo S3 */
     #main-wrap {
       width:100%; height:100%;
       display:table;
@@ -25,7 +23,7 @@
 
     /* ══ HEADER ══ */
     #header {
-      width:100%; height:88px;
+      width:100%; height:100px;
       background:#fff;
       border-bottom:6px solid #FF7D10;
       display:table;
@@ -33,14 +31,14 @@
     }
     .h-logo-zone {
       display:table-cell;
-      width:22%;
+      width:20%;
       vertical-align:middle;
       padding:0 20px;
       border-right:2px solid #E0E8F4;
     }
     .h-logo-inner { display:table; }
     .h-logo-inner td { vertical-align:middle; padding-right:12px; }
-    #logo-img { height:48px; display:block; }
+    #logo-img { height:52px; display:block; }
     .h-sub {
       font-size:12px; letter-spacing:3px; text-transform:uppercase;
       color:#0047CC; font-weight:800; white-space:nowrap;
@@ -49,54 +47,57 @@
     }
     .h-legend-zone {
       display:table-cell;
-      width:56%;
+      width:46%;
       vertical-align:middle;
       text-align:center;
     }
     .h-legend-inner { display:inline-table; }
     .h-legend-inner td { vertical-align:middle; padding:0 18px; white-space:nowrap; }
-    .leg-dot { width:20px; height:20px; border-radius:50%; display:inline-block; vertical-align:middle; margin-right:8px; }
+    .leg-dot { width:22px; height:22px; border-radius:50%; display:inline-block; vertical-align:middle; margin-right:8px; }
     .leg-txt {
-      font-size:20px; font-weight:800; color:#1A2E6E;
+      font-size:22px; font-weight:800; color:#1A2E6E;
       font-family:'Barlow Condensed', sans-serif; letter-spacing:1px;
       vertical-align:middle;
     }
+
+    /* ══ RELOJ – zona derecha ══ */
     .h-clock-zone {
       display:table-cell;
-      width:22%;
+      width:34%;
       vertical-align:middle;
-      text-align:right;
-      padding:0 20px;
+      padding:0 24px;
       border-left:2px solid #E0E8F4;
     }
-    .clk-meta {
-      font-size:11px; letter-spacing:1px; text-transform:uppercase;
-      color:#5572A0; display:block; white-space:nowrap;
-      font-family:'Barlow Condensed', sans-serif; font-weight:700;
-    }
-    #clk-time {
-      font-size:58px; font-weight:900; letter-spacing:3px;
-      color:#0047CC; line-height:1; display:block;
-      font-family:'Barlow Condensed', sans-serif;
-    }
-    #clk-date {
+    /* Fila superior: semana | actualización */
+    #clk-meta {
       font-size:13px; letter-spacing:1px; text-transform:uppercase;
       color:#5572A0; display:block; white-space:nowrap;
       font-family:'Barlow Condensed', sans-serif; font-weight:700;
+      margin-bottom:2px;
+    }
+    /* Fila central: hora grande */
+    #clk-time {
+      font-size:78px; font-weight:900; letter-spacing:4px;
+      color:#0047CC; line-height:1; display:block;
+      font-family:'Barlow Condensed', sans-serif;
+    }
+    /* Fila inferior: día completo */
+    #clk-date {
+      font-size:18px; letter-spacing:1px; text-transform:uppercase;
+      color:#1A2E6E; display:block; white-space:nowrap;
+      font-family:'Barlow Condensed', sans-serif; font-weight:700;
+      margin-top:2px;
     }
 
     /* ══ CONTENEDOR TABLA ══ */
     #tabla-wrap {
-      width:100%;
-      /* altura = 100vh - 88px header - 6px border - 10px margen */
-      /* Usamos JS para setear esto */
+      width:calc(100% - 20px);
       overflow:hidden;
       background:#fff;
       border:2px solid #D0DCEE;
       margin:6px 10px 8px 10px;
     }
 
-    /* ══ GRID: tabla HTML nativa para max compatibilidad ══ */
     #grid {
       width:100%;
       height:100%;
@@ -122,7 +123,6 @@
       font-family:'Barlow Condensed', sans-serif;
       width:200px;
     }
-    #grid thead td.day-hd { }
     #grid thead td.day-hd.hoy { background:rgba(255,125,16,0.35); }
     .dh-nom {
       font-size:28px; font-weight:900; text-transform:uppercase;
@@ -133,7 +133,6 @@
       font-size:16px; color:rgba(255,255,255,0.85);
       font-family:'Barlow Condensed', sans-serif; font-weight:600; display:block; margin-top:1px;
     }
-    .dh-hoy .dh-fec { color:#FFD080; }
     .hoy-badge {
       display:inline-block; background:#FF7D10; color:#fff;
       font-size:11px; font-weight:900; letter-spacing:1px;
@@ -156,13 +155,6 @@
       white-space:nowrap;
       width:200px;
     }
-    .sala-lbl-inner { display:table; width:100%; }
-    .sala-lbl-inner td { vertical-align:middle; }
-    .sala-colorbar {
-      width:8px; border-radius:5px;
-      display:inline-block; vertical-align:middle;
-      margin-right:10px;
-    }
     .sala-nombre {
       font-size:28px; font-weight:800; color:#0A1F5C;
       font-family:'Barlow Condensed', sans-serif; line-height:1; display:block;
@@ -177,8 +169,7 @@
       background:#fff;
       border-right:1px solid #E8EEF8;
       vertical-align:top;
-      padding:4px 5px;
-      /* CLAVE: overflow con scroll para cuando hay muchas reuniones */
+      padding:5px 6px;
       overflow:hidden;
       position:relative;
     }
@@ -194,51 +185,46 @@
     }
 
     /* ══ BLOQUES DE EVENTOS ══ */
-    /* FIX PRINCIPAL: en vez de height fijo calculado por JS,
-       usamos un contenedor flex-column que se adapta */
     .ev-container {
       width:100%; height:100%;
-      display:block;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
     }
 
     .ev-bloque {
-      display:block;
-      width:100%;
+      flex:1;                    /* <-- CLAVE: cada bloque ocupa el espacio disponible proporcionalmente */
+      min-height:36px;
       border-radius:6px;
-      padding:4px 8px;
+      padding:6px 10px;
       border-left:6px solid transparent;
-      margin-bottom:3px;
       overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
     }
-    /* Altura mínima garantizada, pero se expande si hay espacio */
-    .ev-bloque { min-height:38px; }
 
     .ev-ocup    { background:#FFF3EA; border-color:#FF7D10; }
     .ev-pronto  { background:#EBF0FF; border-color:#0047CC; }
     .ev-proxima { background:#EAF7EE; border-color:#1CB85B; }
 
     .ev-hora {
-      font-size:17px; font-weight:900; display:block; white-space:nowrap;
+      font-size:18px; font-weight:900; display:block; white-space:nowrap;
       font-family:'Barlow Condensed', sans-serif;
-      line-height:1.1;
+      line-height:1.2;
     }
     .ev-ocup .ev-hora    { color:#CC5000; }
     .ev-pronto .ev-hora  { color:#0047CC; }
     .ev-proxima .ev-hora { color:#0A6B30; }
 
     .ev-user {
-      font-size:14px; font-weight:700; display:block;
+      font-size:15px; font-weight:700; display:block;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-      line-height:1.1;
+      line-height:1.2;
     }
     .ev-ocup .ev-user    { color:#7A3000; }
     .ev-pronto .ev-user  { color:#003099; }
     .ev-proxima .ev-user { color:#0A4A20; }
-
-    /* Cuando hay MUCHOS eventos: reducir tamaño de fuente */
-    .ev-container.muchos .ev-hora { font-size:13px; }
-    .ev-container.muchos .ev-user { font-size:11px; }
-    .ev-container.muchos .ev-bloque { padding:2px 6px; min-height:28px; margin-bottom:2px; }
 
     /* Overlay carga */
     #overlay {
@@ -252,7 +238,6 @@
       border:7px solid #C8D8F0; border-top:7px solid #0047CC;
       border-radius:50%;
       display:inline-block;
-      /* animación CSS simple */
     }
     .ov-txt {
       display:block; margin-top:16px;
@@ -260,8 +245,6 @@
       text-transform:uppercase; font-weight:800;
       font-family:'Barlow Condensed', sans-serif;
     }
-
-    /* Spin: usamos JS para rotar porque MagicInfo puede no soportar @keyframes bien */
   </style>
 </head>
 <body>
@@ -291,7 +274,7 @@
     </tr></table>
   </div>
   <div class="h-clock-zone">
-    <span class="clk-meta" id="clk-meta">---</span>
+    <span id="clk-meta">---</span>
     <span id="clk-time">--:--</span>
     <span id="clk-date">---</span>
   </div>
@@ -303,17 +286,14 @@
     <thead>
       <tr>
         <td class="corner">SALA</td>
-        <!-- días se insertan por JS -->
       </tr>
     </thead>
     <tbody id="grid-body">
-      <!-- filas se insertan por JS -->
     </tbody>
   </table>
 </div>
 
 <script>
-// ── CONFIG ──────────────────────────────────────────────────
 var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyn7VSKT-IFULCC2bPx2SlK2W2GlaXQNoKZ44WLQq5Ev94ESTC45vlJgcpmPgaN_IYQ/exec";
 
 var DIAS_FULL = ["Domingo","Lunes","Martes","Mi\u00e9rcoles","Jueves","Viernes","S\u00e1bado"];
@@ -324,7 +304,9 @@ var SALAS  = ["Sala Villarica","Sala 6","Sala 5","Sala 4","Sala 3","Sala 2","Sal
 var SHORT  = {"Sala 1":"Sala 1","Sala 2":"Sala 2","Sala 3":"Sala 3","Sala 4":"Sala 4","Sala 5":"Sala 5","Sala 6":"Sala 6","Sala Villarica":"Villarica"};
 var COLORES= {"Sala 1":"#AB47BC","Sala 2":"#29B6F6","Sala 3":"#FF5722","Sala 4":"#26C6A6","Sala 5":"#C6D000","Sala 6":"#00BCD4","Sala Villarica":"#2196F3"};
 
-// ── HELPERS ─────────────────────────────────────────────────
+// Datos en memoria para poder re-renderizar sin nueva llamada JSONP
+var lastData = null;
+
 function pad(n){ return n<10?"0"+n:""+n; }
 function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 function fmtH(iso){ var d=new Date(iso); return pad(d.getHours())+":"+pad(d.getMinutes()); }
@@ -335,7 +317,7 @@ function getLunes(f){
   d.setHours(0,0,0,0); return d;
 }
 
-// ── SPINNER manual (compatible MagicInfo) ───────────────────
+// Spinner
 var spinAngle=0, spinTimer=null;
 function startSpinner(){
   var el=document.getElementById("spinner");
@@ -351,7 +333,7 @@ function stopSpinner(){
 }
 startSpinner();
 
-// ── RELOJ ────────────────────────────────────────────────────
+// Reloj
 function tickClock(){
   var n=new Date();
   document.getElementById("clk-time").innerHTML=pad(n.getHours())+":"+pad(n.getMinutes());
@@ -359,26 +341,32 @@ function tickClock(){
   var lun=getLunes(n), vie=new Date(lun); vie.setDate(lun.getDate()+4);
   document.getElementById("clk-meta").innerHTML=
     "Semana "+pad(lun.getDate())+"/"+pad(lun.getMonth()+1)+" \u2013 "+pad(vie.getDate())+"/"+pad(vie.getMonth()+1)
-    +"  |  Act. "+pad(n.getHours())+":"+pad(n.getMinutes())+":"+pad(n.getSeconds());
+    +"  \u00b7  Act. "+pad(n.getHours())+":"+pad(n.getMinutes())+":"+pad(n.getSeconds());
+
+  // Re-render silencioso cada minuto para eliminar reuniones que terminaron
+  if(n.getSeconds()===0 && lastData){
+    renderGrid(lastData);
+  }
 }
 setInterval(tickClock,1000); tickClock();
 
-// ── AJUSTAR ALTO DEL WRAP ────────────────────────────────────
+// Ajustar alto
 function ajustarAlto(){
   var hdr=document.getElementById("header");
   var wrap=document.getElementById("tabla-wrap");
   if(!hdr||!wrap) return;
-  var hdrH=hdr.offsetHeight||88;
+  var hdrH=hdr.offsetHeight||100;
   var total=window.innerHeight||document.documentElement.clientHeight||768;
   wrap.style.height=(total - hdrH - 20)+"px";
-  wrap.style.width=(( window.innerWidth||document.documentElement.clientWidth||1366)-20)+"px";
+  wrap.style.width=((window.innerWidth||document.documentElement.clientWidth||1366)-20)+"px";
 }
 ajustarAlto();
-// No usamos resize event porque MagicInfo no lo dispara bien; usamos polling
 setInterval(ajustarAlto, 2000);
 
-// ── RENDER ───────────────────────────────────────────────────
+// RENDER
 function renderGrid(data){
+  lastData = data; // guardar para re-renders por reloj
+
   var salas=data.salas||data;
   if(!salas||!salas.length){ stopSpinner(); return; }
 
@@ -388,9 +376,8 @@ function renderGrid(data){
   var map={};
   for(var i=0;i<salas.length;i++) map[salas[i].nombre]=salas[i];
 
-  // ── Cabeceras días ──
+  // Cabeceras días
   var theadTr=document.querySelector("#grid thead tr");
-  // limpiar días viejos (mantener corner)
   var viejosHd=theadTr.querySelectorAll(".day-hd");
   for(var i=0;i<viejosHd.length;i++) viejosHd[i].parentNode.removeChild(viejosHd[i]);
 
@@ -405,7 +392,7 @@ function renderGrid(data){
     theadTr.appendChild(td);
   }
 
-  // ── Filas salas ──
+  // Filas salas
   var tbody=document.getElementById("grid-body");
   tbody.innerHTML="";
 
@@ -413,27 +400,20 @@ function renderGrid(data){
     var nombre=SALAS[si], s=map[nombre];
     var tr=document.createElement("tr");
 
-    // Calcular altura de fila: espacio disponible / num salas
-    // Lo hacemos via CSS height en el td, que la tabla respeta
-    // Se setea en el siguiente paso vía ajustarAlto
-
     var estadoColor=s?(s.estado==="ocupada"?"#FF7D10":s.estado==="pronto"?"#0047CC":"#1CB85B"):"#888";
     var estadoTxt =s?(s.estado==="ocupada"?"&#9679; Ocupada ahora":s.estado==="pronto"?"&#9679; Pr\u00f3xima reserva":"&#9679; Disponible"):"";
     var colorBar  =COLORES[nombre]||"#0047CC";
-    var barH      =Math.round(100*0.6); // 60% de la celda
 
-    // Celda etiqueta
     var tdLbl=document.createElement("td");
     tdLbl.className="sala-lbl";
     tdLbl.innerHTML='<div style="display:table;width:100%"><div style="display:table-cell;vertical-align:middle;width:12px;padding-right:10px;">'
-      +'<div class="sala-colorbar" style="background:'+colorBar+';height:48px;width:8px;"></div>'
+      +'<div style="background:'+colorBar+';height:48px;width:8px;border-radius:5px;display:inline-block;vertical-align:middle;"></div>'
       +'</div><div style="display:table-cell;vertical-align:middle;">'
       +'<span class="sala-nombre">'+esc(SHORT[nombre]||nombre)+'</span>'
       +'<span class="sala-estado" style="color:'+estadoColor+'">'+estadoTxt+'</span>'
       +'</div></div>';
     tr.appendChild(tdLbl);
 
-    // Celdas días
     for(var d=0;d<5;d++){
       var fecha=new Date(lunes); fecha.setDate(lunes.getDate()+d);
       var fechaTs=soloFecha(fecha), esHoy2=(fechaTs===hoyTs);
@@ -441,23 +421,26 @@ function renderGrid(data){
       var tdCell=document.createElement("td");
       tdCell.className="day-cell"+(esHoy2?" hoy":"");
 
-      // Recopilar eventos del día
       var evsDia=[];
       if(s&&s.eventosSemana){
         for(var ei=0;ei<s.eventosSemana.length;ei++){
           var ev=s.eventosSemana[ei];
           if(soloFecha(new Date(ev.inicio))!==fechaTs) continue;
-          // Para hoy: filtrar los que ya terminaron
+          // ELIMINAR REUNIONES QUE YA TERMINARON en días de hoy
           if(esHoy2&&new Date(ev.fin).getTime()<=ahoraMs) continue;
           evsDia.push(ev);
         }
       }
-      // Para hoy: agregar actual y proximas sin duplicar
       if(esHoy2&&s){
-        if(s.actual&&soloFecha(new Date(s.actual.inicio))===fechaTs) evsDia.push(s.actual);
+        if(s.actual&&soloFecha(new Date(s.actual.inicio))===fechaTs){
+          // solo agregar si no terminó
+          if(new Date(s.actual.fin).getTime()>ahoraMs) evsDia.push(s.actual);
+        }
         if(s.proximas){
           for(var pi=0;pi<s.proximas.length;pi++){
-            if(soloFecha(new Date(s.proximas[pi].inicio))===fechaTs) evsDia.push(s.proximas[pi]);
+            if(soloFecha(new Date(s.proximas[pi].inicio))===fechaTs){
+              if(new Date(s.proximas[pi].fin).getTime()>ahoraMs) evsDia.push(s.proximas[pi]);
+            }
           }
         }
         // deduplicar por inicio
@@ -473,9 +456,7 @@ function renderGrid(data){
       } else {
         evsDia.sort(function(a,b){return new Date(a.inicio)-new Date(b.inicio);});
         var now=Date.now();
-        // FIX: clase "muchos" cuando hay 4+ eventos para reducir tamaño fuente
-        var muchos=evsDia.length>=4;
-        var html='<div class="ev-container'+(muchos?" muchos":"")+ '">';
+        var html='<div class="ev-container">';
         for(var ei=0;ei<evsDia.length;ei++){
           var ev=evsDia[ei];
           var iniMs=new Date(ev.inicio).getTime(), finMs=new Date(ev.fin).getTime();
@@ -495,16 +476,12 @@ function renderGrid(data){
   stopSpinner();
 }
 
-// ── CARGA DATOS JSONP ────────────────────────────────────────
+// Carga JSONP
 var cbCount=0;
 function cargarDatos(){
   cbCount++; var cn="cb"+cbCount;
   window[cn]=function(data){
-    try{
-      renderGrid(data);
-    }catch(err){
-      // silencioso para no romper la TV
-    }
+    try{ renderGrid(data); }catch(err){}
     try{
       var el=document.getElementById("jsonp-script");
       if(el&&el.parentNode) el.parentNode.removeChild(el);
