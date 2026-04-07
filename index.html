@@ -185,7 +185,7 @@
       border-left:4px solid #FF7D10;
     }
  
-    /* BLOQUES DE EVENTOS - ahora ocupan TODO el espacio vertical */
+    /* BLOQUES DE EVENTOS */
     .ev-container {
       display:flex;
       flex-direction:column;
@@ -206,7 +206,6 @@
       justify-content:center;
     }
  
-    /* Cuando hay un solo evento, ocupa toda la altura */
     .ev-container:has(.ev-bloque:only-child) .ev-bloque {
       justify-content:center;
     }
@@ -272,7 +271,7 @@
                  onerror="this.style.display='none';document.getElementById('logo-txt').style.display='inline';"
                  alt="Prodalam"/><span id="logo-txt" style="display:none;font-size:28px;font-weight:900;color:#0047CC;font-family:'Barlow Condensed',sans-serif;letter-spacing:2px;">Prodalam</span></td>
         <td><span class="h-sub">Tiempo real</span></td>
-      </tr></table>
+      </table></table>
     </div>
     <div class="h-legend-zone">
       <table class="h-legend-inner"><tr>
@@ -348,17 +347,16 @@ function tickClock(){
   document.getElementById("clk-meta").innerHTML=
     "Semana "+pad(lun.getDate())+"/"+pad(lun.getMonth()+1)+" – "+pad(vie.getDate())+"/"+pad(vie.getMonth()+1)
     +"  ·  Act. "+pad(n.getHours())+":"+pad(n.getMinutes())+":"+pad(n.getSeconds());
-  if(n.getSeconds()===0 && lastData) renderGrid(lastData);
+  
+  // Refrescar cada minuto para eliminar reuniones que terminaron
+  if(n.getSeconds() === 0 && lastData) {
+    renderGrid(lastData);
+  }
 }
 setInterval(tickClock,1000); tickClock();
 
-/* ========== NUEVA DISTRIBUCIÓN DE FILAS ==========
-   Filas vacías → 32px fijos
-   Filas con eventos → reparten TODO el espacio restante proporcional a cantidad de eventos
-   Las tarjetas usan flex:1 para llenar verticalmente */
-   
-var EMPTY_ROW_HEIGHT = 32;  // Filas sin eventos - muy compactas
-var MIN_EVENT_ROW = 65;     // Altura mínima por fila con eventos
+var EMPTY_ROW_HEIGHT = 32;
+var MIN_EVENT_ROW = 65;
 
 function ajustarFilas() {
   var wrap = document.getElementById("tabla-wrap");
@@ -367,12 +365,11 @@ function ajustarFilas() {
   
   var wrapH = wrap.clientHeight;
   var headH = thead.offsetHeight || 56;
-  var bodyH = wrapH - headH - 2; // pequeño margen
+  var bodyH = wrapH - headH - 2;
   
   var rows = document.querySelectorAll("#grid-body tr");
   if(!rows.length) return;
   
-  // Calcular cuántos eventos tiene cada fila (máximo en sus celdas)
   var eventosPorFila = [];
   for(var i = 0; i < rows.length; i++) {
     var celdas = rows[i].querySelectorAll("td.day-cell");
@@ -384,7 +381,6 @@ function ajustarFilas() {
     eventosPorFila.push(maxEventos);
   }
   
-  // Separar filas vacías y con eventos
   var espacioVacias = 0;
   var indicesConEventos = [];
   for(var i = 0; i < eventosPorFila.length; i++) {
@@ -395,19 +391,16 @@ function ajustarFilas() {
     }
   }
   
-  // Espacio disponible para filas con eventos
   var espacioEventos = bodyH - espacioVacias;
   if(espacioEventos < MIN_EVENT_ROW * indicesConEventos.length) {
     espacioEventos = MIN_EVENT_ROW * indicesConEventos.length;
   }
   
-  // Sumar pesos (cantidad de eventos) solo de filas con eventos
   var pesoTotal = 0;
   for(var i = 0; i < indicesConEventos.length; i++) {
     pesoTotal += eventosPorFila[indicesConEventos[i]];
   }
   
-  // Calcular alturas
   var alturas = [];
   for(var i = 0; i < rows.length; i++) {
     if(eventosPorFila[i] === 0) {
@@ -420,16 +413,12 @@ function ajustarFilas() {
     }
   }
   
-  // Aplicar alturas y escalar fuentes
   for(var i = 0; i < rows.length; i++) {
     rows[i].style.height = alturas[i] + "px";
     rows[i].style.maxHeight = alturas[i] + "px";
     
     if(eventosPorFila[i] > 0) {
-      // Escalar fuentes según altura disponible POR EVENTO
       var alturaPorEvento = alturas[i] / eventosPorFila[i];
-      
-      // Tamaños de fuente más grandes cuando hay espacio
       var horaSize = Math.min(32, Math.max(16, Math.floor(alturaPorEvento * 0.32)));
       var userSize = Math.min(26, Math.max(13, Math.floor(alturaPorEvento * 0.26)));
       var paddingV = Math.min(12, Math.max(5, Math.floor(alturaPorEvento * 0.1)));
@@ -454,109 +443,164 @@ function ajustarFilas() {
 setInterval(ajustarFilas, 200);
 window.addEventListener("resize", function() { setTimeout(ajustarFilas, 50); });
 
-/* RENDER */
+/* FILTRAR REUNIONES - ELIMINA LAS QUE YA TERMINARON */
+function filtrarEventosActivos(eventos, ahoraMs) {
+  if(!eventos || !eventos.length) return [];
+  
+  return eventos.filter(function(ev) {
+    var finMs = new Date(ev.fin).getTime();
+    // Solo mostrar reuniones que NO han terminado (fin > ahora)
+    return finMs > ahoraMs;
+  });
+}
+
 function renderGrid(data){
   lastData = data;
   var salas = data.salas || data;
   if(!salas || !salas.length){ stopSpinner(); return; }
  
-  var ahora=new Date(), ahoraMs=ahora.getTime();
-  var lunes=getLunes(ahora), hoyTs=soloFecha(ahora);
+  var ahora = new Date();
+  var ahoraMs = ahora.getTime();
+  var lunes = getLunes(ahora);
+  var hoyTs = soloFecha(ahora);
  
-  var map={};
-  for(var i=0;i<salas.length;i++) map[salas[i].nombre]=salas[i];
+  var map = {};
+  for(var i = 0; i < salas.length; i++) {
+    map[salas[i].nombre] = salas[i];
+  }
  
-  /* Cabeceras días */
-  var theadTr=document.querySelector("#grid thead tr");
-  var viejosHd=theadTr.querySelectorAll(".day-hd");
-  for(var i=0;i<viejosHd.length;i++) viejosHd[i].parentNode.removeChild(viejosHd[i]);
+  // Cabeceras días
+  var theadTr = document.querySelector("#grid thead tr");
+  var viejosHd = theadTr.querySelectorAll(".day-hd");
+  for(var i = 0; i < viejosHd.length; i++) {
+    if(viejosHd[i]) viejosHd[i].parentNode.removeChild(viejosHd[i]);
+  }
  
-  for(var d=0;d<5;d++){
-    var fecha=new Date(lunes); fecha.setDate(lunes.getDate()+d);
-    var esHoy=(soloFecha(fecha)===hoyTs);
-    var td=document.createElement("td");
-    td.className="day-hd"+(esHoy?" hoy":"");
-    td.innerHTML='<span class="dh-nom">'+DIAS_CORT[d]+'</span>'
-                +'<span class="dh-fec">'+pad(fecha.getDate())+"/"+pad(fecha.getMonth()+1)+'</span>'
-                +(esHoy?'<span class="hoy-badge">HOY</span>':"");
+  for(var d = 0; d < 5; d++){
+    var fecha = new Date(lunes);
+    fecha.setDate(lunes.getDate() + d);
+    var esHoy = (soloFecha(fecha) === hoyTs);
+    var td = document.createElement("td");
+    td.className = "day-hd" + (esHoy ? " hoy" : "");
+    td.innerHTML = '<span class="dh-nom">' + DIAS_CORT[d] + '</span>'
+                + '<span class="dh-fec">' + pad(fecha.getDate()) + "/" + pad(fecha.getMonth()+1) + '</span>'
+                + (esHoy ? '<span class="hoy-badge">HOY</span>' : "");
     theadTr.appendChild(td);
   }
  
-  /* Filas salas */
-  var tbody=document.getElementById("grid-body");
-  tbody.innerHTML="";
+  // Filas salas
+  var tbody = document.getElementById("grid-body");
+  tbody.innerHTML = "";
  
-  for(var si=0;si<SALAS.length;si++){
-    var nombre=SALAS[si], s=map[nombre];
-    var tr=document.createElement("tr");
+  for(var si = 0; si < SALAS.length; si++){
+    var nombre = SALAS[si];
+    var s = map[nombre];
+    var tr = document.createElement("tr");
  
-    var estadoColor=s?(s.estado==="ocupada"?"#FF7D10":s.estado==="pronto"?"#0047CC":"#1CB85B"):"#888";
-    var estadoTxt =s?(s.estado==="ocupada"?"● Ocupada ahora":s.estado==="pronto"?"● Próxima reserva":"● Disponible"):"";
-    var colorBar  =COLORES[nombre]||"#0047CC";
+    var estadoColor = s ? (s.estado === "ocupada" ? "#FF7D10" : s.estado === "pronto" ? "#0047CC" : "#1CB85B") : "#888";
+    var estadoTxt = s ? (s.estado === "ocupada" ? "● Ocupada ahora" : s.estado === "pronto" ? "● Próxima reserva" : "● Disponible") : "";
+    var colorBar = COLORES[nombre] || "#0047CC";
  
-    var tdLbl=document.createElement("td");
-    tdLbl.className="sala-lbl";
-    tdLbl.innerHTML='<div style="display:table;width:100%">'
-      +'<div style="display:table-cell;vertical-align:middle;width:12px;padding-right:8px;">'
-      +'<div style="background:'+colorBar+';height:44px;width:7px;border-radius:5px;display:inline-block;vertical-align:middle;"></div>'
-      +'</div><div style="display:table-cell;vertical-align:middle;">'
-      +'<span class="sala-nombre">'+esc(SHORT[nombre]||nombre)+'</span>'
-      +'<span class="sala-estado" style="color:'+estadoColor+'">'+estadoTxt+'</span>'
-      +'</div></div>';
+    var tdLbl = document.createElement("td");
+    tdLbl.className = "sala-lbl";
+    tdLbl.innerHTML = '<div style="display:table;width:100%">'
+      + '<div style="display:table-cell;vertical-align:middle;width:12px;padding-right:8px;">'
+      + '<div style="background:' + colorBar + ';height:44px;width:7px;border-radius:5px;display:inline-block;vertical-align:middle;"></div>'
+      + '</div><div style="display:table-cell;vertical-align:middle;">'
+      + '<span class="sala-nombre">' + esc(SHORT[nombre] || nombre) + '</span>'
+      + '<span class="sala-estado" style="color:' + estadoColor + '">' + estadoTxt + '</span>'
+      + '</div></div>';
     tr.appendChild(tdLbl);
  
-    for(var d=0;d<5;d++){
-      var fecha=new Date(lunes); fecha.setDate(lunes.getDate()+d);
-      var fechaTs=soloFecha(fecha), esHoy2=(fechaTs===hoyTs);
+    for(var d = 0; d < 5; d++){
+      var fecha = new Date(lunes);
+      fecha.setDate(lunes.getDate() + d);
+      var fechaTs = soloFecha(fecha);
+      var esHoy2 = (fechaTs === hoyTs);
  
-      var tdCell=document.createElement("td");
-      tdCell.className="day-cell"+(esHoy2?" hoy":"");
-      tdCell.style.position="relative";
+      var tdCell = document.createElement("td");
+      tdCell.className = "day-cell" + (esHoy2 ? " hoy" : "");
+      tdCell.style.position = "relative";
  
-      var evsDia=[];
-      if(s&&s.eventosSemana){
-        for(var ei=0;ei<s.eventosSemana.length;ei++){
-          var ev=s.eventosSemana[ei];
-          if(soloFecha(new Date(ev.inicio))!==fechaTs) continue;
-          if(esHoy2&&new Date(ev.fin).getTime()<=ahoraMs) continue;
+      var evsDia = [];
+      
+      // Reuniones de la semana (eventosSemana)
+      if(s && s.eventosSemana) {
+        for(var ei = 0; ei < s.eventosSemana.length; ei++) {
+          var ev = s.eventosSemana[ei];
+          var evInicio = new Date(ev.inicio);
+          var evFin = new Date(ev.fin);
+          
+          // Solo si es el día correcto
+          if(soloFecha(evInicio) !== fechaTs) continue;
+          
+          // Para días pasados (no hoy), mostrar todo
+          // Para hoy, filtrar las que ya terminaron
+          if(esHoy2 && evFin.getTime() <= ahoraMs) continue;
+          
+          // Para días futuros, mostrar todo
           evsDia.push(ev);
         }
       }
-      if(esHoy2&&s){
-        if(s.actual&&soloFecha(new Date(s.actual.inicio))===fechaTs){
-          if(new Date(s.actual.fin).getTime()>ahoraMs) evsDia.push(s.actual);
+      
+      // Reunión actual (si existe y no ha terminado)
+      if(esHoy2 && s && s.actual) {
+        var actualFin = new Date(s.actual.fin);
+        if(soloFecha(new Date(s.actual.inicio)) === fechaTs && actualFin.getTime() > ahoraMs) {
+          evsDia.push(s.actual);
         }
-        if(s.proximas){
-          for(var pi=0;pi<s.proximas.length;pi++){
-            if(soloFecha(new Date(s.proximas[pi].inicio))===fechaTs){
-              if(new Date(s.proximas[pi].fin).getTime()>ahoraMs) evsDia.push(s.proximas[pi]);
-            }
+      }
+      
+      // Próximas reuniones
+      if(esHoy2 && s && s.proximas) {
+        for(var pi = 0; pi < s.proximas.length; pi++) {
+          var prox = s.proximas[pi];
+          var proxFin = new Date(prox.fin);
+          if(soloFecha(new Date(prox.inicio)) === fechaTs && proxFin.getTime() > ahoraMs) {
+            evsDia.push(prox);
           }
         }
-        var seen={},uniq=[];
-        for(var ei=0;ei<evsDia.length;ei++){
-          if(!seen[evsDia[ei].inicio]){seen[evsDia[ei].inicio]=1;uniq.push(evsDia[ei]);}
-        }
-        evsDia=uniq;
       }
- 
-      if(evsDia.length===0){
-        tdCell.innerHTML='';
-      } else {
-        evsDia.sort(function(a,b){return new Date(a.inicio)-new Date(b.inicio);});
-        var now=Date.now();
-        var html='<div class="ev-container">';
-        for(var ei=0;ei<evsDia.length;ei++){
-          var ev=evsDia[ei];
-          var iniMs=new Date(ev.inicio).getTime(), finMs=new Date(ev.fin).getTime();
-          var cls=iniMs<=now&&finMs>now?"ev-ocup":iniMs>now&&iniMs<=now+1800000?"ev-pronto":"ev-proxima";
-          html+='<div class="ev-bloque '+cls+'">'
-               +'<span class="ev-hora">'+fmtH(ev.inicio)+" – "+fmtH(ev.fin)+'</span>'
-               +(ev.creador?'<span class="ev-user">'+esc(ev.creador)+'</span>':"")
-               +'</div>';
+      
+      // Eliminar duplicados por inicio
+      var seen = {};
+      var uniq = [];
+      for(var ei = 0; ei < evsDia.length; ei++) {
+        if(!seen[evsDia[ei].inicio]) {
+          seen[evsDia[ei].inicio] = 1;
+          uniq.push(evsDia[ei]);
         }
-        html+='</div>';
-        tdCell.innerHTML=html;
+      }
+      evsDia = uniq;
+      
+      // Ordenar por hora de inicio
+      evsDia.sort(function(a, b) {
+        return new Date(a.inicio) - new Date(b.inicio);
+      });
+ 
+      if(evsDia.length === 0) {
+        tdCell.innerHTML = '';
+      } else {
+        var html = '<div class="ev-container">';
+        for(var ei = 0; ei < evsDia.length; ei++) {
+          var ev = evsDia[ei];
+          var iniMs = new Date(ev.inicio).getTime();
+          var finMs = new Date(ev.fin).getTime();
+          
+          var cls = "ev-proxima";
+          if(iniMs <= ahoraMs && finMs > ahoraMs) {
+            cls = "ev-ocup";
+          } else if(iniMs > ahoraMs && iniMs <= ahoraMs + 1800000) {
+            cls = "ev-pronto";
+          }
+          
+          html += '<div class="ev-bloque ' + cls + '">'
+               + '<span class="ev-hora">' + fmtH(ev.inicio) + " – " + fmtH(ev.fin) + '</span>'
+               + (ev.creador ? '<span class="ev-user">' + esc(ev.creador) + '</span>' : '')
+               + '</div>';
+        }
+        html += '</div>';
+        tdCell.innerHTML = html;
       }
       tr.appendChild(tdCell);
     }
@@ -567,21 +611,26 @@ function renderGrid(data){
   setTimeout(ajustarFilas, 50);
 }
  
-/* JSONP */
-var cbCount=0;
+// JSONP
+var cbCount = 0;
 function cargarDatos(){
-  cbCount++; var cn="cb"+cbCount;
-  window[cn]=function(data){
-    try{ renderGrid(data); }catch(err){}
+  cbCount++; 
+  var cn = "cb" + cbCount;
+  window[cn] = function(data){
+    try{ 
+      renderGrid(data); 
+    } catch(err) {
+      console.log(err);
+    }
     try{
-      var el=document.getElementById("jsonp-script");
-      if(el&&el.parentNode) el.parentNode.removeChild(el);
+      var el = document.getElementById("jsonp-script");
+      if(el && el.parentNode) el.parentNode.removeChild(el);
       delete window[cn];
-    }catch(e){}
+    } catch(e){}
   };
-  var sc=document.createElement("script");
-  sc.id="jsonp-script";
-  sc.src=SCRIPT_URL+"?callback="+cn+"&t="+Date.now();
+  var sc = document.createElement("script");
+  sc.id = "jsonp-script";
+  sc.src = SCRIPT_URL + "?callback=" + cn + "&t=" + Date.now();
   document.getElementsByTagName("head")[0].appendChild(sc);
 }
  
