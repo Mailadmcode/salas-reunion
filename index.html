@@ -180,8 +180,12 @@
       background:#F0F6FF;
       border-left:4px solid #FF7D10;
     }
+    td.day-cell.pasado {
+      background:#F9FAFB;
+      opacity:0.6;
+    }
 
-    /* ══ CELDA SIN RESERVAS — ahora se ve como bloque compacto ══ */
+    /* ══ CELDA SIN RESERVAS ══ */
     .libre-bloque {
       display:block;
       width:100%;
@@ -439,9 +443,17 @@ function renderGrid(data){
     for(var d=0;d<5;d++){
       var fecha=new Date(lunes); fecha.setDate(lunes.getDate()+d);
       var fechaTs=soloFecha(fecha), esHoy2=(fechaTs===hoyTs);
+      var esPasado=(fechaTs < hoyTs);  // ← día anterior a hoy
 
       var tdCell=document.createElement("td");
-      tdCell.className="day-cell"+(esHoy2?" hoy":"");
+      tdCell.className="day-cell"+(esHoy2?" hoy":"")+(esPasado?" pasado":"");
+
+      // ── CAMBIO: si el día ya pasó, mostrar siempre "Sin reservas" ──
+      if(esPasado){
+        tdCell.innerHTML='<div class="libre-bloque"><span class="libre-txt">Sin reservas</span></div>';
+        tr.appendChild(tdCell);
+        continue;
+      }
 
       var evsDia=[];
       if(s&&s.eventosSemana){
@@ -467,7 +479,6 @@ function renderGrid(data){
       }
 
       if(evsDia.length===0){
-        /* CAMBIO: bloque visual compacto en vez de solo texto gris */
         tdCell.innerHTML='<div class="libre-bloque"><span class="libre-txt">Sin reservas</span></div>';
       } else {
         evsDia.sort(function(a,b){return new Date(a.inicio)-new Date(b.inicio);});
