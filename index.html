@@ -15,6 +15,12 @@
       font-family:'Barlow', Arial, sans-serif;
     }
 
+    #main-wrap {
+      width:100%; height:100%;
+      display:table;
+      table-layout:fixed;
+    }
+
     /* ══ HEADER ══ */
     #header {
       width:100%; height:88px;
@@ -24,8 +30,10 @@
       table-layout:fixed;
     }
     .h-logo-zone {
-      display:table-cell; width:22%;
-      vertical-align:middle; padding:0 20px;
+      display:table-cell;
+      width:22%;
+      vertical-align:middle;
+      padding:0 20px;
       border-right:2px solid #E0E8F4;
     }
     .h-logo-inner { display:table; }
@@ -38,20 +46,26 @@
       border-left:3px solid #FF7D10; padding-left:10px;
     }
     .h-legend-zone {
-      display:table-cell; width:56%;
-      vertical-align:middle; text-align:center;
+      display:table-cell;
+      width:56%;
+      vertical-align:middle;
+      text-align:center;
     }
     .h-legend-inner { display:inline-table; }
     .h-legend-inner td { vertical-align:middle; padding:0 18px; white-space:nowrap; }
     .leg-dot { width:20px; height:20px; border-radius:50%; display:inline-block; vertical-align:middle; margin-right:8px; }
     .leg-txt {
       font-size:20px; font-weight:800; color:#1A2E6E;
-      font-family:'Barlow Condensed', sans-serif; letter-spacing:1px; vertical-align:middle;
+      font-family:'Barlow Condensed', sans-serif; letter-spacing:1px;
+      vertical-align:middle;
     }
     .h-clock-zone {
-      display:table-cell; width:22%;
-      vertical-align:middle; text-align:right;
-      padding:0 20px; border-left:2px solid #E0E8F4;
+      display:table-cell;
+      width:22%;
+      vertical-align:middle;
+      text-align:right;
+      padding:0 20px;
+      border-left:2px solid #E0E8F4;
     }
     .clk-meta {
       font-size:11px; letter-spacing:1px; text-transform:uppercase;
@@ -69,31 +83,41 @@
       font-family:'Barlow Condensed', sans-serif; font-weight:700;
     }
 
-    /* ══ TABLA ══ */
+    /* ══ CONTENEDOR TABLA ══ */
     #tabla-wrap {
-      overflow:hidden; background:#fff;
+      width:100%;
+      overflow:hidden;
+      background:#fff;
       border:2px solid #D0DCEE;
       margin:6px 10px 8px 10px;
     }
+
     #grid {
-      width:100%; height:100%;
-      border-collapse:collapse; table-layout:fixed;
+      width:100%;
+      height:auto;
+      border-collapse:collapse;
+      table-layout:fixed;
     }
 
-    /* Cabecera días */
+    /* Cabecera de días */
     #grid thead tr { height:72px; }
     #grid thead td {
       background:#0047CC;
       border-right:1px solid rgba(255,255,255,0.15);
       border-bottom:5px solid #FF7D10;
-      text-align:center; vertical-align:middle; padding:4px 0;
+      text-align:center;
+      vertical-align:middle;
+      padding:4px 0;
     }
     #grid thead td.corner {
-      background:#003399; border-right:2px solid rgba(255,255,255,0.2);
+      background:#003399;
+      border-right:2px solid rgba(255,255,255,0.2);
       font-size:20px; font-weight:900; letter-spacing:3px;
       text-transform:uppercase; color:#fff;
-      font-family:'Barlow Condensed', sans-serif; width:200px;
+      font-family:'Barlow Condensed', sans-serif;
+      width:200px;
     }
+    #grid thead td.day-hd { }
     #grid thead td.day-hd.hoy { background:rgba(255,125,16,0.35); }
     .dh-nom {
       font-size:28px; font-weight:900; text-transform:uppercase;
@@ -104,6 +128,7 @@
       font-size:16px; color:rgba(255,255,255,0.85);
       font-family:'Barlow Condensed', sans-serif; font-weight:600; display:block; margin-top:1px;
     }
+    .dh-hoy .dh-fec { color:#FFD080; }
     .hoy-badge {
       display:inline-block; background:#FF7D10; color:#fff;
       font-size:11px; font-weight:900; letter-spacing:1px;
@@ -111,71 +136,108 @@
       font-family:'Barlow Condensed', sans-serif;
     }
 
-    /* Filas tbody */
-    #grid tbody tr { border-bottom:2px solid #E0E8F4; }
+    /* Filas de salas */
+    #grid tbody tr {
+      border-bottom:2px solid #E0E8F4;
+    }
     #grid tbody tr:last-child { border-bottom:none; }
 
-    /* Etiqueta sala */
+    /* Celda etiqueta sala */
     td.sala-lbl {
-      background:#F4F7FF; border-right:3px solid #D8E4F4;
-      vertical-align:middle; padding:0 12px;
-      white-space:nowrap; width:200px;
+      background:#F4F7FF;
+      border-right:3px solid #D8E4F4;
+      vertical-align:middle;
+      padding:0 12px;
+      white-space:nowrap;
+      width:200px;
     }
+    .sala-lbl-inner { display:table; width:100%; }
+    .sala-lbl-inner td { vertical-align:middle; }
     .sala-colorbar {
       width:8px; border-radius:5px;
-      display:inline-block; vertical-align:middle; margin-right:10px;
+      display:inline-block; vertical-align:middle;
+      margin-right:10px;
     }
     .sala-nombre {
       font-size:28px; font-weight:800; color:#0A1F5C;
       font-family:'Barlow Condensed', sans-serif; line-height:1; display:block;
     }
     .sala-estado {
-      font-size:14px; font-weight:700; line-height:1; display:block; margin-top:3px;
+      font-size:14px; font-weight:700; line-height:1;
+      display:block; margin-top:3px;
     }
 
-    /* Celdas días */
+    /* Celdas de días — altura dictada por el contenido */
     td.day-cell {
-      background:#fff; border-right:1px solid #E8EEF8;
-      vertical-align:top; padding:6px 6px;
-      overflow:hidden; position:relative;
+      background:#fff;
+      border-right:1px solid #E8EEF8;
+      vertical-align:top;
+      padding:4px 5px;
+      overflow:visible;
+      position:relative;
     }
-    td.day-cell.hoy { background:#F0F6FF; border-left:4px solid #FF7D10; }
-    td.day-cell.pasado { background:#F9FAFB; opacity:0.6; }
+    td.day-cell.hoy {
+      background:#F0F6FF;
+      border-left:4px solid #FF7D10;
+    }
+    td.day-cell.pasado {
+      background:#F9FAFB;
+      opacity:0.6;
+    }
 
-    /* Libre */
+    /* ══ CELDA SIN RESERVAS ══ */
     .libre-bloque {
-      display:flex; align-items:center; justify-content:center;
-      width:100%; height:100%;
-      border-radius:6px; border-left:6px solid #C8D4E8; background:#F4F7FF;
+      display:block;
+      width:100%;
+      border-radius:6px;
+      padding:3px 8px;
+      border-left:6px solid #C8D4E8;
+      background:#F4F7FF;
+      min-height:28px;
+      margin-top:2px;
     }
     .libre-txt {
-      font-size:14px; color:#A0B0CC; font-style:italic;
-      font-family:'Barlow Condensed', sans-serif; font-weight:600; letter-spacing:0.5px;
+      font-size:13px; color:#A0B0CC; font-style:italic;
+      font-family:'Barlow Condensed', sans-serif;
+      font-weight:600; letter-spacing:0.5px;
+      line-height:28px;
     }
 
-    /* Eventos: flex vertical que ocupa toda la celda */
+    /* ══ BLOQUES DE EVENTOS ══ */
     .ev-container {
-      width:100%; height:100%;
-      display:flex; flex-direction:column;
-      justify-content:space-evenly; gap:4px;
+      width:100%;
+      height:auto;
+      display:block;
     }
+
     .ev-bloque {
-      flex:1; min-height:0;
-      display:flex; align-items:center;
-      border-radius:6px; padding:0 12px;
-      border-left:6px solid transparent; overflow:hidden;
+      display:block;
+      width:100%;
+      border-radius:6px;
+      padding:8px 12px;
+      border-left:6px solid transparent;
+      margin-bottom:4px;
+      overflow:hidden;
+      min-height:44px;
     }
+
     .ev-ocup    { background:#FFF3EA; border-color:#FF7D10; }
     .ev-pronto  { background:#EBF0FF; border-color:#0047CC; }
     .ev-proxima { background:#EAF7EE; border-color:#1CB85B; }
 
+    /* Hora y usuario en la misma línea */
     .ev-inline {
-      display:flex; align-items:baseline;
-      gap:8px; white-space:nowrap; overflow:hidden;
+      display:flex;
+      align-items:baseline;
+      gap:8px;
+      white-space:nowrap;
+      overflow:hidden;
     }
+
     .ev-hora {
       font-size:22px; font-weight:900; flex-shrink:0;
-      font-family:'Barlow Condensed', sans-serif; line-height:1.2;
+      font-family:'Barlow Condensed', sans-serif;
+      line-height:1.2;
     }
     .ev-ocup .ev-hora    { color:#CC5000; }
     .ev-pronto .ev-hora  { color:#0047CC; }
@@ -183,7 +245,8 @@
 
     .ev-sep {
       font-size:18px; font-weight:700; flex-shrink:0;
-      font-family:'Barlow Condensed', sans-serif; opacity:0.4;
+      font-family:'Barlow Condensed', sans-serif;
+      opacity:0.4;
     }
     .ev-ocup .ev-sep    { color:#CC5000; }
     .ev-pronto .ev-sep  { color:#0047CC; }
@@ -192,22 +255,31 @@
     .ev-user {
       font-size:18px; font-weight:700;
       overflow:hidden; text-overflow:ellipsis;
-      font-family:'Barlow Condensed', sans-serif; line-height:1.2;
+      font-family:'Barlow Condensed', sans-serif;
+      line-height:1.2;
     }
     .ev-ocup .ev-user    { color:#7A3000; }
     .ev-pronto .ev-user  { color:#003099; }
     .ev-proxima .ev-user { color:#0A4A20; }
 
-    /* Overlay */
+    /* Cuando hay MUCHOS eventos */
+    .ev-container.muchos .ev-hora { font-size:17px; }
+    .ev-container.muchos .ev-sep  { font-size:15px; }
+    .ev-container.muchos .ev-user { font-size:15px; }
+    .ev-container.muchos .ev-bloque { padding:5px 10px; min-height:34px; margin-bottom:3px; }
+
+    /* Overlay carga */
     #overlay {
       position:fixed; top:0; left:0; width:100%; height:100%;
-      background:#EEF2FB; z-index:999; text-align:center;
+      background:#EEF2FB; z-index:999;
+      text-align:center;
     }
     .ov-inner { display:inline-block; margin-top:40%; }
     .spinner {
       width:56px; height:56px;
       border:7px solid #C8D8F0; border-top:7px solid #0047CC;
-      border-radius:50%; display:inline-block;
+      border-radius:50%;
+      display:inline-block;
     }
     .ov-txt {
       display:block; margin-top:16px;
@@ -226,13 +298,13 @@
   </div>
 </div>
 
+<!-- HEADER -->
 <div id="header">
   <div class="h-logo-zone">
     <table class="h-logo-inner"><tr>
       <td><img id="logo-img" src="https://i.imgur.com/fXLdGez.png"
                onerror="this.style.display='none';document.getElementById('logo-txt').style.display='inline';"
-               alt="Prodalam"/>
-          <span id="logo-txt" style="display:none;font-size:30px;font-weight:900;color:#0047CC;font-family:'Barlow Condensed',sans-serif;letter-spacing:2px;">Prodalam</span></td>
+               alt="Prodalam"/><span id="logo-txt" style="display:none;font-size:30px;font-weight:900;color:#0047CC;font-family:'Barlow Condensed',sans-serif;letter-spacing:2px;">Prodalam</span></td>
       <td><span class="h-sub">Tiempo real</span></td>
     </tr></table>
   </div>
@@ -250,10 +322,16 @@
   </div>
 </div>
 
+<!-- TABLA PRINCIPAL -->
 <div id="tabla-wrap">
   <table id="grid">
-    <thead><tr><td class="corner">SALA</td></tr></thead>
-    <tbody id="grid-body"></tbody>
+    <thead>
+      <tr>
+        <td class="corner">SALA</td>
+      </tr>
+    </thead>
+    <tbody id="grid-body">
+    </tbody>
   </table>
 </div>
 
@@ -278,7 +356,6 @@ function getLunes(f){
   d.setHours(0,0,0,0); return d;
 }
 
-/* ── Spinner ── */
 var spinAngle=0, spinTimer=null;
 function startSpinner(){
   var el=document.getElementById("spinner");
@@ -290,11 +367,10 @@ function startSpinner(){
 function stopSpinner(){
   if(spinTimer){ clearInterval(spinTimer); spinTimer=null; }
   var ov=document.getElementById("overlay");
-  if(ov) ov.style.display="none";
+  if(ov){ ov.style.display="none"; }
 }
 startSpinner();
 
-/* ── Reloj ── */
 function tickClock(){
   var n=new Date();
   document.getElementById("clk-time").innerHTML=pad(n.getHours())+":"+pad(n.getMinutes());
@@ -306,206 +382,137 @@ function tickClock(){
 }
 setInterval(tickClock,1000); tickClock();
 
-/* ══════════════════════════════════════════════════════════
-   DISTRIBUCIÓN DE ALTURAS
-   Reparte el espacio disponible entre las filas del tbody
-   en proporción al número de eventos de cada sala.
-   Luego escala la tipografía para que aproveche la altura.
-══════════════════════════════════════════════════════════ */
-function distribuirAlturas(wrapH){
-  var tbody = document.getElementById("grid-body");
-  if(!tbody) return;
-  var filas = tbody.querySelectorAll("tr");
-  if(!filas.length) return;
-
-  var THEAD_H    = 72;   /* altura fija del encabezado */
-  var disponible = wrapH - THEAD_H - 4;
-  if(disponible < 60) return;
-
-  /* Peso de cada fila = máx eventos visible en cualquier columna */
-  var pesos = [];
-  for(var i=0; i<filas.length; i++){
-    var bloques = filas[i].querySelectorAll(".ev-bloque").length;
-    /* Mínimo 1 para salas sin eventos; máx 6 para no exagerar */
-    pesos.push(Math.min(Math.max(bloques, 1), 6));
-  }
-
-  var sumPesos = 0;
-  for(var i=0; i<pesos.length; i++) sumPesos += pesos[i];
-
-  for(var i=0; i<filas.length; i++){
-    var h = Math.floor((pesos[i] / sumPesos) * disponible);
-    filas[i].style.height = h + "px";
-
-    /* Factor de escala tipográfica: 80px es el tamaño "base" de referencia */
-    var factor = Math.min(Math.max(h / 80, 0.65), 2.4);
-
-    var sel = function(cls){ return filas[i].querySelectorAll(cls); };
-
-    setFontSize(sel(".ev-hora"),     22, factor);
-    setFontSize(sel(".ev-user"),     18, factor);
-    setFontSize(sel(".ev-sep"),      18, factor);
-    setFontSize(sel(".sala-nombre"), 28, factor);
-    setFontSize(sel(".sala-estado"), 14, factor);
-    setFontSize(sel(".libre-txt"),   14, factor);
-  }
-}
-
-function setFontSize(els, base, factor){
-  var size = Math.round(base * factor) + "px";
-  for(var i=0; i<els.length; i++) els[i].style.fontSize = size;
-}
-
 function ajustarAlto(){
-  var hdr  = document.getElementById("header");
-  var wrap = document.getElementById("tabla-wrap");
-  if(!hdr || !wrap) return;
-
-  var hdrH  = hdr.offsetHeight || 88;
-  var total = window.innerHeight || document.documentElement.clientHeight || 768;
-  var wrapH = total - hdrH - 20;
-  var wrapW = (window.innerWidth || document.documentElement.clientWidth || 1366) - 20;
-
-  wrap.style.height = wrapH + "px";
-  wrap.style.width  = wrapW + "px";
-
-  distribuirAlturas(wrapH);
+  var hdr=document.getElementById("header");
+  var wrap=document.getElementById("tabla-wrap");
+  if(!hdr||!wrap) return;
+  var hdrH=hdr.offsetHeight||88;
+  var total=window.innerHeight||document.documentElement.clientHeight||768;
+  wrap.style.height=(total - hdrH - 20)+"px";
+  wrap.style.width=(( window.innerWidth||document.documentElement.clientWidth||1366)-20)+"px";
 }
-
 ajustarAlto();
 setInterval(ajustarAlto, 2000);
-window.addEventListener("resize", ajustarAlto);
 
-/* ══════════════════════════════════════════════════════════
-   RENDER GRID
-══════════════════════════════════════════════════════════ */
 function renderGrid(data){
-  var salas = data.salas || data;
-  if(!salas || !salas.length){ stopSpinner(); return; }
+  var salas=data.salas||data;
+  if(!salas||!salas.length){ stopSpinner(); return; }
 
-  var ahora  = new Date(), ahoraMs = ahora.getTime();
-  var lunes  = getLunes(ahora), hoyTs = soloFecha(ahora);
-  var map    = {};
-  for(var i=0; i<salas.length; i++) map[salas[i].nombre] = salas[i];
+  var ahora=new Date(), ahoraMs=ahora.getTime();
+  var lunes=getLunes(ahora), hoyTs=soloFecha(ahora);
 
-  /* Cabecera días */
-  var theadTr  = document.querySelector("#grid thead tr");
-  var viejosHd = theadTr.querySelectorAll(".day-hd");
-  for(var i=0; i<viejosHd.length; i++) viejosHd[i].parentNode.removeChild(viejosHd[i]);
+  var map={};
+  for(var i=0;i<salas.length;i++) map[salas[i].nombre]=salas[i];
 
-  for(var d=0; d<5; d++){
-    var fecha = new Date(lunes); fecha.setDate(lunes.getDate()+d);
-    var esHoy = (soloFecha(fecha) === hoyTs);
-    var td = document.createElement("td");
-    td.className = "day-hd" + (esHoy ? " hoy" : "");
-    td.innerHTML = '<span class="dh-nom">'+DIAS_CORT[d]+'</span>'
-                 + '<span class="dh-fec">'+pad(fecha.getDate())+"/"+pad(fecha.getMonth()+1)+'</span>'
-                 + (esHoy ? '<span class="hoy-badge">HOY</span>' : "");
+  var theadTr=document.querySelector("#grid thead tr");
+  var viejosHd=theadTr.querySelectorAll(".day-hd");
+  for(var i=0;i<viejosHd.length;i++) viejosHd[i].parentNode.removeChild(viejosHd[i]);
+
+  for(var d=0;d<5;d++){
+    var fecha=new Date(lunes); fecha.setDate(lunes.getDate()+d);
+    var esHoy=(soloFecha(fecha)===hoyTs);
+    var td=document.createElement("td");
+    td.className="day-hd"+(esHoy?" hoy":"");
+    td.innerHTML='<span class="dh-nom">'+DIAS_CORT[d]+'</span>'
+                +'<span class="dh-fec">'+pad(fecha.getDate())+"/"+pad(fecha.getMonth()+1)+'</span>'
+                +(esHoy?'<span class="hoy-badge">HOY</span>':"");
     theadTr.appendChild(td);
   }
 
-  var tbody = document.getElementById("grid-body");
-  tbody.innerHTML = "";
+  var tbody=document.getElementById("grid-body");
+  tbody.innerHTML="";
 
-  for(var si=0; si<SALAS.length; si++){
-    var nombre = SALAS[si], s = map[nombre];
-    var tr = document.createElement("tr");
+  for(var si=0;si<SALAS.length;si++){
+    var nombre=SALAS[si], s=map[nombre];
+    var tr=document.createElement("tr");
 
-    var estadoColor = s ? (s.estado==="ocupada"?"#FF7D10":s.estado==="pronto"?"#0047CC":"#1CB85B") : "#888";
-    var estadoTxt   = s ? (s.estado==="ocupada"?"&#9679; Ocupada ahora":s.estado==="pronto"?"&#9679; Pr\u00f3xima reserva":"&#9679; Disponible") : "";
-    var colorBar    = COLORES[nombre] || "#0047CC";
+    var estadoColor=s?(s.estado==="ocupada"?"#FF7D10":s.estado==="pronto"?"#0047CC":"#1CB85B"):"#888";
+    var estadoTxt =s?(s.estado==="ocupada"?"&#9679; Ocupada ahora":s.estado==="pronto"?"&#9679; Pr\u00f3xima reserva":"&#9679; Disponible"):"";
+    var colorBar  =COLORES[nombre]||"#0047CC";
 
-    /* Etiqueta sala */
-    var tdLbl = document.createElement("td");
-    tdLbl.className = "sala-lbl";
-    tdLbl.innerHTML = '<div style="display:table;width:100%;height:100%">'
-      + '<div style="display:table-cell;vertical-align:middle;width:12px;padding-right:10px;">'
-      + '<div class="sala-colorbar" style="background:'+colorBar+';height:48px;width:8px;"></div>'
-      + '</div><div style="display:table-cell;vertical-align:middle;">'
-      + '<span class="sala-nombre">'+esc(SHORT[nombre]||nombre)+'</span>'
-      + '<span class="sala-estado" style="color:'+estadoColor+'">'+estadoTxt+'</span>'
-      + '</div></div>';
+    var tdLbl=document.createElement("td");
+    tdLbl.className="sala-lbl";
+    tdLbl.innerHTML='<div style="display:table;width:100%"><div style="display:table-cell;vertical-align:middle;width:12px;padding-right:10px;">'
+      +'<div class="sala-colorbar" style="background:'+colorBar+';height:48px;width:8px;"></div>'
+      +'</div><div style="display:table-cell;vertical-align:middle;">'
+      +'<span class="sala-nombre">'+esc(SHORT[nombre]||nombre)+'</span>'
+      +'<span class="sala-estado" style="color:'+estadoColor+'">'+estadoTxt+'</span>'
+      +'</div></div>';
     tr.appendChild(tdLbl);
 
-    for(var d=0; d<5; d++){
-      var fecha    = new Date(lunes); fecha.setDate(lunes.getDate()+d);
-      var fechaTs  = soloFecha(fecha), esHoy2 = (fechaTs === hoyTs);
-      var esPasado = (fechaTs < hoyTs);
+    for(var d=0;d<5;d++){
+      var fecha=new Date(lunes); fecha.setDate(lunes.getDate()+d);
+      var fechaTs=soloFecha(fecha), esHoy2=(fechaTs===hoyTs);
+      var esPasado=(fechaTs < hoyTs);  // ← día anterior a hoy
 
-      var tdCell = document.createElement("td");
-      tdCell.className = "day-cell" + (esHoy2?" hoy":"") + (esPasado?" pasado":"");
+      var tdCell=document.createElement("td");
+      tdCell.className="day-cell"+(esHoy2?" hoy":"")+(esPasado?" pasado":"");
 
-      /* Días pasados: vacío */
+      // ── CAMBIO: si el día ya pasó, mostrar siempre "Sin reservas" ──
       if(esPasado){
-        tdCell.innerHTML = '<div class="libre-bloque"><span class="libre-txt">Sin reservas</span></div>';
+        tdCell.innerHTML='<div class="libre-bloque"><span class="libre-txt">Sin reservas</span></div>';
         tr.appendChild(tdCell);
         continue;
       }
 
-      /* Recopilar eventos del día */
-      var evsDia = [];
-      if(s && s.eventosSemana){
-        for(var ei=0; ei<s.eventosSemana.length; ei++){
-          var ev = s.eventosSemana[ei];
-          if(soloFecha(new Date(ev.inicio)) !== fechaTs) continue;
-          if(esHoy2 && new Date(ev.fin).getTime() <= ahoraMs) continue;
+      var evsDia=[];
+      if(s&&s.eventosSemana){
+        for(var ei=0;ei<s.eventosSemana.length;ei++){
+          var ev=s.eventosSemana[ei];
+          if(soloFecha(new Date(ev.inicio))!==fechaTs) continue;
+          if(esHoy2&&new Date(ev.fin).getTime()<=ahoraMs) continue;
           evsDia.push(ev);
         }
       }
-      if(esHoy2 && s){
-        if(s.actual && soloFecha(new Date(s.actual.inicio)) === fechaTs) evsDia.push(s.actual);
+      if(esHoy2&&s){
+        if(s.actual&&soloFecha(new Date(s.actual.inicio))===fechaTs) evsDia.push(s.actual);
         if(s.proximas){
-          for(var pi=0; pi<s.proximas.length; pi++){
-            if(soloFecha(new Date(s.proximas[pi].inicio)) === fechaTs) evsDia.push(s.proximas[pi]);
+          for(var pi=0;pi<s.proximas.length;pi++){
+            if(soloFecha(new Date(s.proximas[pi].inicio))===fechaTs) evsDia.push(s.proximas[pi]);
           }
         }
-        var seen={}, uniq=[];
-        for(var ei=0; ei<evsDia.length; ei++){
-          if(!seen[evsDia[ei].inicio]){ seen[evsDia[ei].inicio]=1; uniq.push(evsDia[ei]); }
+        var seen={},uniq=[];
+        for(var ei=0;ei<evsDia.length;ei++){
+          if(!seen[evsDia[ei].inicio]){seen[evsDia[ei].inicio]=1;uniq.push(evsDia[ei]);}
         }
-        evsDia = uniq;
+        evsDia=uniq;
       }
 
-      if(evsDia.length === 0){
-        tdCell.innerHTML = '<div class="libre-bloque"><span class="libre-txt">Sin reservas</span></div>';
+      if(evsDia.length===0){
+        tdCell.innerHTML='<div class="libre-bloque"><span class="libre-txt">Sin reservas</span></div>';
       } else {
-        evsDia.sort(function(a,b){ return new Date(a.inicio)-new Date(b.inicio); });
-        var now  = Date.now();
-        var html = '<div class="ev-container">';
-        for(var ei=0; ei<evsDia.length; ei++){
-          var ev    = evsDia[ei];
-          var iniMs = new Date(ev.inicio).getTime(), finMs = new Date(ev.fin).getTime();
-          var cls   = iniMs<=now && finMs>now ? "ev-ocup"
-                    : iniMs>now && iniMs<=now+1800000 ? "ev-pronto"
-                    : "ev-proxima";
-          html += '<div class="ev-bloque '+cls+'">'
-                + '<div class="ev-inline">'
-                + '<span class="ev-hora">'+fmtH(ev.inicio)+" \u2013 "+fmtH(ev.fin)+'</span>'
-                + (ev.creador ? '<span class="ev-sep">|</span><span class="ev-user">'+esc(ev.creador)+'</span>' : "")
-                + '</div></div>';
+        evsDia.sort(function(a,b){return new Date(a.inicio)-new Date(b.inicio);});
+        var now=Date.now();
+        var muchos=evsDia.length>=4;
+        var html='<div class="ev-container'+(muchos?" muchos":"")+ '">';
+        for(var ei=0;ei<evsDia.length;ei++){
+          var ev=evsDia[ei];
+          var iniMs=new Date(ev.inicio).getTime(), finMs=new Date(ev.fin).getTime();
+          var cls=iniMs<=now&&finMs>now?"ev-ocup":iniMs>now&&iniMs<=now+1800000?"ev-pronto":"ev-proxima";
+          html+='<div class="ev-bloque '+cls+'">'
+               +'<div class="ev-inline">'
+               +'<span class="ev-hora">'+fmtH(ev.inicio)+" \u2013 "+fmtH(ev.fin)+'</span>'
+               +(ev.creador?'<span class="ev-sep">|</span><span class="ev-user">'+esc(ev.creador)+'</span>':"")
+               +'</div>'
+               +'</div>';
         }
-        html += '</div>';
-        tdCell.innerHTML = html;
+        html+='</div>';
+        tdCell.innerHTML=html;
       }
       tr.appendChild(tdCell);
     }
     tbody.appendChild(tr);
   }
-
   stopSpinner();
-  /* Redistribuir alturas con los datos frescos */
-  setTimeout(function(){
-    var wrap = document.getElementById("tabla-wrap");
-    if(wrap) distribuirAlturas(wrap.offsetHeight);
-  }, 50);
 }
 
-/* ── JSONP ── */
 var cbCount=0;
 function cargarDatos(){
   cbCount++; var cn="cb"+cbCount;
   window[cn]=function(data){
-    try{ renderGrid(data); }catch(err){}
+    try{
+      renderGrid(data);
+    }catch(err){}
     try{
       var el=document.getElementById("jsonp-script");
       if(el&&el.parentNode) el.parentNode.removeChild(el);
